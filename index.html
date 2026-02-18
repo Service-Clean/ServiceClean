@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiceClean - Управление клинингом</title>
+    <style>
+        /* === ОСНОВНЫЕ СТИЛИ === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        body {
+            background-color: #f4f7fb;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* === ШАПКА (ХЕДЕР) === */
+        .header {
+            background-color: #0b2b4a;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .logo span {
+            font-size: 2rem;
+        }
+        .nav-menu {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .nav-btn.active {
+            background: white;
+            color: #0b2b4a;
+        }
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .user-name {
+            font-weight: 500;
+        }
+        .logout-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* === ОСНОВНОЙ КОНТЕЙНЕР === */
+        .main-container {
+            flex: 1;
+            max-width: 1300px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* === СТАТИСТИКА === */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid #e9edf4;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0b2b4a;
+            margin-bottom: 0.3rem;
+        }
+        .stat-label {
+            color: #6b7a8f;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* === РАЗДЕЛЫ (КЛИЕНТЫ, СОТРУДНИКИ И Т.Д.) === */
+        .section {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+            border: 1px solid #e9edf4;
+        }
+        .section-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        .section-header h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #0b2b4a;
+        }
+        .add-btn {
+            background: #0b2b4a;
+            color: white;
+            border: none;
+            padding: 0.7rem 2rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        .add-btn:hover {
+            background: #1f3e5e;
+            transform: scale(1.02);
+        }
+
+        /* === ТАБЛИЦЫ === */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+        th {
+            text-align: left;
+            padding: 1rem 1rem;
+            background: #f8fafd;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            border-bottom: 2px solid #dde3ed;
+        }
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #eef2f6;
+            color: #1f2a3f;
+        }
+        tr:hover td {
+            background-color: #f9fcff;
+        }
+        .delete-btn {
+            background: #fff0f0;
+            color: #c0392b;
+            border: 1px solid #ffd6d6;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .delete-btn:hover {
+            background: #c0392b;
+            color: white;
+            border-color: #c0392b;
+        }
+
+        /* === QR-КОД === */
+        .qr-section {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        .qr-btn {
+            background: white;
+            border: 1px solid #0b2b4a;
+            color: #0b2b4a;
+            padding: 0.8rem 2.5rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .qr-btn:hover {
+            background: #f0f5ff;
+        }
+        .qr-container {
+            display: none;
+            margin: 1.5rem auto 0;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 24px;
+            border: 1px dashed #0b2b4a;
+            max-width: 300px;
+        }
+        .qr-container.show {
+            display: block;
+        }
+        .qr-container img {
+            width: 180px;
+            height: 180px;
+            display: block;
+            margin: 0 auto 1rem;
+        }
+
+        /* === ПОДВАЛ (ФУТЕР) === */
+        .footer {
+            background: white;
+            border-top: 1px solid #e2e9f2;
+            padding: 2rem;
+            text-align: center;
+            color: #4f5f73;
+            margin-top: 2rem;
+        }
+        .footer .names {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #0b2b4a;
+            margin-bottom: 0.5rem;
+        }
+        .footer .names span {
+            color: #2c3e50;
+            font-weight: 400;
+        }
+        .footer .details {
+            font-size: 0.9rem;
+        }
+
+        /* === УВЕДОМЛЕНИЯ === */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0b2b4a;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 9999;
+        }
+        .toast.show {
+            display: block;
+        }
+
+        /* === АДАПТИВНОСТЬ === */
+        @media (max-width: 700px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== ШАПКА ========== -->
+    <header class="header">
+        <div class="logo">
+            <span>🧼</span> ServiceClean
+        </div>
+        <div class="nav-menu" id="navMenu">
+            <button class="nav-btn active" data-section="clients">Клиенты</button>
+            <button class="nav-btn" data-section="employees">Сотрудники</button>
+            <button class="nav-btn" data-section="services">Услуги</button>
+            <button class="nav-btn" data-section="orders">Заказы</button>
+        </div>
+        <div class="user-area">
+            <span class="user-name">Администратор</span>
+            <button class="logout-btn" id="logoutBtn">Выйти</button>
+        </div>
+    </header>
+
+    <!-- ========== ОСНОВНОЙ БЛОК ========== -->
+    <main class="main-container">
+
+        <!-- СТАТИСТИКА (общая для всех разделов) -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="statClients">0</div>
+                <div class="stat-label">Клиентов</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="statEmployees">0</div>
+                <div class="stat-label">Сотрудников</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="statServices">0</div>
+                <div class="stat-label">Услуг</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="statOrders">0</div>
+                <div class="stat-label">Заказов</div>
+            </div>
+        </div>
+
+        <!-- ===== РАЗДЕЛ: КЛИЕНТЫ ===== -->
+        <section id="clientsSection" class="section">
+            <div class="section-header">
+                <h2>👥 Управление клиентами</h2>
+                <button class="add-btn" onclick="addItem('clients')">
+                    <span>+</span> Добавить клиента
+                </button>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th></th></tr>
+                    </thead>
+                    <tbody id="clientsTable"><tr><td colspan="6">Загрузка...</td></tr></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===== РАЗДЕЛ: СОТРУДНИКИ ===== -->
+        <section id="employeesSection" class="section" style="display: none;">
+            <div class="section-header">
+                <h2>🧑‍🔧 Управление сотрудниками</h2>
+                <button class="add-btn" onclick="addItem('employees')">
+                    <span>+</span> Добавить сотрудника
+                </button>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th></th></tr>
+                    </thead>
+                    <tbody id="employeesTable"><tr><td colspan="6">Загрузка...</td></tr></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===== РАЗДЕЛ: УСЛУГИ ===== -->
+        <section id="servicesSection" class="section" style="display: none;">
+            <div class="section-header">
+                <h2>🧴 Каталог услуг</h2>
+                <button class="add-btn" onclick="addItem('services')">
+                    <span>+</span> Добавить услугу
+                </button>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время (мин)</th><th></th></tr>
+                    </thead>
+                    <tbody id="servicesTable"><tr><td colspan="6">Загрузка...</td></tr></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===== РАЗДЕЛ: ЗАКАЗЫ ===== -->
+        <section id="ordersSection" class="section" style="display: none;">
+            <div class="section-header">
+                <h2>📋 Журнал заказов</h2>
+                <button class="add-btn" onclick="addItem('orders')">
+                    <span>+</span> Создать заказ
+                </button>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Клиент</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th><th></th></tr>
+                    </thead>
+                    <tbody id="ordersTable"><tr><td colspan="7">Загрузка...</td></tr></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- QR-код -->
+        <div class="qr-section">
+            <button class="qr-btn" id="qrBtn">📱 Показать QR-код</button>
+            <div class="qr-container" id="qrContainer">
+                <img src="https://quickchart.io/qr?text=https://Service-Clean.github.io/ServiceClean/&size=180&margin=0&ecLevel=H&color=0b2b4a" alt="QR-код">
+                <div style="font-weight:500;">ServiceClean</div>
+                <div style="font-size:11px; color:#aaa;">https://Service-Clean.github.io/ServiceClean/</div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ========== ПОДВАЛ ========== -->
+    <footer class="footer">
+        <div class="names">
+            Колесниченко Анастасия, <span>Кобеняк Арина</span>
+        </div>
+        <div class="details">
+            Группа ИС-22 · Специальность 09.02.07 Информационные системы и программирование
+        </div>
+        <div style="margin-top:1rem; color:#6c7a90;">© 2026 ООО «СервисКлин»</div>
+    </footer>
+
+    <!-- Уведомление -->
+    <div class="toast" id="toast">Сохранено</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ===== НАСТРОЙКИ SUPABASE =====
+        const SUPABASE_URL = 'https://pyojgyasaccwrcdogexx.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_db9nx0GejLB8Cw7XNB3ACg_FmTeP-WX';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====
+        let currentSection = 'clients';
+
+        // ===== ПЕРЕКЛЮЧЕНИЕ РАЗДЕЛОВ =====
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const section = this.dataset.section;
+                currentSection = section;
+                
+                document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+                document.getElementById(section + 'Section').style.display = 'block';
+                
+                loadData(section);
+            });
+        });
+
+        // ===== ЗАГРУЗКА ДАННЫХ =====
+        async function loadData(table) {
+            try {
+                const { data, error } = await supabase.from(table).select('*').order('id');
+                if (error) throw error;
+
+                const tbody = document.getElementById(table + 'Table');
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="10">Нет данных</td></tr>';
+                } else {
+                    let html = '';
+                    data.forEach(item => {
+                        html += '<tr>';
+                        if (table === 'clients') {
+                            html += `<td>${item.id}</td><td>${item.full_name||''}</td><td>${item.phone||''}</td><td>${item.email||''}</td><td>${item.address||''}</td>`;
+                        } else if (table === 'employees') {
+                            html += `<td>${item.id}</td><td>${item.full_name||''}</td><td>${item.position||''}</td><td>${item.phone||''}</td><td>${item.salary||0} ₽</td>`;
+                        } else if (table === 'services') {
+                            html += `<td>${item.id}</td><td>${item.name||''}</td><td>${item.description||''}</td><td>${item.price_per_m2||0} ₽</td><td>${item.duration||0}</td>`;
+                        } else if (table === 'orders') {
+                            html += `<td>${item.id}</td><td>${item.client_name||''}</td><td>${item.services||''}</td><td>${item.order_date||''}</td><td>${item.total_price||0} ₽</td><td>${item.status||'новый'}</td>`;
+                        }
+                        html += `<td><button class="delete-btn" onclick="deleteItem('${table}',${item.id})">Удалить</button></td>`;
+                        html += '</tr>';
+                    });
+                    tbody.innerHTML = html;
+                }
+                updateStats();
+            } catch (error) {
+                console.error(error);
+                showToast('Ошибка загрузки', true);
+            }
+        }
+
+        // ===== УДАЛЕНИЕ =====
+        window.deleteItem = async function(table, id) {
+            if (!confirm('Удалить запись?')) return;
+            const { error } = await supabase.from(table).delete().eq('id', id);
+            if (!error) { showToast('Удалено'); loadData(table); } 
+            else showToast('Ошибка', true);
+        };
+
+        // ===== ДОБАВЛЕНИЕ =====
+        window.addItem = function(table) {
+            let fields = [];
+            if (table === 'clients') {
+                fields = ['ФИО', 'Телефон', 'Email', 'Адрес'];
+            } else if (table === 'employees') {
+                fields = ['ФИО', 'Должность', 'Телефон', 'Оклад'];
+            } else if (table === 'services') {
+                fields = ['Название', 'Описание', 'Цена за м²', 'Длительность (мин)'];
+            } else if (table === 'orders') {
+                fields = ['Имя клиента', 'Услуги', 'Дата (ГГГГ-ММ-ДД)', 'Сумма', 'Статус'];
+            }
+
+            let values = [];
+            for (let field of fields) {
+                let val = prompt(`Введите ${field}:`);
+                if (field.includes('Дата') && !val) val = new Date().toISOString().split('T')[0];
+                if (field.includes('Сумма') || field.includes('Оклад') || field.includes('Цена')) val = parseFloat(val) || 0;
+                values.push(val || '');
+            }
+
+            let insertData = {};
+            if (table === 'clients') {
+                insertData = { full_name: values[0], phone: values[1], email: values[2], address: values[3] };
+            } else if (table === 'employees') {
+                insertData = { full_name: values[0], position: values[1], phone: values[2], salary: values[3] };
+            } else if (table === 'services') {
+                insertData = { name: values[0], description: values[1], price_per_m2: values[2], duration: parseInt(values[3]) || 0 };
+            } else if (table === 'orders') {
+                insertData = { client_name: values[0], services: values[1], order_date: values[2], total_price: values[3], status: values[4] || 'новый' };
+            }
+
+            supabase.from(table).insert([insertData]).then(() => {
+                showToast('Добавлено');
+                loadData(table);
+            }).catch(err => showToast('Ошибка', true));
+        };
+
+        // ===== СТАТИСТИКА =====
+        async function updateStats() {
+            const tables = ['clients','employees','services','orders'];
+            for (let t of tables) {
+                const { count } = await supabase.from(t).select('*', { count: 'exact', head: true });
+                document.getElementById(`stat${t.charAt(0).toUpperCase()+t.slice(1)}`).textContent = count || 0;
+            }
+        }
+
+        // ===== TOAST =====
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.backgroundColor = isError ? '#b00020' : '#0b2b4a';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // ===== QR-КОД =====
+        document.getElementById('qrBtn').addEventListener('click', function() {
+            document.getElementById('qrContainer').classList.toggle('show');
+            this.textContent = document.getElementById('qrContainer').classList.contains('show') ? '📱 Скрыть QR-код' : '📱 Показать QR-код';
+        });
+
+        // ===== ВЫХОД =====
+        document.getElementById('logoutBtn').addEventListener('click', () => showToast('Выход из системы'));
+
+        // ===== ЗАГРУЗКА ПРИ СТАРТЕ =====
+        loadData('clients');
+    </script>
+</body>
+</html>
