@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Тест входа</title>
+</head>
+<body>
+    <div id="loginScreen">
+        <h2>Вход</h2>
+        <input type="text" id="loginUsername" value="admin">
+        <input type="password" id="loginPassword" value="admin123">
+        <button onclick="handleLogin()">Войти</button>
+        <div id="loginError"></div>
+    </div>
+
+    <div id="mainContent" style="display: none;">
+        <h1>Вы вошли!</h1>
+        <button onclick="handleLogout()">Выйти</button>
+    </div>
+
+    <script>
+        function handleLogin() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            console.log('Логин:', username, 'Пароль:', password);
+            if (username === 'admin' && password === 'admin123') {
+                localStorage.setItem('loggedIn', 'true');
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+            } else {
+                document.getElementById('loginError').textContent = 'Неверный логин или пароль';
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('loggedIn');
+            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('mainContent').style.display = 'none';
+        }
+
+        // Проверка при загрузке
+        window.onload = function() {
+            if (localStorage.getItem('loggedIn') === 'true') {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+            }
+        };
+    </script>
+</body>
+</html>
