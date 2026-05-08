@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -807,14 +808,14 @@
                             </tr>
                         </thead>
                         <tbody id="employeeOrdersTable">
-                            <tr><td colspan="5">Загрузка...<\/td>   </tr>
+                            <td><td colspan="5">Загрузка...</td></tr>
                         </tbody>
                     </table>
                 </div>
                 <div style="padding: 1.5rem;">
                     <h3 style="color: #0a2e4d; margin-bottom: 1rem;">📋 Детализация заказов за период</h3>
                     <div class="table-wrapper">
-                        </table>
+                        <table>
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -827,7 +828,7 @@
                                 </tr>
                             </thead>
                             <tbody id="employeeOrdersDetailTableBody">
-                                <tr><td colspan="7">Загрузка...<\/td>   </tr>
+                                <tr><td colspan="7">Загрузка...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -841,7 +842,7 @@
                     <button class="btn-primary" id="addClientBtn">+ Добавить клиента</button>
                 </div>
                 <div class="table-wrapper">
-                    </table>
+                    <table>
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -853,8 +854,7 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody id="clientsTable"><tr><td colspan="7">Загрузка...<\/td>   </tr>
-                        </tbody>
+                        <tbody id="clientsTable"><tr><td colspan="7">Загрузка...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -866,7 +866,7 @@
                     <button class="btn-primary" id="addEmployeeBtn">+ Добавить сотрудника</button>
                 </div>
                 <div class="table-wrapper">
-                    </table>
+                    <table>
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -876,10 +876,9 @@
                                 <th>Оклад</th>
                                 <th>Дата</th>
                                 <th></th>
-                            </tr>
+                            </td>
                         </thead>
-                        <tbody id="employeesTable"><tr><td colspan="7">Загрузка...<\/td>   </tr>
-                        </tbody>
+                        <tbody id="employeesTable"><tr><td colspan="7">Загрузка...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -891,7 +890,7 @@
                     <button class="btn-primary" id="addServiceBtn">+ Добавить услугу</button>
                 </div>
                 <div class="table-wrapper">
-                    <tr>
+                    <table>
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -903,8 +902,7 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody id="servicesTable"><tr><td colspan="7">Загрузка...<\/td>   </tr>
-                        </tbody>
+                        <tbody id="servicesTable"><tr><td colspan="7">Загрузка...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -916,7 +914,7 @@
                     <button class="btn-primary" id="addOrderBtn">+ Создать заказ</button>
                 </div>
                 <div class="table-wrapper">
-                    <table>
+                    </table>
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -930,8 +928,7 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody id="ordersTable"><tr><td colspan="9">Загрузка...<\/td>   </tr>
-                        </tbody>
+                        <tbody id="ordersTable"><tr><td colspan="9">Загрузка...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -1161,6 +1158,12 @@
             
             const tbody = document.getElementById('employeeOrdersTable');
             const detailTbody = document.getElementById('employeeOrdersDetailTableBody');
+            
+            // Проверка на существование элементов (чтобы избежать ошибки при скрытой вкладке)
+            if (!tbody || !detailTbody) {
+                console.warn('Элементы таблицы для отчёта по сотрудникам ещё не загружены');
+                return;
+            }
             
             if (!allEmployees.length) {
                 tbody.innerHTML = '<tr><td colspan="5">Нет данных о сотрудниках</td></tr>';
@@ -1679,3 +1682,4 @@
     </script>
 </body>
 </html>
+```
