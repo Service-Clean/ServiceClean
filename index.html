@@ -105,8 +105,8 @@
                 <button class="nav-btn" data-section="employees">Сотрудники</button>
                 <button class="nav-btn" data-section="services">Услуги</button>
                 <button class="nav-btn" data-section="orders">Заказы</button>
-                <button class="nav-btn" data-section="employeeOrders">👥 Заказы по сотрудникам</button>
-                <button class="nav-btn active" data-section="reports">📊 Отчёты</button>
+                <button class="nav-btn" data-section="employeeOrders">📊👥 Отчёт Заказы по сотрудникам</button>
+                <button class="nav-btn active" data-section="reports">📊 Отчёт Аналитический</button>
             </div>
             <div class="user-info"><span>Администратор</span><button class="btn-secondary" onclick="handleLogout()">Выйти</button></div>
         </header>
@@ -121,7 +121,7 @@
 
             <div id="reportsSection" class="reports-section">
                 <div class="reports-header">
-                    <h3>📊 Аналитические отчёты</h3>
+                    <h3>📊 Отчёт Аналитический</h3>
                     <div class="date-range">
                         <input type="date" id="startDate"><span>—</span><input type="date" id="endDate">
                         <button class="btn-primary" id="generateReportsBtn">Сформировать</button>
@@ -154,8 +154,8 @@
             </div>
 
             <div id="clientsSection" class="section" style="display: none;"><div class="section-header"><h2>👤 Клиенты</h2><button class="btn-primary" id="addClientBtn">+ Добавить</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th>Дата</th><th></th></tr></thead><tbody id="clientsTable"></tbody></table></div></div>
-            <div id="employeesSection" class="section" style="display: none;"><div class="section-header"><h2>👩‍💼 Сотрудники</h2><button class="btn-primary" id="addEmployeeBtn">+ Добавить</button></div><div class="table-wrapper"></table><thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата</th><th></th></tr></thead><tbody id="employeesTable"></tbody></table></div></div>
-            <div id="servicesSection" class="section" style="display: none;"><div class="section-header"><h2>🪣 Услуги</h2><button class="btn-primary" id="addServiceBtn">+ Добавить</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время</th><th>Дата</th><th></th><tr></thead><tbody id="servicesTable"></tbody></table></div></div>
+            <div id="employeesSection" class="section" style="display: none;"><div class="section-header"><h2>👩‍💼 Сотрудники</h2><button class="btn-primary" id="addEmployeeBtn">+ Добавить</button></div><div class="table-wrapper"></td><thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата</th><th></th></tr></thead><tbody id="employeesTable"></tbody></table></div></div>
+            <div id="servicesSection" class="section" style="display: none;"><div class="section-header"><h2>🪣 Услуги</h2><button class="btn-primary" id="addServiceBtn">+ Добавить</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время</th><th>Дата</th><th></th></tr></thead><tbody id="servicesTable"></tbody></tr></div></div>
             <div id="ordersSection" class="section" style="display: none;"><div class="section-header"><h2>📋 Заказы</h2><button class="btn-primary" id="addOrderBtn">+ Создать заказ</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Клиент</th><th>Сотрудник</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th><th>Создан</th><th></th></tr></thead><tbody id="ordersTable"></tbody></table></div></div>
         </main>
         <footer class="footer"><div class="company">ООО «СервисКлин» 2026</div></footer>
@@ -227,10 +227,10 @@
                         html += '<td>' + escapeHtml(item.name) + '</td><td>' + escapeHtml(item.description) + '</td><td>' + (item.price_per_m2 || 0) + ' ₽</td><td>' + (item.duration || 0) + ' мин</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
                     } else if (table === 'orders') {
                         let emp = allEmployees.find(e => e.id == item.employee_id);
-                        html += '<td>' + escapeHtml(item.client_name) + '</td><td>' + escapeHtml(emp?.full_name || '—') + '</td><td>' + escapeHtml(item.services) + '</td><td>' + escapeHtml(item.order_date) + '</td><td>' + (item.total_price?.toLocaleString() || 0) + ' ₽</td><td>' + escapeHtml(item.status) + '</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
+                        html += '<td>' + escapeHtml(item.client_name) + '</td><td>' + escapeHtml(emp?.full_name || '—') + '<td><td>' + escapeHtml(item.services) + '</td><td>' + escapeHtml(item.order_date) + '<tr><td>' + (item.total_price?.toLocaleString() || 0) + ' ₽</td><td>' + escapeHtml(item.status) + '</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
                     }
                     html += '<td><button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️</button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button></td>';
-                    html += '<table>';
+                    html += '</tr>';
                 });
                 tbody.innerHTML = html;
                 updateStats();
@@ -278,56 +278,56 @@
                 showToast('Нет подключения к БД', true);
                 return;
             }
-            if (allEmployees.length === 0 || allServices.length === 0) {
+            if (!allEmployees.length || !allServices.length) {
                 showToast('Данные ещё загружаются, попробуйте через секунду', true);
                 return;
             }
+            try {
+                const { data, error } = await supabaseClient.from('orders').select('*').eq('id', id).single();
+                if (error) throw error;
+                if (!data) return;
 
-            const { data } = await supabaseClient
-                .from('orders')
-                .select('*')
-                .eq('id', id)
-                .single();
+                document.getElementById('orderModalTitle').textContent = '✏️ Редактирование заказа';
+                document.getElementById('orderEditId').value = data.id;
+                document.getElementById('client_name').value = data.client_name || '';
+                document.getElementById('order_date').value = data.order_date || '';
+                document.getElementById('status').value = data.status || 'новый';
 
-            if (!data) return;
+                const employeeSelect = document.getElementById('employee_id');
+                employeeSelect.innerHTML = '<option value="">Выберите сотрудника *</option>';
+                allEmployees.forEach(emp => {
+                    employeeSelect.innerHTML += `<option value="${emp.id}" ${emp.id == data.employee_id ? 'selected' : ''}>${escapeHtml(emp.full_name)}</option>`;
+                });
 
-            document.getElementById('orderModalTitle').textContent = '✏️ Редактирование заказа';
-            document.getElementById('orderEditId').value = id;
-            document.getElementById('client_name').value = data.client_name || '';
-            document.getElementById('order_date').value = data.order_date || '';
-            document.getElementById('status').value = data.status || 'новый';
-
-            const employeeSelect = document.getElementById('employee_id');
-            employeeSelect.innerHTML = '<option value="">Выберите сотрудника *</option>';
-            allEmployees.forEach(emp => {
-                employeeSelect.innerHTML += '<option value="' + escapeHtml(emp.id) + '" ' + (emp.id == data.employee_id ? 'selected' : '') + '>' + escapeHtml(emp.full_name) + '</option>';
-            });
-
-            document.getElementById('servicesList').innerHTML = '';
-            
-            if (data.services) {
-                const serviceStrings = data.services.split(',').map(s => s.trim());
-                serviceStrings.forEach(serviceStr => {
-                    const match = serviceStr.match(/(.+?)\s*\((\d+(?:\.\d+)?)\s*м²\)/);
-                    if (match) {
-                        const serviceName = match[1].trim();
-                        const quantity = parseFloat(match[2]);
-                        const service = allServices.find(s => s.name === serviceName);
-                        if (service) {
-                            addServiceRow(service.id, quantity);
+                document.getElementById('servicesList').innerHTML = '';
+                
+                if (data.services && data.services.trim()) {
+                    const serviceStrings = data.services.split(',').map(s => s.trim());
+                    serviceStrings.forEach(serviceStr => {
+                        const match = serviceStr.match(/(.+?)\s*\(([\d\.]+)\s*м²\)/);
+                        if (match) {
+                            const serviceName = match[1].trim();
+                            const quantity = parseFloat(match[2]);
+                            const service = allServices.find(s => s.name === serviceName);
+                            if (service) {
+                                addServiceRow(service.id, quantity);
+                            } else {
+                                addServiceRow();
+                            }
                         } else {
                             addServiceRow();
                         }
-                    } else {
-                        addServiceRow();
-                    }
-                });
-            } else {
-                addServiceRow();
-            }
+                    });
+                } else {
+                    addServiceRow();
+                }
 
-            calculateTotal();
-            document.getElementById('orderModal').classList.add('show');
+                calculateTotal();
+                document.getElementById('orderModal').classList.add('show');
+            } catch (err) {
+                console.error('Ошибка загрузки заказа для редактирования:', err);
+                showToast('Ошибка загрузки заказа', true);
+            }
         };
 
         function addServiceRow(selectedServiceId, quantity) {
@@ -542,3 +542,4 @@
     </script>
 </body>
 </html>
+```
