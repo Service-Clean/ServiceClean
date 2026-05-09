@@ -105,8 +105,8 @@
                 <button class="nav-btn" data-section="employees">Сотрудники</button>
                 <button class="nav-btn" data-section="services">Услуги</button>
                 <button class="nav-btn" data-section="orders">Заказы</button>
-                <button class="nav-btn" data-section="employeeOrders">📊👥 Отчёт Заказы по сотрудникам</button>
-                <button class="nav-btn active" data-section="reports">📊 Отчёт Аналитический </button>
+                <button class="nav-btn" data-section="employeeOrders">👥 Заказы по сотрудникам</button>
+                <button class="nav-btn active" data-section="reports">📊 Отчёты</button>
             </div>
             <div class="user-info"><span>Администратор</span><button class="btn-secondary" onclick="handleLogout()">Выйти</button></div>
         </header>
@@ -121,7 +121,7 @@
 
             <div id="reportsSection" class="reports-section">
                 <div class="reports-header">
-                    <h3>📊 Аналитический отчёт</h3>
+                    <h3>📊 Аналитические отчёты</h3>
                     <div class="date-range">
                         <input type="date" id="startDate"><span>—</span><input type="date" id="endDate">
                         <button class="btn-primary" id="generateReportsBtn">Сформировать</button>
@@ -150,12 +150,12 @@
                     </div>
                 </div>
                 <div class="table-wrapper"><table><thead><tr><th>Сотрудник</th><th>Должность</th><th>Заказов</th><th>Сумма</th><th>Средний чек</th></tr></thead><tbody id="employeeOrdersTable"><tr><td colspan="5">Загрузка...<\/td></tr></tbody></table></div>
-                <div style="padding: 1.5rem;"><h3 style="color:#0a2e4d;">📋 Детализация</h3><div class="table-wrapper"><tr><thead><tr><th>ID</th><th>Сотрудник</th><th>Клиент</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th></tr></thead><tbody id="employeeOrdersDetailTableBody"><tr><td colspan="7">Загрузка...<\/td></tr></tbody></table></div></div>
+                <div style="padding: 1.5rem;"><h3 style="color:#0a2e4d;">📋 Детализация</h3><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Сотрудник</th><th>Клиент</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th></tr></thead><tbody id="employeeOrdersDetailTableBody"><tr><td colspan="7">Загрузка...<\/td></tr></tbody></table></div></div>
             </div>
 
             <div id="clientsSection" class="section" style="display: none;"><div class="section-header"><h2>👤 Клиенты</h2><button class="btn-primary" id="addClientBtn">+ Добавить</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th>Дата</th><th></th></tr></thead><tbody id="clientsTable"></tbody></table></div></div>
-            <div id="employeesSection" class="section" style="display: none;"><div class="section-header"><h2>👩‍💼 Сотрудники</h2><button class="btn-primary" id="addEmployeeBtn">+ Добавить</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата</th><th></th></tr></thead><tbody id="employeesTable"></tbody></table></div></div>
-            <div id="servicesSection" class="section" style="display: none;"><div class="section-header"><h2>🪣 Услуги</h2><button class="btn-primary" id="addServiceBtn">+ Добавить</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время</th><th>Дата</th><th></th></tr></thead><tbody id="servicesTable"></tbody></table></div></div>
+            <div id="employeesSection" class="section" style="display: none;"><div class="section-header"><h2>👩‍💼 Сотрудники</h2><button class="btn-primary" id="addEmployeeBtn">+ Добавить</button></div><div class="table-wrapper"></table><thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата</th><th></th></tr></thead><tbody id="employeesTable"></tbody></table></div></div>
+            <div id="servicesSection" class="section" style="display: none;"><div class="section-header"><h2>🪣 Услуги</h2><button class="btn-primary" id="addServiceBtn">+ Добавить</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время</th><th>Дата</th><th></th><tr></thead><tbody id="servicesTable"></tbody></table></div></div>
             <div id="ordersSection" class="section" style="display: none;"><div class="section-header"><h2>📋 Заказы</h2><button class="btn-primary" id="addOrderBtn">+ Создать заказ</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Клиент</th><th>Сотрудник</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th><th>Создан</th><th></th></tr></thead><tbody id="ordersTable"></tbody></table></div></div>
         </main>
         <footer class="footer"><div class="company">ООО «СервисКлин» 2026</div></footer>
@@ -217,15 +217,20 @@
                 let tbody = document.getElementById(table + 'Table'), html = '';
                 if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="10">Нет данных</td></tr>'; updateStats(); return; }
                 data.forEach(item => {
-                    html += '<tr><td>' + escapeHtml(item.id) + '</td>';
-                    if (table === 'clients') html += '<td>' + escapeHtml(item.full_name) + '</td><td>' + escapeHtml(item.phone) + '</td><td>' + escapeHtml(item.email) + '</td><td>' + escapeHtml(item.address) + '</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
-                    else if (table === 'employees') html += '<td>' + escapeHtml(item.full_name) + '</td><td>' + escapeHtml(item.position) + '</td><td>' + escapeHtml(item.phone) + '</td><td>' + (item.salary || 0) + ' ₽</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
-                    else if (table === 'services') html += '<td>' + escapeHtml(item.name) + '</td><td>' + escapeHtml(item.description) + '</td><td>' + (item.price_per_m2 || 0) + ' ₽</td><td>' + (item.duration || 0) + ' мин</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
-                    else if (table === 'orders') {
+                    html += '<tr>';
+                    html += '<td>' + escapeHtml(item.id) + '</td>';
+                    if (table === 'clients') {
+                        html += '<td>' + escapeHtml(item.full_name) + '</td><td>' + escapeHtml(item.phone) + '</td><td>' + escapeHtml(item.email) + '</td><td>' + escapeHtml(item.address) + '</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
+                    } else if (table === 'employees') {
+                        html += '<td>' + escapeHtml(item.full_name) + '</td><td>' + escapeHtml(item.position) + '</td><td>' + escapeHtml(item.phone) + '</td><td>' + (item.salary || 0) + ' ₽</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
+                    } else if (table === 'services') {
+                        html += '<td>' + escapeHtml(item.name) + '</td><td>' + escapeHtml(item.description) + '</td><td>' + (item.price_per_m2 || 0) + ' ₽</td><td>' + (item.duration || 0) + ' мин</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
+                    } else if (table === 'orders') {
                         let emp = allEmployees.find(e => e.id == item.employee_id);
                         html += '<td>' + escapeHtml(item.client_name) + '</td><td>' + escapeHtml(emp?.full_name || '—') + '</td><td>' + escapeHtml(item.services) + '</td><td>' + escapeHtml(item.order_date) + '</td><td>' + (item.total_price?.toLocaleString() || 0) + ' ₽</td><td>' + escapeHtml(item.status) + '</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
                     }
-                    html += '<td><button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️</button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button></td></tr>';
+                    html += '<td><button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️</button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button></td>';
+                    html += '<table>';
                 });
                 tbody.innerHTML = html;
                 updateStats();
@@ -238,7 +243,7 @@
             let start = document.getElementById('employeeStartDate').value, end = document.getElementById('employeeEndDate').value;
             let filtered = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
             let tbody = document.getElementById('employeeOrdersTable'), detail = document.getElementById('employeeOrdersDetailTableBody');
-            if (!allEmployees.length) { tbody.innerHTML = '<tr><td colspan="5">Нет данных</td></tr>'; detail.innerHTML = '<tr><td colspan="7">Нет данных</td></tr>'; return; }
+            if (!allEmployees.length) { tbody.innerHTML = '<tr><td colspan="5">Нет данных о сотрудниках</td></tr>'; detail.innerHTML = '<tr><td colspan="7">Нет данных</td></tr>'; return; }
             let sumHtml = '', detHtml = '';
             allEmployees.forEach(emp => {
                 let empOrders = filtered.filter(o => o.employee_id === emp.id), total = empOrders.reduce((s,o) => s + (o.total_price||0),0), avg = empOrders.length ? (total/empOrders.length).toFixed(0) : 0;
@@ -269,26 +274,58 @@
         };
 
         window.editOrder = async function(id) {
-            if (!supabaseClient || !allEmployees.length || !allServices.length) { showToast('Данные загружаются', true); return; }
-            let { data } = await supabaseClient.from('orders').select('*').eq('id', id).single();
+            if (!supabaseClient) {
+                showToast('Нет подключения к БД', true);
+                return;
+            }
+            if (allEmployees.length === 0 || allServices.length === 0) {
+                showToast('Данные ещё загружаются, попробуйте через секунду', true);
+                return;
+            }
+
+            const { data } = await supabaseClient
+                .from('orders')
+                .select('*')
+                .eq('id', id)
+                .single();
+
             if (!data) return;
+
             document.getElementById('orderModalTitle').textContent = '✏️ Редактирование заказа';
             document.getElementById('orderEditId').value = id;
             document.getElementById('client_name').value = data.client_name || '';
             document.getElementById('order_date').value = data.order_date || '';
             document.getElementById('status').value = data.status || 'новый';
-            let empSelect = document.getElementById('employee_id');
-            empSelect.innerHTML = '<option value="">Выберите сотрудника *</option>';
-            allEmployees.forEach(e => empSelect.innerHTML += `<option value="${e.id}" ${e.id == data.employee_id ? 'selected' : ''}>${escapeHtml(e.full_name)}</option>`);
+
+            const employeeSelect = document.getElementById('employee_id');
+            employeeSelect.innerHTML = '<option value="">Выберите сотрудника *</option>';
+            allEmployees.forEach(emp => {
+                employeeSelect.innerHTML += '<option value="' + escapeHtml(emp.id) + '" ' + (emp.id == data.employee_id ? 'selected' : '') + '>' + escapeHtml(emp.full_name) + '</option>';
+            });
+
             document.getElementById('servicesList').innerHTML = '';
+            
             if (data.services) {
-                let parts = data.services.split(',').map(s => s.trim());
-                parts.forEach(p => {
-                    let match = p.match(/(.+?)\s*\(([\d\.]+)\s*м²\)/);
-                    if (match) { let srv = allServices.find(s => s.name === match[1]); if(srv) addServiceRow(srv.id, parseFloat(match[2])); else addServiceRow(null, 1); }
-                    else addServiceRow(null, 1);
+                const serviceStrings = data.services.split(',').map(s => s.trim());
+                serviceStrings.forEach(serviceStr => {
+                    const match = serviceStr.match(/(.+?)\s*\((\d+(?:\.\d+)?)\s*м²\)/);
+                    if (match) {
+                        const serviceName = match[1].trim();
+                        const quantity = parseFloat(match[2]);
+                        const service = allServices.find(s => s.name === serviceName);
+                        if (service) {
+                            addServiceRow(service.id, quantity);
+                        } else {
+                            addServiceRow();
+                        }
+                    } else {
+                        addServiceRow();
+                    }
                 });
-            } else addServiceRow(null, 1);
+            } else {
+                addServiceRow();
+            }
+
             calculateTotal();
             document.getElementById('orderModal').classList.add('show');
         };
@@ -315,7 +352,7 @@
             newRow.querySelector('.remove-service').addEventListener('click', function() {
                 newRow.remove();
                 if (document.querySelectorAll('.service-row').length === 0) {
-                    addServiceRow(null, 1);
+                    addServiceRow();
                 } else {
                     calculateTotal();
                 }
@@ -326,11 +363,17 @@
 
         function calculateTotal() {
             let total = 0;
-            document.querySelectorAll('.service-row').forEach(row => {
-                let sel = row.querySelector('.service-select'), qty = row.querySelector('.service-quantity');
-                if(sel.value && qty.value) { let price = parseFloat(sel.selectedOptions[0]?.dataset.price || 0); total += price * parseFloat(qty.value); }
+            const rows = document.querySelectorAll('.service-row');
+            rows.forEach(row => {
+                const select = row.querySelector('.service-select');
+                const quantity = row.querySelector('.service-quantity');
+                if (select.value && quantity.value) {
+                    const price = parseFloat(select.selectedOptions[0]?.dataset.price || 0);
+                    const qty = parseFloat(quantity.value) || 0;
+                    total += price * qty;
+                }
             });
-            document.getElementById('totalAmount').textContent = `Итого: ${total.toLocaleString()} ₽`;
+            document.getElementById('totalAmount').textContent = 'Итого: ' + total.toLocaleString() + ' ₽';
             return total;
         }
 
@@ -349,11 +392,11 @@
             sel.innerHTML='<option value="">Выберите сотрудника *</option>'; 
             allEmployees.forEach(e=>sel.innerHTML+=`<option value="${e.id}">${escapeHtml(e.full_name)}</option>`); 
             document.getElementById('servicesList').innerHTML=''; 
-            addServiceRow(null, 1); 
+            addServiceRow(); 
             document.getElementById('orderModal').classList.add('show'); 
         });
         
-        document.getElementById('addServiceRowBtn').addEventListener('click', () => addServiceRow(null, 1));
+        document.getElementById('addServiceRowBtn').addEventListener('click', () => addServiceRow());
         
         document.getElementById('simpleModalForm').addEventListener('submit', async(e) => { 
             e.preventDefault(); 
@@ -372,36 +415,78 @@
 
         document.getElementById('orderForm').addEventListener('submit', async(e) => {
             e.preventDefault();
-            let client_name = document.getElementById('client_name').value;
-            let employee_id = document.getElementById('employee_id').value;
-            let order_date = document.getElementById('order_date').value;
-            let status = document.getElementById('status').value;
-            let editId = document.getElementById('orderEditId').value;
-            let rows = document.querySelectorAll('.service-row');
-            if(rows.length === 0) { showToast('Добавьте услугу', true); return; }
-            let services = [];
+            if (!supabaseClient) {
+                showToast('Нет подключения к БД', true);
+                return;
+            }
+            
+            const client_name = document.getElementById('client_name').value;
+            const employee_id = document.getElementById('employee_id').value;
+            const order_date = document.getElementById('order_date').value;
+            const status = document.getElementById('status').value;
+            const editId = document.getElementById('orderEditId').value;
+
+            const rows = document.querySelectorAll('.service-row');
+            if (rows.length === 0) {
+                showToast('Добавьте хотя бы одну услугу', true);
+                return;
+            }
+
+            const services = [];
             rows.forEach(row => {
-                let sel = row.querySelector('.service-select'), qty = row.querySelector('.service-quantity');
-                if(sel.value && qty.value) {
-                    let service = allServices.find(s => s.id == sel.value);
-                    if(service) services.push(service.name + ' (' + qty.value + ' м²)');
+                const select = row.querySelector('.service-select');
+                const quantity = row.querySelector('.service-quantity');
+                if (select.value && quantity.value) {
+                    const service = allServices.find(s => s.id == select.value);
+                    if (service) {
+                        services.push(service.name + ' (' + quantity.value + ' м²)');
+                    }
                 }
             });
-            if(services.length === 0) { showToast('Выберите услуги', true); return; }
-            let total_price = calculateTotal();
-            let formData = { client_name, employee_id: employee_id || null, services: services.join(', '), order_date, total_price, status };
+
+            if (services.length === 0) {
+                showToast('Выберите услуги и укажите количество', true);
+                return;
+            }
+
+            const servicesStr = services.join(', ');
+            const total_price = calculateTotal();
+
+            if (total_price > 99999999.99) {
+                showToast('Сумма слишком большая', true);
+                return;
+            }
+
+            const formData = {
+                client_name: client_name,
+                employee_id: employee_id || null,
+                services: servicesStr,
+                order_date: order_date,
+                total_price: total_price,
+                status: status
+            };
+
             try {
-                if(editId) await supabaseClient.from('orders').update(formData).eq('id', editId);
-                else { formData.created_at = new Date().toISOString(); await supabaseClient.from('orders').insert([formData]); }
-                showToast(editId ? 'Заказ обновлён' : 'Заказ создан');
+                if (editId) {
+                    await supabaseClient.from('orders').update(formData).eq('id', editId);
+                    showToast('Заказ обновлён');
+                } else {
+                    formData.created_at = new Date().toISOString();
+                    await supabaseClient.from('orders').insert([formData]);
+                    showToast('Заказ создан');
+                }
+                
                 document.getElementById('orderModal').classList.remove('show');
                 loadTable('orders');
                 loadAllData();
-            } catch(error) { showToast('Ошибка: ' + error.message, true); }
+            } catch (error) {
+                showToast('Ошибка: ' + error.message, true);
+            }
         });
 
         document.getElementById('closeOrderModalBtn').addEventListener('click', () => document.getElementById('orderModal').classList.remove('show'));
         document.getElementById('closeSimpleModalBtn').addEventListener('click', () => document.getElementById('simpleModal').classList.remove('show'));
+        
         window.deleteItem = async function(table, id) { if(confirm('Удалить?')) try{ await supabaseClient.from(table).delete().eq('id',id); showToast('Удалено'); loadTable(table); loadAllData(); } catch(e){ showToast('Ошибка', true); } };
         
         document.getElementById('employeeOrdersPdfBtn').addEventListener('click', () => { showToast('PDF подготовлен'); window.print(); });
