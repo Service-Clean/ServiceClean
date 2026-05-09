@@ -552,7 +552,7 @@
 <body>
     <div class="login-screen" id="loginScreen">
         <div class="login-box">
-            <h2>🔐 Вход в СервисКлин</h2>
+            <h2>🔐 Вход в информационную систему СервисКлин</h2>
             <input type="text" id="loginUsername" placeholder="Логин" value="admin">
             <div class="password-wrapper">
                 <input type="password" id="loginPassword" placeholder="Пароль" value="admin123">
@@ -609,7 +609,7 @@
             </div>
 
             <div id="employeeOrdersSection" class="section" style="display: none;">
-                <div class="section-header"><h2>📊👥 Заказы по сотрудникам</h2>
+                <div class="section-header"><h2>👥 Заказы по сотрудникам</h2>
                     <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
                         <div class="date-range"><input type="date" id="employeeStartDate"><span>—</span><input type="date" id="employeeEndDate"><button class="btn-primary" id="filterEmployeeOrdersBtn">Применить</button></div>
                         <div class="export-buttons"><button class="btn-secondary" id="employeeOrdersPdfBtn">📄 PDF</button><button class="btn-secondary" id="employeeOrdersPrintBtn">🖨️ Печать</button></div>
@@ -619,10 +619,10 @@
                 <div style="padding: 1.5rem;"><h3 style="color:#0a2e4d;">📋 Детализация</h3><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Сотрудник</th><th>Клиент</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th></tr></thead><tbody id="employeeOrdersDetailTableBody"><tr><td colspan="7">Загрузка...<\/td></tr></tbody></table></div></div>
             </div>
 
-            <div id="clientsSection" class="section" style="display: none;"><div class="section-header"><h2>👤 Клиенты</h2><button class="btn-primary" id="addClientBtn">+ Добавить</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th>Дата</th><th></th></tr></thead><tbody id="clientsTable"></tbody></table></div></div>
-            <div id="employeesSection" class="section" style="display: none;"><div class="section-header"><h2>👩‍💼 Сотрудники</h2><button class="btn-primary" id="addEmployeeBtn">+ Добавить</button></div><div class="table-wrapper"></table><thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата</th><th></th></tr></thead><tbody id="employeesTable"></tbody></table></div></div>
-            <div id="servicesSection" class="section" style="display: none;"><div class="section-header"><h2>🪣 Услуги</h2><button class="btn-primary" id="addServiceBtn">+ Добавить</button></div><div class="table-wrapper"><tr><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время</th><th>Дата</th><th></th></tr></thead><tbody id="servicesTable"></tbody></table></div></div>
-            <div id="ordersSection" class="section" style="display: none;"><div class="section-header"><h2>📋 Заказы</h2><button class="btn-primary" id="addOrderBtn">+ Создать заказ</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Клиент</th><th>Сотрудник</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th><th>Создан</th><th></th></tr></thead><tbody id="ordersTable"></tbody></table></div></div>
+            <div id="clientsSection" class="section" style="display: none;"><div class="section-header"><h2>👤 Клиенты</h2><button class="btn-primary" id="addClientBtn">+ Добавить</button></div><div class="table-wrapper"><tr><thead><tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th>Дата</th><th></th></tr></thead><tbody id="clientsTable"></tbody></table></div></div>
+            <div id="employeesSection" class="section" style="display: none;"><div class="section-header"><h2>👩‍💼 Сотрудники</h2><button class="btn-primary" id="addEmployeeBtn">+ Добавить</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата</th><th></th></tr></thead><tbody id="employeesTable"></tbody></table></div></div>
+            <div id="servicesSection" class="section" style="display: none;"><div class="section-header"><h2>🪣 Услуги</h2><button class="btn-primary" id="addServiceBtn">+ Добавить</button></div><div class="table-wrapper"><tr><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время</th><th>Дата</th><th></th></td></thead><tbody id="servicesTable"></tbody></table></div></div>
+            <div id="ordersSection" class="section" style="display: none;"><div class="section-header"><h2>📋 Заказы</h2><button class="btn-primary" id="addOrderBtn">+ Создать заказ</button></div><div class="table-wrapper"></td><thead><tr><th>ID</th><th>Клиент</th><th>Сотрудник</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th><th>Создан</th><th></th></tr></thead><tbody id="ordersTable"></tbody></table></div></div>
         </main>
         <footer class="footer"><div class="company">ООО «СервисКлин» 2026</div></footer>
     </div>
@@ -683,7 +683,7 @@
                 let { data, error } = await supabaseClient.from(table).select('*').order('id');
                 if (error) throw error;
                 let tbody = document.getElementById(table + 'Table'), html = '';
-                if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="10">Нет данных</td></tr>'; updateStats(); return; }
+                if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="10">Нет данных</td> </tr>'; updateStats(); return; }
                 data.forEach(item => {
                     html += '<tr>';
                     html += '<td>' + escapeHtml(item.id) + '</td>';
@@ -960,7 +960,6 @@
         document.getElementById('employeeOrdersPdfBtn').addEventListener('click', () => { showToast('PDF подготовлен'); window.print(); });
         document.getElementById('employeeOrdersPrintBtn').addEventListener('click', () => window.print());
         document.getElementById('filterEmployeeOrdersBtn').addEventListener('click', filterEmployeeOrders);
-        
         document.getElementById('generateReportsBtn').addEventListener('click', function() {
             let start = document.getElementById('startDate').value, end = document.getElementById('endDate').value;
             let filteredOrders = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
