@@ -6,114 +6,756 @@
     <title>СервисКлин — Корпоративная информационная система</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧼</text></svg>">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; }
-        body { background: #f0f4f8; min-height: 100vh; display: flex; flex-direction: column; }
-        @media (max-width: 768px) {
-            .header { flex-direction: column; padding: 0.8rem; gap: 0.5rem; }
-            .logo { font-size: 1.3rem; }
-            .nav-menu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; width: 100%; }
-            .nav-btn { padding: 0.5rem 0.3rem; font-size: 0.75rem; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-            .user-info { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
-            .user-info span { font-size: 0.8rem; }
-            .user-info button { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; margin-bottom: 1rem; }
-            .stat-card { padding: 0.8rem; }
-            .stat-value { font-size: 1.4rem; }
-            .stat-label { font-size: 0.7rem; }
-            .section-header { flex-direction: column; gap: 0.6rem; align-items: stretch; padding: 1rem; }
-            .section-header h2 { font-size: 1.1rem; text-align: center; }
-            .btn-primary, .btn-secondary { padding: 0.5rem 1rem; font-size: 0.85rem; width: 100%; }
-            .export-buttons { flex-direction: column; gap: 0.5rem; width: 100%; }
-            .export-buttons button { width: 100%; }
-            .table-wrapper { padding: 0.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-            table { min-width: 600px; font-size: 0.75rem; }
-            th, td { padding: 0.5rem 0.3rem; }
-            .btn-warning, .btn-danger { padding: 0.2rem 0.4rem; font-size: 0.7rem; margin: 0.1rem; }
-            .reports-header { flex-direction: column; gap: 0.8rem; }
-            .date-range { flex-direction: column; width: 100%; }
-            .date-range input { width: 100%; }
-            .date-range button { width: 100%; }
-            .report-card { padding: 0.8rem; }
-            .report-item { font-size: 0.85rem; }
-            .modal-content { padding: 1rem; width: 95%; max-height: 80vh; }
-            .service-row { flex-direction: column; gap: 0.5rem; }
-            .service-row select, .service-row input, .service-row button { width: 100%; }
-            .add-service-btn { width: 100%; }
-            .total-amount { font-size: 1rem; padding: 0.8rem; }
-            .modal-buttons { flex-direction: column; gap: 0.5rem; }
-            .modal-buttons button { width: 100%; }
-            .footer { padding: 1rem; font-size: 0.8rem; }
-            .footer .company { font-size: 1rem; }
+        /* ===== ПОЛНЫЙ ДИЗАЙН (БЕЗ СОКРАЩЕНИЙ) ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
         }
-        @media (max-width: 480px) { .nav-menu { grid-template-columns: repeat(2, 1fr); } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 360px) { .nav-menu { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: 1fr; } .stat-card { display: flex; justify-content: space-between; align-items: center; } }
-        .header { background: #0a2e4d; color: white; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
-        .logo { font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
-        .nav-menu { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .nav-btn { background: transparent; border: none; color: rgba(255,255,255,0.8); padding: 0.5rem 1.5rem; border-radius: 2rem; font-size: 1rem; cursor: pointer; transition: 0.2s; }
-        .nav-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-        .nav-btn.active { background: white; color: #0a2e4d; font-weight: 600; }
-        .user-info { display: flex; align-items: center; gap: 1rem; }
-        .main { flex: 1; max-width: 1300px; width: 100%; margin: 2rem auto; padding: 0 2rem; }
-        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
-        .stat-card { background: white; padding: 1.5rem; border-radius: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
-        .stat-value { font-size: 2.2rem; font-weight: 700; color: #0a2e4d; }
-        .stat-label { color: #64748b; font-size: 0.9rem; }
-        .section { background: white; border-radius: 1rem; border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 2rem; }
-        .section-header { padding: 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; background: #f8fafc; flex-wrap: wrap; gap: 1rem; }
-        .section-header h2 { color: #0a2e4d; font-size: 1.3rem; }
-        .btn-primary { background: #0a2e4d; color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 2rem; font-size: 0.95rem; cursor: pointer; }
-        .btn-primary:hover { background: #1f3e5e; }
-        .btn-secondary { background: white; color: #0a2e4d; border: 1px solid #0a2e4d; padding: 0.6rem 1.5rem; border-radius: 2rem; cursor: pointer; }
-        .btn-warning { background: #f59e0b; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 0.5rem; cursor: pointer; margin-right: 0.5rem; }
-        .btn-warning:hover { background: #d97706; }
-        .btn-danger { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; padding: 0.3rem 1rem; border-radius: 2rem; cursor: pointer; }
-        .reports-section { background: white; border-radius: 1rem; border: 1px solid #e2e8f0; padding: 1.5rem; margin-bottom: 2rem; }
-        .reports-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
-        .date-range { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-        .date-range input { padding: 0.5rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
-        .report-cards { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
-        .report-card { background: #f8fafc; border-radius: 0.75rem; padding: 1.25rem; border: 1px solid #e2e8f0; }
-        .report-card h4 { color: #0a2e4d; margin-bottom: 1rem; border-bottom: 2px solid #0a2e4d; padding-bottom: 0.5rem; }
-        .report-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed #e2e8f0; }
-        .export-buttons { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem; }
-        .footer { background: white; border-top: 1px solid #e2e8f0; padding: 2rem; text-align: center; color: #475569; margin-top: 2rem; }
-        .footer .company { font-size: 1.2rem; font-weight: 600; color: #0a2e4d; margin-bottom: 0.5rem; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000; }
-        .modal.show { display: flex; }
-        .modal-content { background: white; padding: 2rem; border-radius: 1rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; }
-        .modal-content h3 { color: #0a2e4d; margin-bottom: 1.5rem; }
-        .modal-content input, .modal-content select { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
-        .password-wrapper { position: relative; width: 100%; margin-bottom: 1rem; }
-        .password-wrapper input { margin-bottom: 0; padding-right: 2.5rem; }
-        .toggle-password { position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); cursor: pointer; background: transparent; border: none; }
-        .service-row { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center; }
-        .service-row select { flex: 2; margin-bottom: 0; }
-        .service-row input { flex: 1; margin-bottom: 0; }
-        .service-row button { background: #dc2626; color: white; border: none; padding: 0.75rem 1rem; border-radius: 0.5rem; cursor: pointer; }
-        .add-service-btn { background: #0a2e4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; margin: 0.5rem 0; }
-        .total-amount { font-size: 1.2rem; font-weight: 600; color: #0a2e4d; margin: 1rem 0; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; text-align: right; }
-        .modal-buttons { display: flex; gap: 1rem; margin-top: 1.5rem; }
-        .modal-buttons button { flex: 1; padding: 0.75rem; border: none; border-radius: 0.5rem; cursor: pointer; }
-        .modal-buttons button[type="submit"] { background: #0a2e4d; color: white; }
-        .modal-buttons button[type="button"] { background: #e2e8f0; color: #1e293b; }
-        .toast { position: fixed; bottom: 20px; right: 20px; background: #0a2e4d; color: white; padding: 1rem 2rem; border-radius: 2rem; display: none; z-index: 1001; }
-        .toast.show { display: block; }
-        .login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a2e4d; display: flex; align-items: center; justify-content: center; z-index: 2000; }
-        .login-box { background: white; padding: 2rem; border-radius: 1rem; max-width: 400px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .login-box h2 { color: #0a2e4d; margin-bottom: 1.5rem; text-align: center; }
-        .login-box input { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
-        .login-box .password-wrapper { margin-bottom: 1rem; }
-        .login-box button { width: 100%; padding: 0.75rem; background: #0a2e4d; color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-size: 1rem; margin-top: 0.5rem; }
-        .login-box button:hover { background: #1f3e5e; }
-        .login-error { color: #dc2626; margin-top: 0.5rem; text-align: center; }
-        .table-wrapper { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
-        th { background: #f8fafc; color: #0a2e4d; }
+
+        body {
+            background: #f0f4f8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* УЛУЧШЕННАЯ АДАПТАЦИЯ ДЛЯ СМАРТФОНОВ */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                padding: 0.8rem;
+                gap: 0.5rem;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            .nav-menu {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.4rem;
+                width: 100%;
+            }
+            
+            .nav-btn {
+                padding: 0.5rem 0.3rem;
+                font-size: 0.75rem;
+                text-align: center;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            
+            .user-info {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            
+            .user-info span {
+                font-size: 0.8rem;
+            }
+            
+            .user-info button {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+                margin-bottom: 1rem;
+            }
+            
+            .stat-card {
+                padding: 0.8rem;
+            }
+            
+            .stat-value {
+                font-size: 1.4rem;
+            }
+            
+            .stat-label {
+                font-size: 0.7rem;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                gap: 0.6rem;
+                align-items: stretch;
+                padding: 1rem;
+            }
+            
+            .section-header h2 {
+                font-size: 1.1rem;
+                text-align: center;
+            }
+            
+            .btn-primary, .btn-secondary {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+                width: 100%;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
+            }
+            
+            .export-buttons button {
+                width: 100%;
+            }
+            
+            .table-wrapper {
+                padding: 0.5rem;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            table {
+                min-width: 600px;
+                font-size: 0.75rem;
+            }
+            
+            th, td {
+                padding: 0.5rem 0.3rem;
+            }
+            
+            .btn-warning, .btn-danger {
+                padding: 0.2rem 0.4rem;
+                font-size: 0.7rem;
+                margin: 0.1rem;
+            }
+            
+            .reports-header {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            
+            .date-range {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .date-range input {
+                width: 100%;
+            }
+            
+            .date-range button {
+                width: 100%;
+            }
+            
+            .report-card {
+                padding: 0.8rem;
+            }
+            
+            .report-item {
+                font-size: 0.85rem;
+            }
+            
+            .qr-btn {
+                width: 100%;
+                padding: 0.6rem;
+                font-size: 0.9rem;
+            }
+            
+            .qr-container {
+                padding: 1rem;
+            }
+            
+            .qr-container img {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .modal-content {
+                padding: 1rem;
+                width: 95%;
+                max-height: 80vh;
+            }
+            
+            .service-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .service-row select,
+            .service-row input,
+            .service-row button {
+                width: 100%;
+            }
+            
+            .add-service-btn {
+                width: 100%;
+            }
+            
+            .total-amount {
+                font-size: 1rem;
+                padding: 0.8rem;
+            }
+            
+            .modal-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .modal-buttons button {
+                width: 100%;
+            }
+            
+            .footer {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+            
+            .footer .company {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-menu {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 360px) {
+            .nav-menu {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .stat-card {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .header {
+            background: #0a2e4d;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.8);
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-btn.active {
+            background: white;
+            color: #0a2e4d;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .main {
+            flex: 1; /* чтобы занимать всё свободное пространство и прижимать подвал к низу */
+            max-width: 1300px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            /* меняем с 4 колонок на 2 колонки для двух рядов */
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0a2e4d;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+        }
+
+        .section-header h2 {
+            color: #0a2e4d;
+            font-size: 1.3rem;
+        }
+
+        .btn-primary {
+            background: #0a2e4d;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 2rem;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: #1f3e5e;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #0a2e4d;
+            border: 1px solid #0a2e4d;
+            padding: 0.6rem 1.5rem;
+            border-radius: 2rem;
+            cursor: pointer;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .reports-section {
+            background: white;
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .reports-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .reports-header h3 {
+            color: #0a2e4d;
+            font-size: 1.3rem;
+        }
+
+        .date-range {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .date-range input {
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+        }
+
+        .report-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .report-card {
+            background: #f8fafc;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .report-card h4 {
+            color: #0a2e4d;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #0a2e4d;
+            padding-bottom: 0.5rem;
+        }
+
+        .report-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+
+        .qr-section {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .qr-btn {
+            background: white;
+            border: 1px solid #0a2e4d;
+            color: #0a2e4d;
+            padding: 0.8rem 2.5rem;
+            border-radius: 2rem;
+            cursor: pointer;
+        }
+
+        .qr-container {
+            display: none;
+            margin: 1.5rem auto 0;
+            padding: 1.5rem;
+            background: white;
+            border: 1px dashed #0a2e4d;
+            border-radius: 1rem;
+            max-width: 280px;
+        }
+
+        .qr-container.show {
+            display: block;
+        }
+
+        .qr-container img {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 1rem;
+            display: block;
+        }
+
+        .footer {
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            padding: 2rem;
+            text-align: center;
+            color: #475569;
+            margin-top: 2rem;
+        }
+
+        .footer .company {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0a2e4d;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer .names {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer .names span {
+            color: #0a2e4d;
+            font-weight: 500;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h3 {
+            color: #0a2e4d;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-content input,
+        .modal-content select {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+        }
+        
+        /* Стили для поля пароля с глазиком */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        
+        .password-wrapper input {
+            margin-bottom: 0;
+            padding-right: 2.5rem;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            user-select: none;
+            font-size: 1.2rem;
+            color: #64748b;
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .service-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            align-items: center;
+        }
+
+        .service-row select {
+            flex: 2;
+            margin-bottom: 0;
+        }
+
+        .service-row input {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .service-row button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        .add-service-btn {
+            background: #0a2e4d;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            margin: 0.5rem 0;
+        }
+
+        .total-amount {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0a2e4d;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            text-align: right;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        .modal-buttons button[type="submit"] {
+            background: #0a2e4d;
+            color: white;
+        }
+
+        .modal-buttons button[type="button"] {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #0a2e4d;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 1001;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a2e4d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .login-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .login-box h2 {
+            color: #0a2e4d;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+        }
+        
+        .login-box .password-wrapper {
+            margin-bottom: 1rem;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #0a2e4d;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .login-box button:hover {
+            background: #1f3e5e;
+        }
+
+        .login-error {
+            color: #dc2626;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
+    <!-- Экран входа -->
     <div class="login-screen" id="loginScreen">
         <div class="login-box">
             <h2>🔐 Вход в СервисКлин</h2>
@@ -127,9 +769,12 @@
         </div>
     </div>
 
+    <!-- Основной контент -->
     <div id="mainContent" style="display: none;">
         <header class="header">
-            <div class="logo"><span>🧼</span> СервисКлин</div>
+            <div class="logo">
+                <span>🧼</span> СервисКлин
+            </div>
             <div class="nav-menu">
                 <button class="nav-btn" data-section="clients">Клиенты</button>
                 <button class="nav-btn" data-section="employees">Сотрудники</button>
@@ -138,64 +783,293 @@
                 <button class="nav-btn" data-section="employeeOrders">📊👥 Отчёт Заказы по сотрудникам</button>
                 <button class="nav-btn active" data-section="reports">📊 Отчёт Аналитический</button>
             </div>
-            <div class="user-info"><span>Администратор</span><button class="btn-secondary" onclick="handleLogout()">Выйти</button></div>
+            <div class="user-info">
+                <span>Администратор</span>
+                <button class="btn-secondary" onclick="handleLogout()">Выйти</button>
+            </div>
         </header>
 
         <main class="main">
             <div class="stats-grid">
-                <div class="stat-card"><div class="stat-value" id="statClients">0</div><div class="stat-label">Клиентов</div></div>
-                <div class="stat-card"><div class="stat-value" id="statEmployees">0</div><div class="stat-label">Сотрудников</div></div>
-                <div class="stat-card"><div class="stat-value" id="statServices">0</div><div class="stat-label">Услуг</div></div>
-                <div class="stat-card"><div class="stat-value" id="statOrders">0</div><div class="stat-label">Заказов</div></div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statClients">0</div>
+                    <div class="stat-label">Клиентов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statEmployees">0</div>
+                    <div class="stat-label">Сотрудников</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statServices">0</div>
+                    <div class="stat-label">Услуг</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statOrders">0</div>
+                    <div class="stat-label">Заказов</div>
+                </div>
             </div>
 
+            <!-- Секция отчётов -->
             <div id="reportsSection" class="reports-section">
-                <div class="reports-header"><h3>📊 Аналитический отчёт</h3>
-                    <div class="date-range"><input type="date" id="startDate"><span>—</span><input type="date" id="endDate"><button class="btn-primary" id="generateReportsBtn">Сформировать</button></div>
-                </div>
-                <div class="report-cards"><div class="report-card"><h4>📅 ИТОГО ЗА ПЕРИОД</h4>
-                    <div id="periodStats">
-                        <div class="report-item"><span>Заказов:</span><span id="periodOrders">0</span></div>
-                        <div class="report-item"><span>Выручка:</span><span id="periodRevenue">0 ₽</span></div>
-                        <div class="report-item"><span>Новых клиентов:</span><span id="periodNewClients">0</span></div>
-                        <div class="report-item"><span>Новых сотрудников:</span><span id="periodNewEmployees">0</span></div>
-                        <div class="report-item"><span>Новых услуг:</span><span id="periodNewServices">0</span></div>
-                        <div class="report-item"><span>Выполнено заказов:</span><span id="periodCompleted">0</span></div>
+                <div class="reports-header">
+                    <h3>📊 Отчёт Аналитический</h3>
+                    <div class="date-range">
+                        <input type="date" id="startDate">
+                        <span>—</span>
+                        <input type="date" id="endDate">
+                        <button class="btn-primary" id="generateReportsBtn">Сформировать</button>
                     </div>
-                </div></div>
-                <div class="export-buttons"><button class="btn-secondary" id="pdfBtn">📄 PDF</button><button class="btn-secondary" id="printBtn">🖨️ Печать</button></div>
+                </div>
+                <div class="report-cards">
+                    <div class="report-card">
+                        <h4>📅 ИТОГО ЗА ПЕРИОД</h4>
+                        <div id="periodStats">
+                            <div class="report-item"><span>Заказов:</span><span id="periodOrders">0</span></div>
+                            <div class="report-item"><span>Выручка:</span><span id="periodRevenue">0 ₽</span></div>
+                            <div class="report-item"><span>Новых клиентов:</span><span id="periodNewClients">0</span></div>
+                            <div class="report-item"><span>Новых сотрудников:</span><span id="periodNewEmployees">0</span></div>
+                            <div class="report-item"><span>Новых услуг:</span><span id="periodNewServices">0</span></div>
+                            <div class="report-item"><span>Выполнено заказов:</span><span id="periodCompleted">0</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-secondary" id="pdfBtn">📄 PDF</button>
+                    <button class="btn-secondary" id="printBtn">🖨️ Печать</button>
+                </div>
             </div>
 
+            <!-- Секция заказов по сотрудникам -->
             <div id="employeeOrdersSection" class="section" style="display: none;">
-                <div class="section-header"><h2>👥 Заказы по сотрудникам</h2>
-                    <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-                        <div class="date-range"><input type="date" id="employeeStartDate"><span>—</span><input type="date" id="employeeEndDate"><button class="btn-primary" id="filterEmployeeOrdersBtn">Применить</button></div>
-                        <div class="export-buttons"><button class="btn-secondary" id="employeeOrdersPdfBtn">📄 PDF</button><button class="btn-secondary" id="employeeOrdersPrintBtn">🖨️ Печать</button></div>
+                <div class="section-header">
+                    <h2>👥 Заказы по сотрудникам</h2>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div class="date-range" style="margin: 0;">
+                            <input type="date" id="employeeStartDate">
+                            <span>—</span>
+                            <input type="date" id="employeeEndDate">
+                            <button class="btn-primary" id="filterEmployeeOrdersBtn">Применить фильтр</button>
+                        </div>
+                        <div class="export-buttons" style="margin: 0;">
+                            <button class="btn-secondary" id="employeeOrdersPdfBtn">📄 PDF</button>
+                            <button class="btn-secondary" id="employeeOrdersPrintBtn">🖨️ Печать</button>
+                        </div>
                     </div>
                 </div>
-                <div class="table-wrapper"><table><thead><tr><th>Сотрудник</th><th>Должность</th><th>Заказов</th><th>Сумма</th><th>Средний чек</th></tr></thead><tbody id="employeeOrdersTable"><tr><td colspan="5">Загрузка...<\/td></tr></tbody></table></div>
-                <div style="padding: 1.5rem;"><h3 style="color:#0a2e4d;">📋 Детализация</h3><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Сотрудник</th><th>Клиент</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th></tr></thead><tbody id="employeeOrdersDetailTableBody"><tr><td colspan="7">Загрузка...<\/td></tr></tbody></td></div></div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Сотрудник</th>
+                                <th>Должность</th>
+                                <th>Заказов за период</th>
+                                <th>Сумма за период</th>
+                                <th>Средний чек</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeOrdersTable">
+                            <tr><td colspan="5">Загрузка...<\/td>   </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <h3 style="color: #0a2e4d; margin-bottom: 1rem;">📋 Детализация заказов за период</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Сотрудник</th>
+                                    <th>Клиент</th>
+                                    <th>Услуги</th>
+                                    <th>Дата</th>
+                                    <th>Сумма</th>
+                                    <th>Статус</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeeOrdersDetailTableBody">
+                                <tr><td colspan="7">Загрузка...<\/td>   </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <div id="clientsSection" class="section" style="display: none;"><div class="section-header"><h2>👤 Клиенты</h2><button class="btn-primary" id="addClientBtn">+ Добавить</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th>Дата</th><th></th></tr></thead><tbody id="clientsTable"></tbody></table></div></div>
-            <div id="employeesSection" class="section" style="display: none;"><div class="section-header"><h2>👩‍💼 Сотрудники</h2><button class="btn-primary" id="addEmployeeBtn">+ Добавить</button></div><div class="table-wrapper"><tr><thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата</th><th></th></tr></thead><tbody id="employeesTable"></tbody></table></div></div>
-            <div id="servicesSection" class="section" style="display: none;"><div class="section-header"><h2>🪣 Услуги</h2><button class="btn-primary" id="addServiceBtn">+ Добавить</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время</th><th>Дата</th><th></th></tr></thead><tbody id="servicesTable"></tbody></table></div></div>
-            <div id="ordersSection" class="section" style="display: none;"><div class="section-header"><h2>📋 Заказы</h2><button class="btn-primary" id="addOrderBtn">+ Создать заказ</button></div><div class="table-wrapper"><td><thead><tr><th>ID</th><th>Клиент</th><th>Сотрудник</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th><th>Создан</th><th></th></tr></thead><tbody id="ordersTable"></tbody></table></div></div>
+            <!-- Секция клиентов -->
+            <div id="clientsSection" class="section" style="display: none;">
+                <div class="section-header">
+                    <h2>👤 Клиенты</h2>
+                    <button class="btn-primary" id="addClientBtn">+ Добавить</button>
+                </div>
+                <div class="table-wrapper">
+                    <tr>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>ФИО</th>
+                                <th>Телефон</th>
+                                <th>Email</th>
+                                <th>Адрес</th>
+                                <th>Дата</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientsTable"><tr><td colspan="7">Загрузка...<\/td>   </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Секция сотрудников -->
+            <div id="employeesSection" class="section" style="display: none;">
+                <div class="section-header">
+                    <h2>👩‍💼 Сотрудники</h2>
+                    <button class="btn-primary" id="addEmployeeBtn">+ Добавить</button>
+                </div>
+                <div class="table-wrapper">
+                    </table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>ФИО</th>
+                                <th>Должность</th>
+                                <th>Телефон</th>
+                                <th>Оклад</th>
+                                <th>Дата</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeesTable"><tr><td colspan="7">Загрузка...<\/td>   <table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Секция услуг -->
+            <div id="servicesSection" class="section" style="display: none;">
+                <div class="section-header">
+                    <h2>🪣 Услуги</h2>
+                    <button class="btn-primary" id="addServiceBtn">+ Добавить</button>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Описание</th>
+                                <th>Цена/м²</th>
+                                <th>Время</th>
+                                <th>Дата</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="servicesTable"><tr><td colspan="7">Загрузка...<\/td>   </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Секция заказов -->
+            <div id="ordersSection" class="section" style="display: none;">
+                <div class="section-header">
+                    <h2>📋 Заказы</h2>
+                    <button class="btn-primary" id="addOrderBtn">+ Создать заказ</button>
+                </div>
+                <div class="table-wrapper">
+                    <tr>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Клиент</th>
+                                <th>Сотрудник</th>
+                                <th>Услуги</th>
+                                <th>Дата</th>
+                                <th>Сумма</th>
+                                <th>Статус</th>
+                                <th>Создан</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTable"><tr><td colspan="9">Загрузка...<\/td>   </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </main>
-        <footer class="footer"><div class="company">ООО «СервисКлин» 2026</div></footer>
+
+        <footer class="footer">
+            <div class="company">ООО «СервисКлин» 2026</div>
+        </footer>
     </div>
 
-    <div class="modal" id="orderModal"><div class="modal-content"><h3 id="orderModalTitle">➕ Создание заказа</h3><form id="orderForm"><input type="hidden" id="orderEditId"><input type="text" id="client_name" placeholder="Имя клиента *" required><select id="employee_id" required><option value="">Выберите сотрудника *</option></select><div id="servicesList"></div><button type="button" class="add-service-btn" id="addServiceRowBtn">+ Добавить услугу</button><div class="total-amount" id="totalAmount">Итого: 0 ₽</div><input type="date" id="order_date" required><select id="status" required><option value="новый">Новый</option><option value="в работе">В работе</option><option value="выполнен">Выполнен</option></select><div class="modal-buttons"><button type="submit">Сохранить</button><button type="button" id="closeOrderModalBtn">Отмена</button></div></form></div></div>
-    <div class="modal" id="simpleModal"><div class="modal-content"><h3 id="simpleModalTitle">Добавление</h3><form id="simpleModalForm"><input type="hidden" id="simpleEditId"><div id="simpleModalFields"></div><div class="modal-buttons"><button type="submit">Сохранить</button><button type="button" id="closeSimpleModalBtn">Отмена</button></div></form></div></div>
+    <!-- Модальное окно для заказов -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <h3 id="orderModalTitle">➕ Создание заказа</h3>
+            <form id="orderForm">
+                <input type="hidden" id="orderEditId">
+                <input type="text" id="client_name" placeholder="Имя клиента *" required>
+                <select id="employee_id" required>
+                    <option value="">Выберите сотрудника *</option>
+                </select>
+                <div id="servicesList">
+                    <div class="service-row">
+                        <select class="service-select" required>
+                            <option value="">Выберите услугу</option>
+                        </select>
+                        <input type="number" class="service-quantity" placeholder="Кол-во м²" value="1" min="0.1" step="0.1">
+                        <button type="button" class="remove-service" style="display:none;">✖</button>
+                    </div>
+                </div>
+                <button type="button" class="add-service-btn" id="addServiceRowBtn">+ Добавить услугу</button>
+                <div class="total-amount" id="totalAmount">Итого: 0 ₽</div>
+                <input type="date" id="order_date" required>
+                <select id="status" required>
+                    <option value="новый">Новый</option>
+                    <option value="в работе">В работе</option>
+                    <option value="выполнен">Выполнен</option>
+                </select>
+                <div class="modal-buttons">
+                    <button type="submit">Сохранить</button>
+                    <button type="button" id="closeOrderModalBtn">Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно для остальных сущностей -->
+    <div class="modal" id="simpleModal">
+        <div class="modal-content">
+            <h3 id="simpleModalTitle">Добавление</h3>
+            <form id="simpleModalForm">
+                <input type="hidden" id="simpleEditId">
+                <div id="simpleModalFields"></div>
+                <div class="modal-buttons">
+                    <button type="submit">Сохранить</button>
+                    <button type="button" id="closeSimpleModalBtn">Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Уведомления -->
     <div class="toast" id="toast">Сохранено</div>
 
+    <!-- Подключение Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        // Функция для переключения видимости пароля
         function togglePasswordVisibility() {
             const pwd = document.getElementById('loginPassword');
             const btn = document.querySelector('.toggle-password');
-            if (pwd.type === 'password') { pwd.type = 'text'; btn.textContent = '🙈'; }
-            else { pwd.type = 'password'; btn.textContent = '👁️'; }
+            if (pwd.type === 'password') {
+                pwd.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                pwd.type = 'password';
+                btn.textContent = '👁️';
+            }
         }
 
         const SUPABASE_URL = 'https://pyojgyasaccwrcdogexx.supabase.co';
@@ -205,7 +1079,15 @@
         let currentTable = 'clients';
         let isAppInitialized = false;
 
-        function escapeHtml(s) { if (!s) return ''; return String(s).replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+        function escapeHtml(s) { 
+            if (!s) return ''; 
+            return String(s).replace(/[&<>]/g, function(m) { 
+                if (m === '&') return '&amp;'; 
+                if (m === '<') return '&lt;'; 
+                if (m === '>') return '&gt;'; 
+                return m; 
+            }); 
+        }
 
         window.handleLogin = function() {
             const user = document.getElementById('loginUsername').value, pwd = document.getElementById('loginPassword').value;
@@ -213,14 +1095,39 @@
                 localStorage.setItem('serviceClean_loggedIn', 'true');
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('mainContent').style.display = 'block';
-                if (!isAppInitialized) { initApp(); isAppInitialized = true; }
+                if (!isAppInitialized) { 
+                    loadAllData(); 
+                    isAppInitialized = true; 
+                }
                 document.querySelector('.nav-btn[data-section="clients"]').click();
-            } else document.getElementById('loginError').textContent = 'Неверный логин или пароль';
+            } else {
+                document.getElementById('loginError').textContent = 'Неверный логин или пароль';
+            }
         };
-        window.handleLogout = function() { localStorage.removeItem('serviceClean_loggedIn'); document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('mainContent').style.display = 'none'; };
-        window.addEventListener('load', function() { if (localStorage.getItem('serviceClean_loggedIn') === 'true') { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('mainContent').style.display = 'block'; initApp(); isAppInitialized = true; document.querySelector('.nav-btn[data-section="clients"]').click(); } });
+        
+        window.handleLogout = function() { 
+            localStorage.removeItem('serviceClean_loggedIn'); 
+            document.getElementById('loginScreen').style.display = 'flex'; 
+            document.getElementById('mainContent').style.display = 'none'; 
+        };
+        
+        window.addEventListener('load', function() { 
+            if (localStorage.getItem('serviceClean_loggedIn') === 'true') { 
+                document.getElementById('loginScreen').style.display = 'none'; 
+                document.getElementById('mainContent').style.display = 'block'; 
+                loadAllData(); 
+                isAppInitialized = true; 
+                document.querySelector('.nav-btn[data-section="clients"]').click(); 
+            } 
+        });
 
-        function showToast(text, isError = false) { let t = document.getElementById('toast'); t.textContent = text; t.style.background = isError ? '#dc2626' : '#0a2e4d'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+        function showToast(text, isError = false) { 
+            let t = document.getElementById('toast'); 
+            t.textContent = text; 
+            t.style.background = isError ? '#dc2626' : '#0a2e4d'; 
+            t.classList.add('show'); 
+            setTimeout(() => t.classList.remove('show'), 2000); 
+        }
 
         document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', function() {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -228,62 +1135,96 @@
             let section = this.dataset.section;
             document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
             document.getElementById('reportsSection').style.display = 'none';
-            if (section === 'reports') document.getElementById('reportsSection').style.display = 'block';
-            else if (section === 'employeeOrders') { document.getElementById('employeeOrdersSection').style.display = 'block'; setDefaultEmployeeDates(); filterEmployeeOrders(); }
-            else { document.getElementById(section + 'Section').style.display = 'block'; loadTable(section); }
+            if (section === 'reports') {
+                document.getElementById('reportsSection').style.display = 'block';
+            } else if (section === 'employeeOrders') {
+                document.getElementById('employeeOrdersSection').style.display = 'block';
+                setDefaultEmployeeDates();
+                filterEmployeeOrders();
+            } else {
+                document.getElementById(section + 'Section').style.display = 'block';
+                loadTable(section);
+            }
         }));
 
-        async function loadTable(table) {
+        async function loadAllData() {
             if (!supabaseClient) return;
             try {
-                let { data, error } = await supabaseClient.from(table).select('*').order('id');
-                if (error) throw error;
-                let tbody = document.getElementById(table + 'Table'), html = '';
-                if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="10">Нет данных<\/td><\/tr>'; updateStats(); return; }
-                data.forEach(item => {
-                    html += '<tr><td>' + escapeHtml(item.id) + '<\/td>';
-                    if (table === 'clients') {
-                        html += '<td>' + escapeHtml(item.full_name) + '<\/td><td>' + escapeHtml(item.phone) + '<\/td><td>' + escapeHtml(item.email) + '<\/td><td>' + escapeHtml(item.address) + '<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
-                    } else if (table === 'employees') {
-                        html += '<td>' + escapeHtml(item.full_name) + '<\/td><td>' + escapeHtml(item.position) + '<\/td><td>' + escapeHtml(item.phone) + '<\/td><td>' + (item.salary || 0) + ' ₽<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
-                    } else if (table === 'services') {
-                        html += '<td>' + escapeHtml(item.name) + '<\/td><td>' + escapeHtml(item.description) + '<\/td><td>' + (item.price_per_m2 || 0) + ' ₽<\/td><td>' + (item.duration || 0) + ' мин<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
-                    } else if (table === 'orders') {
-                        let emp = allEmployees.find(e => e.id == item.employee_id);
-                        html += '<td>' + escapeHtml(item.client_name) + '<\/td><td>' + escapeHtml(emp?.full_name || '—') + '<\/td><td>' + escapeHtml(item.services) + '<\/td><td>' + escapeHtml(item.order_date) + '<\/td><td>' + (item.total_price?.toLocaleString() || 0) + ' ₽<\/td><td>' + escapeHtml(item.status) + '<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
-                    }
-                    html += '<td><button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️<\/button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️<\/button><\/td><\/tr>';
-                });
-                tbody.innerHTML = html;
-                updateStats();
-            } catch(e) { showToast('Ошибка: ' + e.message, true); }
+                let [ordersRes, employeesRes, servicesRes, clientsRes] = await Promise.all([
+                    supabaseClient.from('orders').select('*'),
+                    supabaseClient.from('employees').select('*'),
+                    supabaseClient.from('services').select('*'),
+                    supabaseClient.from('clients').select('*')
+                ]);
+                allOrders = ordersRes.data || [];
+                allEmployees = employeesRes.data || [];
+                allServices = servicesRes.data || [];
+                allClients = clientsRes.data || [];
+                console.log('Загружено клиентов:', allClients.length);
+                console.log('Загружено сотрудников:', allEmployees.length);
+                console.log('Загружено услуг:', allServices.length);
+                console.log('Загружено заказов:', allOrders.length);
+                await updateStats();
+            } catch(e) { 
+                console.error('Ошибка загрузки:', e); 
+                showToast('Ошибка загрузки данных', true); 
+            }
         }
 
-        function setDefaultEmployeeDates() { let d = new Date(); document.getElementById('employeeStartDate').value = new Date(d.getFullYear(),0,1).toISOString().split('T')[0]; document.getElementById('employeeEndDate').value = d.toISOString().split('T')[0]; }
-        
-        function filterEmployeeOrders() {
-            let start = document.getElementById('employeeStartDate').value, end = document.getElementById('employeeEndDate').value;
-            let filtered = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
-            let tbody = document.getElementById('employeeOrdersTable'), detail = document.getElementById('employeeOrdersDetailTableBody');
-            if (!allEmployees.length) { tbody.innerHTML = '<tr><td colspan="5">Нет данных о сотрудниках<\/td><\/tr>'; detail.innerHTML = '<tr><td colspan="7">Нет данных<\/td><\/tr>'; return; }
-            let sumHtml = '', detHtml = '';
-            allEmployees.forEach(emp => {
-                let empOrders = filtered.filter(o => o.employee_id === emp.id), total = empOrders.reduce((s,o) => s + (o.total_price||0),0), avg = empOrders.length ? (total/empOrders.length).toFixed(0) : 0;
-                sumHtml += `<tr><td><strong>${escapeHtml(emp.full_name)}<\/strong><\/td><td>${escapeHtml(emp.position)}<\/td><td>${empOrders.length}<\/td><td>${total.toLocaleString()} ₽<\/td><td>${avg || '—'} ₽<\/td><\/tr>`;
-                if (empOrders.length) {
-                    detHtml += `<tr><td colspan="7" style="background:#e2e8f0;font-weight:600;">👤 ${escapeHtml(emp.full_name)}<\/td><\/tr>`;
-                    empOrders.forEach(o => detHtml += `<tr><td>${o.id}<\/td><td>${escapeHtml(emp.full_name)}<\/td><td>${escapeHtml(o.client_name)}<\/td><td>${escapeHtml(o.services)}<\/td><td>${o.order_date}<\/td><td>${(o.total_price||0).toLocaleString()} ₽<\/td><td>${escapeHtml(o.status)}<\/td><\/tr>`);
+        async function updateStats() {
+            document.getElementById('statClients').textContent = allClients.length;
+            document.getElementById('statEmployees').textContent = allEmployees.length;
+            document.getElementById('statServices').textContent = allServices.length;
+            document.getElementById('statOrders').textContent = allOrders.length;
+        }
+
+        function setDefaultEmployeeDates() { 
+            let d = new Date(); 
+            document.getElementById('employeeStartDate').value = new Date(d.getFullYear(),0,1).toISOString().split('T')[0]; 
+            document.getElementById('employeeEndDate').value = d.toISOString().split('T')[0]; 
+        }
+
+        async function loadTable(table) {
+            let data = [];
+            if (table === 'clients') data = allClients;
+            else if (table === 'employees') data = allEmployees;
+            else if (table === 'services') data = allServices;
+            else if (table === 'orders') data = allOrders;
+            
+            let tbody = document.getElementById(table + 'Table');
+            if (!tbody) { console.error('Элемент не найден:', table + 'Table'); return; }
+            
+            if (!data || data.length === 0) { 
+                tbody.innerHTML = '<tr><td colspan="10">Нет данных<\/td><\/tr>'; 
+                return; 
+            }
+            
+            let html = '';
+            data.forEach(item => {
+                html += '<tr>';
+                html += '<td>' + escapeHtml(item.id) + '<\/td>';
+                if (table === 'clients') {
+                    html += '<td>' + escapeHtml(item.full_name) + '<\/td><td>' + escapeHtml(item.phone) + '<\/td><td>' + escapeHtml(item.email) + '<\/td><td>' + escapeHtml(item.address) + '<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
+                } else if (table === 'employees') {
+                    html += '<td>' + escapeHtml(item.full_name) + '<\/td><td>' + escapeHtml(item.position) + '<\/td><td>' + escapeHtml(item.phone) + '<\/td><td>' + (item.salary || 0) + ' ₽<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
+                } else if (table === 'services') {
+                    html += '<td>' + escapeHtml(item.name) + '<\/td><td>' + escapeHtml(item.description) + '<\/td><td>' + (item.price_per_m2 || 0) + ' ₽<\/td><td>' + (item.duration || 0) + ' мин<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
+                } else if (table === 'orders') {
+                    let emp = allEmployees.find(e => e.id == item.employee_id);
+                    html += '<td>' + escapeHtml(item.client_name) + '<\/td><td>' + escapeHtml(emp?.full_name || '—') + '<\/td><td>' + escapeHtml(item.services) + '<\/td><td>' + escapeHtml(item.order_date) + '<\/td><td>' + (item.total_price?.toLocaleString() || 0) + ' ₽<\/td><td>' + escapeHtml(item.status) + '<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
                 }
+                html += '<td><button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️<\/button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️<\/button><\/td><\/tr>';
             });
-            tbody.innerHTML = sumHtml || '<tr><td colspan="5">Нет заказов<\/td><\/tr>';
-            detail.innerHTML = detHtml || '<tr><td colspan="7">Нет заказов за период<\/td><\/tr>';
+            tbody.innerHTML = html;
         }
 
         window.editItem = async function(table, id) {
-            if (!supabaseClient) return;
-            currentTable = table;
-            let { data } = await supabaseClient.from(table).select('*').eq('id', id).single();
+            let data = null;
+            if (table === 'clients') data = allClients.find(i => i.id == id);
+            else if (table === 'employees') data = allEmployees.find(i => i.id == id);
+            else if (table === 'services') data = allServices.find(i => i.id == id);
             if (!data) return;
+            currentTable = table;
             let titles = { clients:'Редактировать клиента', employees:'Редактировать сотрудника', services:'Редактировать услугу' };
             document.getElementById('simpleModalTitle').textContent = titles[table];
             document.getElementById('simpleEditId').value = id;
@@ -295,9 +1236,77 @@
             document.getElementById('simpleModal').classList.add('show');
         };
 
+        window.deleteItem = async function(table, id) { 
+            if(!confirm('Удалить?')) return;
+            try { 
+                await supabaseClient.from(table).delete().eq('id',id); 
+                showToast('Удалено'); 
+                await loadAllData(); 
+                document.querySelector(`.nav-btn[data-section="${table}"]`).click();
+            } catch(e){ showToast('Ошибка', true); } 
+        };
+
+        document.getElementById('addClientBtn').addEventListener('click', () => { 
+            currentTable='clients'; 
+            document.getElementById('simpleModalTitle').textContent='Добавить клиента'; 
+            document.getElementById('simpleEditId').value=''; 
+            document.getElementById('simpleModalFields').innerHTML='<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="email" id="email" placeholder="Email"><input type="text" id="address" placeholder="Адрес">'; 
+            document.getElementById('simpleModal').classList.add('show'); 
+        });
+        
+        document.getElementById('addEmployeeBtn').addEventListener('click', () => { 
+            currentTable='employees'; 
+            document.getElementById('simpleModalTitle').textContent='Добавить сотрудника'; 
+            document.getElementById('simpleEditId').value=''; 
+            document.getElementById('simpleModalFields').innerHTML='<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="position" placeholder="Должность *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="number" id="salary" step="0.01" placeholder="Оклад">'; 
+            document.getElementById('simpleModal').classList.add('show'); 
+        });
+        
+        document.getElementById('addServiceBtn').addEventListener('click', () => { 
+            currentTable='services'; 
+            document.getElementById('simpleModalTitle').textContent='Добавить услугу'; 
+            document.getElementById('simpleEditId').value=''; 
+            document.getElementById('simpleModalFields').innerHTML='<input type="text" id="name" placeholder="Название *" required><input type="text" id="description" placeholder="Описание"><input type="number" id="price_per_m2" step="0.01" placeholder="Цена/м² *" required><input type="number" id="duration" placeholder="Длительность (мин)">'; 
+            document.getElementById('simpleModal').classList.add('show'); 
+        });
+
+        document.getElementById('simpleModalForm').addEventListener('submit', async(e) => { 
+            e.preventDefault(); 
+            let form={}, inputs=document.querySelectorAll('#simpleModalFields input'); 
+            inputs.forEach(i=>{ 
+                if(i.type==='number') form[i.id]=parseFloat(i.value)||0; 
+                else form[i.id]=i.value; 
+            }); 
+            let id=document.getElementById('simpleEditId').value; 
+            try{ 
+                if(id) await supabaseClient.from(currentTable).update(form).eq('id',id); 
+                else { form.created_at=new Date().toISOString(); await supabaseClient.from(currentTable).insert([form]); } 
+                showToast(id?'Обновлено':'Добавлено'); 
+                document.getElementById('simpleModal').classList.remove('show'); 
+                await loadAllData(); 
+                document.querySelector(`.nav-btn[data-section="${currentTable}"]`).click();
+            } catch(error){ showToast('Ошибка: '+error.message, true); } 
+        });
+
+        document.getElementById('addOrderBtn').addEventListener('click', () => { 
+            if(!allEmployees.length||!allServices.length){ showToast('Данные загружаются, подождите секунду', true); return; } 
+            document.getElementById('orderModalTitle').textContent='➕ Создание заказа'; 
+            document.getElementById('orderEditId').value=''; 
+            document.getElementById('client_name').value=''; 
+            document.getElementById('order_date').value=''; 
+            document.getElementById('status').value='новый'; 
+            let sel=document.getElementById('employee_id'); 
+            sel.innerHTML='<option value="">Выберите сотрудника *</option>'; 
+            allEmployees.forEach(e=>sel.innerHTML+=`<option value="${e.id}">${escapeHtml(e.full_name)}</option>`); 
+            document.getElementById('servicesList').innerHTML=''; 
+            addServiceRow(); 
+            document.getElementById('orderModal').classList.add('show'); 
+        });
+        
+        document.getElementById('addServiceRowBtn').addEventListener('click', () => addServiceRow());
+
         window.editOrder = async function(id) {
-            if (!supabaseClient) return;
-            const { data } = await supabaseClient.from('orders').select('*').eq('id', id).single();
+            const data = allOrders.find(o => o.id == id);
             if (!data) return;
             document.getElementById('orderModalTitle').textContent = '✏️ Редактирование заказа';
             document.getElementById('orderEditId').value = id;
@@ -306,7 +1315,9 @@
             document.getElementById('status').value = data.status || 'новый';
             const employeeSelect = document.getElementById('employee_id');
             employeeSelect.innerHTML = '<option value="">Выберите сотрудника *</option>';
-            allEmployees.forEach(emp => { employeeSelect.innerHTML += `<option value="${emp.id}" ${emp.id == data.employee_id ? 'selected' : ''}>${escapeHtml(emp.full_name)}</option>`; });
+            allEmployees.forEach(emp => { 
+                employeeSelect.innerHTML += `<option value="${emp.id}" ${emp.id == data.employee_id ? 'selected' : ''}>${escapeHtml(emp.full_name)}</option>`; 
+            });
             document.getElementById('servicesList').innerHTML = '';
             if (data.services) {
                 const serviceStrings = data.services.split(',').map(s => s.trim());
@@ -338,10 +1349,10 @@
             servicesList.appendChild(newRow);
             newRow.querySelector('.service-select').addEventListener('change', calculateTotal);
             newRow.querySelector('.service-quantity').addEventListener('input', calculateTotal);
-            newRow.querySelector('.remove-service').addEventListener('click', function() {
-                newRow.remove();
-                if (document.querySelectorAll('.service-row').length === 0) addServiceRow();
-                else calculateTotal();
+            newRow.querySelector('.remove-service').addEventListener('click', function() { 
+                newRow.remove(); 
+                if (document.querySelectorAll('.service-row').length === 0) addServiceRow(); 
+                else calculateTotal(); 
             });
             calculateTotal();
         }
@@ -349,52 +1360,12 @@
         function calculateTotal() {
             let total = 0;
             document.querySelectorAll('.service-row').forEach(row => {
-                const select = row.querySelector('.service-select');
-                const quantity = row.querySelector('.service-quantity');
-                if (select.value && quantity.value) {
-                    const price = parseFloat(select.selectedOptions[0]?.dataset.price || 0);
-                    const qty = parseFloat(quantity.value) || 0;
-                    total += price * qty;
-                }
+                const select = row.querySelector('.service-select'), quantity = row.querySelector('.service-quantity');
+                if (select.value && quantity.value) total += parseFloat(select.selectedOptions[0]?.dataset.price || 0) * parseFloat(quantity.value);
             });
             document.getElementById('totalAmount').textContent = 'Итого: ' + total.toLocaleString() + ' ₽';
             return total;
         }
-
-        document.getElementById('addClientBtn').addEventListener('click', () => { currentTable='clients'; document.getElementById('simpleModalTitle').textContent='Добавить клиента'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="email" id="email" placeholder="Email"><input type="text" id="address" placeholder="Адрес">'; document.getElementById('simpleModal').classList.add('show'); });
-        document.getElementById('addEmployeeBtn').addEventListener('click', () => { currentTable='employees'; document.getElementById('simpleModalTitle').textContent='Добавить сотрудника'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="position" placeholder="Должность *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="number" id="salary" step="0.01" placeholder="Оклад">'; document.getElementById('simpleModal').classList.add('show'); });
-        document.getElementById('addServiceBtn').addEventListener('click', () => { currentTable='services'; document.getElementById('simpleModalTitle').textContent='Добавить услугу'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="name" placeholder="Название *" required><input type="text" id="description" placeholder="Описание"><input type="number" id="price_per_m2" step="0.01" placeholder="Цена/м² *" required><input type="number" id="duration" placeholder="Длительность (мин)">'; document.getElementById('simpleModal').classList.add('show'); });
-        
-        document.getElementById('addOrderBtn').addEventListener('click', () => { 
-            if(!allEmployees.length||!allServices.length){ showToast('Данные загружаются, подождите секунду', true); return; } 
-            document.getElementById('orderModalTitle').textContent='➕ Создание заказа'; 
-            document.getElementById('orderEditId').value=''; 
-            document.getElementById('client_name').value=''; 
-            document.getElementById('order_date').value=''; 
-            document.getElementById('status').value='новый'; 
-            let sel=document.getElementById('employee_id'); 
-            sel.innerHTML='<option value="">Выберите сотрудника *</option>'; 
-            allEmployees.forEach(e=>sel.innerHTML+=`<option value="${e.id}">${escapeHtml(e.full_name)}</option>`); 
-            document.getElementById('servicesList').innerHTML=''; 
-            addServiceRow(); 
-            document.getElementById('orderModal').classList.add('show'); 
-        });
-        document.getElementById('addServiceRowBtn').addEventListener('click', () => addServiceRow());
-        
-        document.getElementById('simpleModalForm').addEventListener('submit', async(e) => { 
-            e.preventDefault(); 
-            let form={}, inputs=document.querySelectorAll('#simpleModalFields input'); 
-            inputs.forEach(i=>{ if(i.type==='number') form[i.id]=parseFloat(i.value)||0; else form[i.id]=i.value; }); 
-            let id=document.getElementById('simpleEditId').value; 
-            try{ 
-                if(id) await supabaseClient.from(currentTable).update(form).eq('id',id); 
-                else { form.created_at=new Date().toISOString(); await supabaseClient.from(currentTable).insert([form]); } 
-                showToast(id?'Обновлено':'Добавлено'); 
-                document.getElementById('simpleModal').classList.remove('show'); 
-                loadTable(currentTable); 
-                loadAllData(); 
-            } catch(error){ showToast('Ошибка: '+error.message, true); } 
-        });
 
         document.getElementById('orderForm').addEventListener('submit', async(e) => {
             e.preventDefault();
@@ -423,19 +1394,47 @@
                 else { formData.created_at = new Date().toISOString(); await supabaseClient.from('orders').insert([formData]); }
                 showToast(editId ? 'Заказ обновлён' : 'Заказ создан');
                 document.getElementById('orderModal').classList.remove('show');
-                loadTable('orders');
-                loadAllData();
+                await loadAllData();
+                document.querySelector('.nav-btn[data-section="orders"]').click();
             } catch(error) { showToast('Ошибка: ' + error.message, true); }
         });
-
+        
         document.getElementById('closeOrderModalBtn').addEventListener('click', () => document.getElementById('orderModal').classList.remove('show'));
         document.getElementById('closeSimpleModalBtn').addEventListener('click', () => document.getElementById('simpleModal').classList.remove('show'));
         
-        window.deleteItem = async function(table, id) { if(confirm('Удалить?')) try{ await supabaseClient.from(table).delete().eq('id',id); showToast('Удалено'); loadTable(table); loadAllData(); } catch(e){ showToast('Ошибка', true); } };
-        
+        function filterEmployeeOrders() {
+            let start = document.getElementById('employeeStartDate').value, end = document.getElementById('employeeEndDate').value;
+            if(!start || !end) { 
+                let d=new Date(); 
+                start=new Date(d.getFullYear(),0,1).toISOString().split('T')[0]; 
+                end=d.toISOString().split('T')[0]; 
+                document.getElementById('employeeStartDate').value=start; 
+                document.getElementById('employeeEndDate').value=end; 
+            }
+            let filtered = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
+            let tbody = document.getElementById('employeeOrdersTable'), detail = document.getElementById('employeeOrdersDetailTableBody');
+            if (!allEmployees.length) { 
+                tbody.innerHTML = '<tr><td colspan="5">Нет данных о сотрудниках<\/td><\/tr>'; 
+                detail.innerHTML = '<tr><td colspan="7">Нет данных<\/td><\/tr>'; 
+                return; 
+            }
+            let sumHtml = '', detHtml = '';
+            allEmployees.forEach(emp => {
+                let empOrders = filtered.filter(o => o.employee_id === emp.id), total = empOrders.reduce((s,o) => s + (o.total_price||0),0), avg = empOrders.length ? (total/empOrders.length).toFixed(0) : 0;
+                sumHtml += `<tr><td><strong>${escapeHtml(emp.full_name)}<\/strong><\/td><td>${escapeHtml(emp.position)}<\/td><td>${empOrders.length}<\/td><td>${total.toLocaleString()} ₽<\/td><td>${avg || '—'} ₽<\/td><\/tr>`;
+                if (empOrders.length) {
+                    detHtml += `<tr><td colspan="7" style="background:#e2e8f0;font-weight:600;">👤 ${escapeHtml(emp.full_name)}<\/td><\/tr>`;
+                    empOrders.forEach(o => detHtml += `<tr><td>${o.id}<\/td><td>${escapeHtml(emp.full_name)}<\/td><td>${escapeHtml(o.client_name)}<\/td><td>${escapeHtml(o.services)}<\/td><td>${o.order_date}<\/td><td>${(o.total_price||0).toLocaleString()} ₽<\/td><td>${escapeHtml(o.status)}<\/td><\/tr>`);
+                }
+            });
+            tbody.innerHTML = sumHtml || '<tr><td colspan="5">Нет заказов<\/td><\/tr>';
+            detail.innerHTML = detHtml || '<tr><td colspan="7">Нет заказов за период<\/td><\/tr>';
+        }
+
+        document.getElementById('filterEmployeeOrdersBtn').addEventListener('click', filterEmployeeOrders);
         document.getElementById('employeeOrdersPdfBtn').addEventListener('click', () => { showToast('PDF подготовлен'); window.print(); });
         document.getElementById('employeeOrdersPrintBtn').addEventListener('click', () => window.print());
-        document.getElementById('filterEmployeeOrdersBtn').addEventListener('click', filterEmployeeOrders);
+        
         document.getElementById('generateReportsBtn').addEventListener('click', function() {
             let start = document.getElementById('startDate').value, end = document.getElementById('endDate').value;
             let filteredOrders = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
@@ -449,40 +1448,9 @@
             document.getElementById('periodNewServices').textContent = filteredServices.length;
             document.getElementById('periodCompleted').textContent = filteredOrders.filter(o => o.status === 'выполнен').length;
         });
+        
         document.getElementById('pdfBtn').addEventListener('click', () => window.print());
         document.getElementById('printBtn').addEventListener('click', () => window.print());
-
-        async function loadAllData() {
-            if (!supabaseClient) return;
-            try {
-                let [ordersRes, employeesRes, servicesRes, clientsRes] = await Promise.all([
-                    supabaseClient.from('orders').select('*'),
-                    supabaseClient.from('employees').select('*'),
-                    supabaseClient.from('services').select('*'),
-                    supabaseClient.from('clients').select('*')
-                ]);
-                allOrders = ordersRes.data || [];
-                allEmployees = employeesRes.data || [];
-                allServices = servicesRes.data || [];
-                allClients = clientsRes.data || [];
-                let today = new Date();
-                let start = new Date(today.getFullYear(), 0, 1).toISOString().split('T')[0];
-                let end = today.toISOString().split('T')[0];
-                document.getElementById('startDate').value = start;
-                document.getElementById('endDate').value = end;
-                setDefaultEmployeeDates();
-                document.getElementById('generateReportsBtn').click();
-                filterEmployeeOrders();
-            } catch(e) { showToast('Ошибка загрузки: '+e.message, true); }
-        }
-
-        async function updateStats() {
-            if (!supabaseClient) return;
-            let tables = ['clients', 'employees', 'services', 'orders'];
-            for(let t of tables) try { let { count } = await supabaseClient.from(t).select('*', { count:'exact', head:true }); document.getElementById('stat'+t.charAt(0).toUpperCase()+t.slice(1)).textContent = count || 0; } catch(e) {}
-        }
-
-        function initApp() { loadAllData(); updateStats(); loadTable('clients'); }
     </script>
 </body>
 </html>
