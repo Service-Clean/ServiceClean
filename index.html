@@ -295,7 +295,7 @@
         }
 
         .main {
-            flex: 1; /* чтобы занимать всё свободное пространство и прижимать подвал к низу */
+            flex: 1;
             max-width: 1300px;
             width: 100%;
             margin: 2rem auto;
@@ -304,7 +304,6 @@
 
         .stats-grid {
             display: grid;
-            /* меняем с 4 колонок на 2 колонки для двух рядов */
             grid-template-columns: repeat(2, 1fr);
             gap: 1.5rem;
             margin-bottom: 2rem;
@@ -875,7 +874,7 @@
                 <div style="padding: 1.5rem;">
                     <h3 style="color: #0a2e4d; margin-bottom: 1rem;">📋 Детализация заказов за период</h3>
                     <div class="table-wrapper">
-                        <table>
+                        </table>
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -939,9 +938,9 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody id="employeesTable"><tr><td colspan="7">Загрузка...<\/td>   <table>
+                        <tbody id="employeesTable"><tr><td colspan="7">Загрузка...<\/td>   </tr>
                         </tbody>
-                    </table>
+                    </tr>
                 </div>
             </div>
 
@@ -952,7 +951,7 @@
                     <button class="btn-primary" id="addServiceBtn">+ Добавить</button>
                 </div>
                 <div class="table-wrapper">
-                    <table>
+                    <tr>
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -1208,7 +1207,7 @@
                 } else if (table === 'employees') {
                     html += '<td>' + escapeHtml(item.full_name) + '<\/td><td>' + escapeHtml(item.position) + '<\/td><td>' + escapeHtml(item.phone) + '<\/td><td>' + (item.salary || 0) + ' ₽<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
                 } else if (table === 'services') {
-                    html += '<td>' + escapeHtml(item.name) + '<\/td><td>' + escapeHtml(item.description) + '<\/td><td>' + (item.price_per_m2 || 0) + ' ₽<\/td><td>' + (item.duration || 0) + ' мин<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
+                    html += '<td>' + escapeHtml(item.name) + '<\/td><td>' + escapeHtml(item.description) + '<\/td><td>' + (item.price_per_m2 || 0) + ' ₽<\/td></tr>' + (item.duration || 0) + ' мин<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
                 } else if (table === 'orders') {
                     let emp = allEmployees.find(e => e.id == item.employee_id);
                     html += '<td>' + escapeHtml(item.client_name) + '<\/td><td>' + escapeHtml(emp?.full_name || '—') + '<\/td><td>' + escapeHtml(item.services) + '<\/td><td>' + escapeHtml(item.order_date) + '<\/td><td>' + (item.total_price?.toLocaleString() || 0) + ' ₽<\/td><td>' + escapeHtml(item.status) + '<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
@@ -1421,7 +1420,7 @@
             let sumHtml = '', detHtml = '';
             allEmployees.forEach(emp => {
                 let empOrders = filtered.filter(o => o.employee_id === emp.id), total = empOrders.reduce((s,o) => s + (o.total_price||0),0), avg = empOrders.length ? (total/empOrders.length).toFixed(0) : 0;
-                sumHtml += `<tr><td><strong>${escapeHtml(emp.full_name)}<\/strong><\/td><td>${escapeHtml(emp.position)}<\/td><td>${empOrders.length}<\/td><td>${total.toLocaleString()} ₽<\/td><td>${avg || '—'} ₽<\/td><\/tr>`;
+                sumHtml += `<tr>}<strong>${escapeHtml(emp.full_name)}<\/strong><\/td><td>${escapeHtml(emp.position)}<\/td><td>${empOrders.length}<\/td><td>${total.toLocaleString()} ₽<\/td><td>${avg || '—'} ₽<\/td><\/tr>`;
                 if (empOrders.length) {
                     detHtml += `<tr><td colspan="7" style="background:#e2e8f0;font-weight:600;">👤 ${escapeHtml(emp.full_name)}<\/td><\/tr>`;
                     empOrders.forEach(o => detHtml += `<tr><td>${o.id}<\/td><td>${escapeHtml(emp.full_name)}<\/td><td>${escapeHtml(o.client_name)}<\/td><td>${escapeHtml(o.services)}<\/td><td>${o.order_date}<\/td><td>${(o.total_price||0).toLocaleString()} ₽<\/td><td>${escapeHtml(o.status)}<\/td><\/tr>`);
