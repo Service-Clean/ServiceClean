@@ -268,96 +268,72 @@
             document.getElementById('simpleModal').classList.add('show');
         };
 
-        window.editOrder = async function(id) {
-    if (!supabaseClient) {
-        showToast('Нет подключения к БД', true);
-        return;
-    }
-    // Если данные ещё не загружены — ждём и пробуем снова
-    if (!allEmployees.length || !allServices.length) {
-        showToast('Загрузка данных, подождите...', false);
-        await loadAllData();
-        await editOrder(id);
-        return;
-    }
+        Window.editOrder = async function(id) {
+            If (!supabaseClient || !allEmployees.length || !allServices.length) { showToast('Данные загружаются', true); return; }
+            Let { data } = await supabaseClient.from('orders').select('*').eq('id', id).single();
+            If (!data) return;
+            Document.getElementById('orderModalTitle').textContent = '✏️ Редактирование заказа';
+            Document.getElementById('orderEditId').value = id;
+            Document.getElementById('client_name').value = data.client_name || '';
+            Document.getElementById('order_date').value = data.order_date || '';
+            Document.getElementById('status').value = data.status || 'новый';
+            Let empSelect = document.getElementById('employee_id');
+            empSelect.innerHTML = '<option value=»»>Выберите сотрудника *</option>';
+            allEmployees.forEach(e => empSelect.innerHTML += `<option value=»${e.id}» ${e.id == data.employee_id ? 'selected' : ''}>${escapeHtml(e.full_name)}</option>`);
+            document.getElementById('servicesList').innerHTML = '';
+            if (data.services) {
+                let parts = data.services.split(',').map(s => s.trim());
+                parts.forEach(p => {
+                    let match = p.match(/(.+?)\s*\(([\d\.]+)\s*м²\)/);
+                    if (match) { let srv = allServices.find(s => s.name === match[1]); if(srv) addServiceRow(srv.id, parseFloat(match[2])); else addServiceRow(null, 1); }
+                    else addServiceRow(null, 1);
+                });
+            } else addServiceRow(null, 1);
+            calculateTotal();
+            document.getElementById('orderModal').classList.add('show');
+        };
 
-    const { data } = await supabaseClient.from('orders').select('*').eq('id', id).single();
-    if (!data) {
-        showToast('Заказ не найден', true);
-        return;
-    }
+        Function addServiceRow(selectedServiceId, quantity) {
+            Const servicesList = document.getElementById('servicesList');
+            Const newRow = document.createElement('div');
+            newRow.className = 'service-row';
+            
+            let options = '<option value=»»>Выберите услугу</option>';
+            allServices.forEach(service => {
+                const selected = service.id == selectedServiceId ? 'selected' : '';
+                options += '<option value=»' + escapeHtml(service.id) + '» data-price=»' + escapeHtml(service.price_per_m2) + '» ' + selected + '>' + escapeHtml(service.name) + ' (' + escapeHtml(service.price_per_m2) + ' ₽/м²)</option>';
+            });
 
-    document.getElementById('orderModalTitle').textContent = '✏️ Редактирование заказа';
-    document.getElementById('orderEditId').value = id;
-    document.getElementById('client_name').value = data.client_name || '';
-    document.getElementById('order_date').value = data.order_date || '';
-    document.getElementById('status').value = data.status || 'новый';
+            newRow.innerHTML = '<select class=»service-select» required>' + options + '</select>' +
+                               '<input type=»number» class=»service-quantity» placeholder=»Кол-во м²» value=»' + (quantity || 1) + '» min=»0.1» step=»0.1»>' +
+                               '<button type=»button» class=»remove-service»>✖</button>';
 
-    const employeeSelect = document.getElementById('employee_id');
-    employeeSelect.innerHTML = '<option value="">Выберите сотрудника *</option>';
-    allEmployees.forEach(emp => {
-        employeeSelect.innerHTML += `<option value="${emp.id}" ${emp.id == data.employee_id ? 'selected' : ''}>${escapeHtml(emp.full_name)}</option>`;
-    });
+            servicesList.appendChild(newRow);
 
-    document.getElementById('servicesList').innerHTML = '';
-    if (data.services) {
-        const serviceStrings = data.services.split(',').map(s => s.trim());
-        for (const serviceStr of serviceStrings) {
-            const match = serviceStr.match(/(.+?)\s*\((\d+(?:\.\d+)?)\s*м²\)/);
-            if (match) {
-                const serviceName = match[1].trim();
-                const quantity = parseFloat(match[2]);
-                const service = allServices.find(s => s.name === serviceName);
-                if (service) {
-                    addServiceRow(service.id, quantity);
-                } else {
+            newRow.querySelector('.service-select').addEventListener('change', calculateTotal);
+            newRow.querySelector('.service-quantity').addEventListener('input', calculateTotal);
+            newRow.querySelector('.remove-service').addEventListener('click', function() {
+                newRow.remove();
+                if (document.querySelectorAll('.service-row').length === 0) {
                     addServiceRow(null, 1);
+                } else {
+                    calculateTotal();
                 }
-            } else {
-                addServiceRow(null, 1);
-            }
-        }
-    } else {
-        addServiceRow(null, 1);
-    }
+            });
 
-    calculateTotal();
-    document.getElementById('orderModal').classList.add('show');
-};
-        function addServiceRow(selectedServiceId, quantity) {
-    const servicesList = document.getElementById('servicesList');
-    const newRow = document.createElement('div');
-    newRow.className = 'service-row';
-    
-    let options = '<option value="">Выберите услугу</option>';
-    if (allServices.length === 0) {
-        options += '<option disabled>Нет услуг — добавьте сначала</option>';
-    } else {
-        allServices.forEach(service => {
-            const selected = (service.id == selectedServiceId) ? 'selected' : '';
-            options += `<option value="${service.id}" data-price="${service.price_per_m2}" ${selected}>${escapeHtml(service.name)} (${escapeHtml(service.price_per_m2)} ₽/м²)</option>`;
-        });
-    }
-
-    newRow.innerHTML = `<select class="service-select" required>${options}</select>` +
-                       `<input type="number" class="service-quantity" placeholder="Кол-во м²" value="${quantity || 1}" min="0.1" step="0.1">` +
-                       `<button type="button" class="remove-service">✖</button>`;
-
-    servicesList.appendChild(newRow);
-
-    newRow.querySelector('.service-select').addEventListener('change', calculateTotal);
-    newRow.querySelector('.service-quantity').addEventListener('input', calculateTotal);
-    newRow.querySelector('.remove-service').addEventListener('click', function() {
-        newRow.remove();
-        if (document.querySelectorAll('.service-row').length === 0) {
-            addServiceRow(null, 1);
-        } else {
             calculateTotal();
         }
-    });
 
-    calculateTotal();
-}
+        Function calculateTotal() {
+            Let total = 0;
+            Document.querySelectorAll('.service-row').forEach(row => {
+                Let sel = row.querySelector('.service-select'), qty = row.querySelector('.service-quantity');
+                If(sel.value && qty.value) { let price = parseFloat(sel.selectedOptions[0]?.dataset.price || 0); total += price * parseFloat(qty.value); }
+            });
+            Document.getElementById('totalAmount').textContent = `Итого: ${total.toLocaleString()} ₽`;
+            Return total;
+        }
+
         Document.getElementById('addClientBtn').addEventListener('click', () => { currentTable='clients'; document.getElementById('simpleModalTitle').textContent='Добавить клиента'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type=»text» id=»full_name» placeholder=»ФИО *» required><input type=»text» id=»phone» placeholder=»Телефон *» required><input type=»email» id=»email» placeholder=»Email»><input type=»text» id=»address» placeholder=»Адрес»>'; document.getElementById('simpleModal').classList.add('show'); });
         Document.getElementById('addEmployeeBtn').addEventListener('click', () => { currentTable='employees'; document.getElementById('simpleModalTitle').textContent='Добавить сотрудника'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type=»text» id=»full_name» placeholder=»ФИО *» required><input type=»text» id=»position» placeholder=»Должность *» required><input type=»text» id=»phone» placeholder=»Телефон *» required><input type=»number» id=»salary» step=»0.01» placeholder=»Оклад»>'; document.getElementById('simpleModal').classList.add('show'); });
         Document.getElementById('addServiceBtn').addEventListener('click', () => { currentTable='services'; document.getElementById('simpleModalTitle').textContent='Добавить услугу'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type=»text» id=»name» placeholder=»Название *» required><input type=»text» id=»description» placeholder=»Описание»><input type=»number» id=»price_per_m2» step=»0.01» placeholder=»Цена/м² *» required><input type=»number» id=»duration» placeholder=»Длительность (мин)»>'; document.getElementById('simpleModal').classList.add('show'); });
