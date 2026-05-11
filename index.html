@@ -574,8 +574,7 @@
             border: 1px solid #e2e8f0;
             border-radius: 0.5rem;
         }
-        
-        /* Стили для поля пароля с глазиком */
+
         .password-wrapper {
             position: relative;
             width: 100%;
@@ -751,6 +750,26 @@
             margin-top: 0.5rem;
             text-align: center;
         }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        th {
+            background: #f8fafc;
+            color: #0a2e4d;
+        }
     </style>
 </head>
 <body>
@@ -789,6 +808,7 @@
                 <div class="stat-card"><div class="stat-value" id="statOrders">0</div><div class="stat-label">Заказов</div></div>
             </div>
 
+            <!-- Аналитический отчёт -->
             <div id="reportsSection" class="reports-section">
                 <div class="reports-header"><h3>📊 Отчёт Аналитический</h3>
                     <div class="date-range"><input type="date" id="startDate"><span>—</span><input type="date" id="endDate"><button class="btn-primary" id="generateReportsBtn">Сформировать</button></div>
@@ -806,6 +826,7 @@
                 <div class="export-buttons"><button class="btn-secondary" id="pdfBtn">📄 PDF</button><button class="btn-secondary" id="printBtn">🖨️ Печать</button></div>
             </div>
 
+            <!-- Заказы по сотрудникам -->
             <div id="employeeOrdersSection" class="section" style="display: none;">
                 <div class="section-header"><h2>📊👥 Отчёт Заказы по сотрудникам</h2>
                     <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
@@ -813,33 +834,42 @@
                         <div class="export-buttons"><button class="btn-secondary" id="employeeOrdersPdfBtn">📄 PDF</button><button class="btn-secondary" id="employeeOrdersPrintBtn">🖨️ Печать</button></div>
                     </div>
                 </div>
-                <div class="table-wrapper"><table><thead><tr><th>Сотрудник</th><th>Должность</th><th>Заказов</th><th>Сумма</th><th>Средний чек</th></tr></thead><tbody id="employeeOrdersTable"></tbody></table></div>
+                <div class="table-wrapper"><td><thead><tr><th>Сотрудник</th><th>Должность</th><th>Заказов</th><th>Сумма</th><th>Средний чек</th></tr></thead><tbody id="employeeOrdersTable"></tbody></table></div>
                 <div style="padding: 1.5rem;"><h3 style="color:#0a2e4d;">📋 Детализация</h3><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Сотрудник</th><th>Клиент</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th></tr></thead><tbody id="employeeOrdersDetailTableBody"></tbody></table></div></div>
             </div>
 
+            <!-- Клиенты -->
             <div id="clientsSection" class="section" style="display: none;">
                 <div class="section-header"><h2>👤 Клиенты</h2><button class="btn-primary" id="addClientBtn">+ Добавить</button></div>
-                <div class="table-wrapper"><table><thead><tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th>Дата</th><th></th></tr></thead><tbody id="clientsTable"></tbody></table></div>
+                <div class="table-wrapper"><table><thead><tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th>Дата</th><th></th></tr></thead>
+                <tbody id="clientsTable"></tbody></table></div>
             </div>
 
+            <!-- Сотрудники -->
             <div id="employeesSection" class="section" style="display: none;">
                 <div class="section-header"><h2>👩‍💼 Сотрудники</h2><button class="btn-primary" id="addEmployeeBtn">+ Добавить</button></div>
-                <div class="table-wrapper"><tr><thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата</th><th></th></tr></thead><tbody id="employeesTable"></tbody></td></div>
+                <div class="table-wrapper"></tr><thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата</th><th></th></tr></thead>
+                <tbody id="employeesTable"></tbody></table></div>
             </div>
 
+            <!-- Услуги -->
             <div id="servicesSection" class="section" style="display: none;">
                 <div class="section-header"><h2>🪣 Услуги</h2><button class="btn-primary" id="addServiceBtn">+ Добавить</button></div>
-                <div class="table-wrapper"><tr><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время</th><th>Дата</th><th></th></td></thead><tbody id="servicesTable"></tbody></td></div>
+                <div class="table-wrapper"></td><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время</th><th>Дата</th><th></th></tr></thead>
+                <tbody id="servicesTable"></tbody></table></div>
             </div>
 
+            <!-- Заказы -->
             <div id="ordersSection" class="section" style="display: none;">
                 <div class="section-header"><h2>📋 Заказы</h2><button class="btn-primary" id="addOrderBtn">+ Создать заказ</button></div>
-                <div class="table-wrapper"><tr><thead><tr><th>ID</th><th>Клиент</th><th>Сотрудник</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th><th>Создан</th><th></th></tr></thead><tbody id="ordersTable"></tbody></td></div>
+                <div class="table-wrapper"><tr><thead><tr><th>ID</th><th>Клиент</th><th>Сотрудник</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th><th>Создан</th><th></th></tr></thead>
+                <tbody id="ordersTable"></tbody></table></div>
             </div>
         </main>
         <footer class="footer"><div class="company">ООО «СервисКлин» 2026</div></footer>
     </div>
 
+    <!-- Модальные окна -->
     <div class="modal" id="orderModal"><div class="modal-content"><h3 id="orderModalTitle">➕ Создание заказа</h3><form id="orderForm"><input type="hidden" id="orderEditId"><input type="text" id="client_name" placeholder="Имя клиента *" required><select id="employee_id" required><option value="">Выберите сотрудника *</option></select><div id="servicesList"></div><button type="button" class="add-service-btn" id="addServiceRowBtn">+ Добавить услугу</button><div class="total-amount" id="totalAmount">Итого: 0 ₽</div><input type="date" id="order_date" required><select id="status" required><option value="новый">Новый</option><option value="в работе">В работе</option><option value="выполнен">Выполнен</option></select><div class="modal-buttons"><button type="submit">Сохранить</button><button type="button" id="closeOrderModalBtn">Отмена</button></div></form></div></div>
     <div class="modal" id="simpleModal"><div class="modal-content"><h3 id="simpleModalTitle">Добавление</h3><form id="simpleModalForm"><input type="hidden" id="simpleEditId"><div id="simpleModalFields"></div><div class="modal-buttons"><button type="submit">Сохранить</button><button type="button" id="closeSimpleModalBtn">Отмена</button></div></form></div></div>
     <div class="toast" id="toast">Сохранено</div>
@@ -877,6 +907,25 @@
 
         function showToast(text, isError = false) { let t = document.getElementById('toast'); t.textContent = text; t.style.background = isError ? '#dc2626' : '#0a2e4d'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
 
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', async function() {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            let section = this.dataset.section;
+            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+            document.getElementById('reportsSection').style.display = 'none';
+            if (section === 'reports') {
+                document.getElementById('reportsSection').style.display = 'block';
+                if (allOrders.length) document.getElementById('generateReportsBtn').click();
+            } else if (section === 'employeeOrders') {
+                document.getElementById('employeeOrdersSection').style.display = 'block';
+                setDefaultEmployeeDates();
+                if (allOrders.length) filterEmployeeOrders();
+            } else {
+                document.getElementById(section + 'Section').style.display = 'block';
+                await loadTable(section);
+            }
+        }));
+
         async function loadAllData() {
             if (!supabaseClient) return;
             try {
@@ -890,313 +939,10 @@
                 allEmployees = employeesRes.data || [];
                 allServices = servicesRes.data || [];
                 allClients = clientsRes.data || [];
-                console.log('Загружено клиентов:', allClients.length);
-                console.log('Загружено сотрудников:', allEmployees.length);
-                console.log('Загружено услуг:', allServices.length);
-                console.log('Загружено заказов:', allOrders.length);
+                console.log('✅ Загружено клиентов:', allClients.length);
+                console.log('✅ Загружено сотрудников:', allEmployees.length);
+                console.log('✅ Загружено услуг:', allServices.length);
+                console.log('✅ Загружено заказов:', allOrders.length);
                 await updateStats();
-                await loadTable('clients');
-                await loadTable('employees');
-                await loadTable('services');
-                await loadTable('orders');
-                let active = document.querySelector('.nav-btn.active')?.dataset.section;
-                if (active && active !== 'reports' && active !== 'employeeOrders') await loadTable(active);
-                if (active === 'reports') document.getElementById('generateReportsBtn').click();
-                if (active === 'employeeOrders') { setDefaultEmployeeDates(); filterEmployeeOrders(); }
-            } catch(e) { console.error('Ошибка загрузки:', e); showToast('Ошибка загрузки данных', true); }
-        }
-
-        async function updateStats() {
-            document.getElementById('statClients').textContent = allClients.length;
-            document.getElementById('statEmployees').textContent = allEmployees.length;
-            document.getElementById('statServices').textContent = allServices.length;
-            document.getElementById('statOrders').textContent = allOrders.length;
-        }
-
-        function setDefaultEmployeeDates() { let d = new Date(); document.getElementById('employeeStartDate').value = new Date(d.getFullYear(),0,1).toISOString().split('T')[0]; document.getElementById('employeeEndDate').value = d.toISOString().split('T')[0]; }
-
-        async function loadTable(table) {
-            let data = [];
-            if (table === 'clients') data = allClients;
-            else if (table === 'employees') data = allEmployees;
-            else if (table === 'services') data = allServices;
-            else if (table === 'orders') data = allOrders;
-            let tbody = document.getElementById(table + 'Table');
-            if (!tbody) { console.error('Элемент не найден:', table + 'Table'); return; }
-            if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="10">Нет данных<\/td><\/tr>'; return; }
-            let html = '';
-            data.forEach(item => {
-                html += '<tr>';
-                html += '<td>' + escapeHtml(item.id) + '<\/td>';
-                if (table === 'clients') {
-                    html += '<td>' + escapeHtml(item.full_name) + '<\/td><td>' + escapeHtml(item.phone) + '<\/td><td>' + escapeHtml(item.email) + '<\/td><td>' + escapeHtml(item.address) + '<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
-                } else if (table === 'employees') {
-                    html += '<td>' + escapeHtml(item.full_name) + '<\/td><td>' + escapeHtml(item.position) + '<\/td><td>' + escapeHtml(item.phone) + '<\/td><td>' + (item.salary || 0) + ' ₽<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
-                } else if (table === 'services') {
-                    html += '<td>' + escapeHtml(item.name) + '<\/td><td>' + escapeHtml(item.description) + '<\/td><td>' + (item.price_per_m2 || 0) + ' ₽<\/td><td>' + (item.duration || 0) + ' мин<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
-                } else if (table === 'orders') {
-                    let emp = allEmployees.find(e => e.id == item.employee_id);
-                    html += '<td>' + escapeHtml(item.client_name) + '<\/td><tr>' + escapeHtml(emp?.full_name || '—') + '<\/td><td>' + escapeHtml(item.services) + '<\/td><td>' + escapeHtml(item.order_date) + '<\/td><table>' + (item.total_price?.toLocaleString() || 0) + ' ₽<\/td><td>' + escapeHtml(item.status) + '<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
-                }
-                html += '<td><button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️<\/button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️<\/button><\/td><\/tr>';
-            });
-            tbody.innerHTML = html;
-        }
-
-        window.editItem = async function(table, id) {
-            let data = null;
-            if (table === 'clients') data = allClients.find(i => i.id == id);
-            else if (table === 'employees') data = allEmployees.find(i => i.id == id);
-            else if (table === 'services') data = allServices.find(i => i.id == id);
-            if (!data) return;
-            currentTable = table;
-            let titles = { clients:'Редактировать клиента', employees:'Редактировать сотрудника', services:'Редактировать услугу' };
-            document.getElementById('simpleModalTitle').textContent = titles[table];
-            document.getElementById('simpleEditId').value = id;
-            let fields = '';
-            if (table === 'clients') fields = `<input type="text" id="full_name" value="${escapeHtml(data.full_name)}" placeholder="ФИО *" required><input type="text" id="phone" value="${escapeHtml(data.phone)}" placeholder="Телефон *" required><input type="email" id="email" value="${escapeHtml(data.email)}" placeholder="Email"><input type="text" id="address" value="${escapeHtml(data.address)}" placeholder="Адрес">`;
-            else if (table === 'employees') fields = `<input type="text" id="full_name" value="${escapeHtml(data.full_name)}" placeholder="ФИО *" required><input type="text" id="position" value="${escapeHtml(data.position)}" placeholder="Должность *" required><input type="text" id="phone" value="${escapeHtml(data.phone)}" placeholder="Телефон *" required><input type="number" id="salary" step="0.01" value="${data.salary||0}" placeholder="Оклад">`;
-            else if (table === 'services') fields = `<input type="text" id="name" value="${escapeHtml(data.name)}" placeholder="Название *" required><input type="text" id="description" value="${escapeHtml(data.description)}" placeholder="Описание"><input type="number" id="price_per_m2" step="0.01" value="${data.price_per_m2||0}" placeholder="Цена/м² *" required><input type="number" id="duration" value="${data.duration||0}" placeholder="Длительность (мин)">`;
-            document.getElementById('simpleModalFields').innerHTML = fields;
-            document.getElementById('simpleModal').classList.add('show');
-        };
-
-        window.deleteItem = async function(table, id) { if(confirm('Удалить?')) try{ await supabaseClient.from(table).delete().eq('id',id); showToast('Удалено'); await loadAllData(); document.querySelector(`.nav-btn[data-section="${table}"]`).click(); } catch(e){ showToast('Ошибка', true); } };
-
-        document.getElementById('addClientBtn').addEventListener('click', () => { currentTable='clients'; document.getElementById('simpleModalTitle').textContent='Добавить клиента'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="email" id="email" placeholder="Email"><input type="text" id="address" placeholder="Адрес">'; document.getElementById('simpleModal').classList.add('show'); });
-        document.getElementById('addEmployeeBtn').addEventListener('click', () => { currentTable='employees'; document.getElementById('simpleModalTitle').textContent='Добавить сотрудника'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="position" placeholder="Должность *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="number" id="salary" step="0.01" placeholder="Оклад">'; document.getElementById('simpleModal').classList.add('show'); });
-        document.getElementById('addServiceBtn').addEventListener('click', () => { currentTable='services'; document.getElementById('simpleModalTitle').textContent='Добавить услугу'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="name" placeholder="Название *" required><input type="text" id="description" placeholder="Описание"><input type="number" id="price_per_m2" step="0.01" placeholder="Цена/м² *" required><input type="number" id="duration" placeholder="Длительность (мин)">'; document.getElementById('simpleModal').classList.add('show'); });
-
-        document.getElementById('simpleModalForm').addEventListener('submit', async(e) => { 
-            e.preventDefault(); 
-            let form={}, inputs=document.querySelectorAll('#simpleModalFields input'); 
-            inputs.forEach(i=>{ if(i.type==='number') form[i.id]=parseFloat(i.value)||0; else form[i.id]=i.value; }); 
-            let id=document.getElementById('simpleEditId').value; 
-            try{ 
-                if(id) await supabaseClient.from(currentTable).update(form).eq('id',id); 
-                else { form.created_at=new Date().toISOString(); await supabaseClient.from(currentTable).insert([form]); } 
-                showToast(id?'Обновлено':'Добавлено'); 
-                document.getElementById('simpleModal').classList.remove('show'); 
-                await loadAllData(); 
-                document.querySelector(`.nav-btn[data-section="${currentTable}"]`).click();
-            } catch(error){ showToast('Ошибка: '+error.message, true); } 
-        });
-
-        document.getElementById('addOrderBtn').addEventListener('click', () => { 
-            if(!allEmployees.length||!allServices.length){ showToast('Данные загружаются, подождите секунду', true); return; } 
-            document.getElementById('orderModalTitle').textContent='➕ Создание заказа'; 
-            document.getElementById('orderEditId').value=''; 
-            document.getElementById('client_name').value=''; 
-            document.getElementById('order_date').value=''; 
-            document.getElementById('status').value='новый'; 
-            let sel=document.getElementById('employee_id'); 
-            sel.innerHTML='<option value="">Выберите сотрудника *</option>'; 
-            allEmployees.forEach(e=>sel.innerHTML+=`<option value="${e.id}">${escapeHtml(e.full_name)}</option>`); 
-            document.getElementById('servicesList').innerHTML=''; 
-            addServiceRow(); 
-            document.getElementById('orderModal').classList.add('show'); 
-        });
-        
-        document.getElementById('addServiceRowBtn').addEventListener('click', () => addServiceRow());
-
-        // ИСПРАВЛЕННАЯ ФУНКЦИЯ РЕДАКТИРОВАНИЯ ЗАКАЗА (с ожиданием загрузки данных)
-        window.editOrder = async function(id) {
-            if (!supabaseClient) {
-                showToast('Нет подключения к БД', true);
-                return;
-            }
-            // Если данные ещё не загружены — ждём и пробуем снова
-            if (!allEmployees.length || !allServices.length) {
-                showToast('Загрузка данных, подождите...', false);
-                await loadAllData();
-                await editOrder(id);
-                return;
-            }
-
-            const { data } = await supabaseClient.from('orders').select('*').eq('id', id).single();
-            if (!data) {
-                showToast('Заказ не найден', true);
-                return;
-            }
-
-            document.getElementById('orderModalTitle').textContent = '✏️ Редактирование заказа';
-            document.getElementById('orderEditId').value = id;
-            document.getElementById('client_name').value = data.client_name || '';
-            document.getElementById('order_date').value = data.order_date || '';
-            document.getElementById('status').value = data.status || 'новый';
-
-            const employeeSelect = document.getElementById('employee_id');
-            employeeSelect.innerHTML = '<option value="">Выберите сотрудника *</option>';
-            allEmployees.forEach(emp => {
-                employeeSelect.innerHTML += `<option value="${emp.id}" ${emp.id == data.employee_id ? 'selected' : ''}>${escapeHtml(emp.full_name)}</option>`;
-            });
-
-            document.getElementById('servicesList').innerHTML = '';
-            if (data.services) {
-                const serviceStrings = data.services.split(',').map(s => s.trim());
-                for (const serviceStr of serviceStrings) {
-                    const match = serviceStr.match(/(.+?)\s*\((\d+(?:\.\d+)?)\s*м²\)/);
-                    if (match) {
-                        const serviceName = match[1].trim();
-                        const quantity = parseFloat(match[2]);
-                        const service = allServices.find(s => s.name === serviceName);
-                        if (service) {
-                            addServiceRow(service.id, quantity);
-                        } else {
-                            addServiceRow();
-                        }
-                    } else {
-                        addServiceRow();
-                    }
-                }
-            } else {
-                addServiceRow();
-            }
-
-            calculateTotal();
-            document.getElementById('orderModal').classList.add('show');
-        };
-
-        function addServiceRow(selectedServiceId, quantity) {
-            const servicesList = document.getElementById('servicesList');
-            const newRow = document.createElement('div');
-            newRow.className = 'service-row';
-            
-            let options = '<option value="">Выберите услугу</option>';
-            allServices.forEach(service => {
-                const selected = service.id == selectedServiceId ? 'selected' : '';
-                options += `<option value="${service.id}" data-price="${service.price_per_m2}" ${selected}>${escapeHtml(service.name)} (${escapeHtml(service.price_per_m2)} ₽/м²)</option>`;
-            });
-
-            newRow.innerHTML = `<select class="service-select" required>${options}</select>` +
-                               `<input type="number" class="service-quantity" placeholder="Кол-во м²" value="${quantity || 1}" min="0.1" step="0.1">` +
-                               `<button type="button" class="remove-service">✖</button>`;
-
-            servicesList.appendChild(newRow);
-
-            newRow.querySelector('.service-select').addEventListener('change', calculateTotal);
-            newRow.querySelector('.service-quantity').addEventListener('input', calculateTotal);
-            newRow.querySelector('.remove-service').addEventListener('click', function() { 
-                newRow.remove(); 
-                if (document.querySelectorAll('.service-row').length === 0) addServiceRow(); 
-                else calculateTotal(); 
-            });
-            calculateTotal();
-        }
-
-        function calculateTotal() {
-            let total = 0;
-            document.querySelectorAll('.service-row').forEach(row => {
-                const select = row.querySelector('.service-select'), quantity = row.querySelector('.service-quantity');
-                if (select.value && quantity.value) total += parseFloat(select.selectedOptions[0]?.dataset.price || 0) * parseFloat(quantity.value);
-            });
-            document.getElementById('totalAmount').textContent = 'Итого: ' + total.toLocaleString() + ' ₽';
-            return total;
-        }
-
-        document.getElementById('orderForm').addEventListener('submit', async(e) => {
-            e.preventDefault();
-            let client_name = document.getElementById('client_name').value;
-            let employee_id = document.getElementById('employee_id').value;
-            let order_date = document.getElementById('order_date').value;
-            let status = document.getElementById('status').value;
-            let editId = document.getElementById('orderEditId').value;
-            let rows = document.querySelectorAll('.service-row');
-            if (rows.length === 0) { showToast('Добавьте хотя бы одну услугу', true); return; }
-            let services = [];
-            rows.forEach(row => {
-                let select = row.querySelector('.service-select'), quantity = row.querySelector('.service-quantity');
-                if (select.value && quantity.value) {
-                    let service = allServices.find(s => s.id == select.value);
-                    if (service) services.push(service.name + ' (' + quantity.value + ' м²)');
-                }
-            });
-            if (services.length === 0) { showToast('Выберите услуги и укажите количество', true); return; }
-            let servicesStr = services.join(', ');
-            let total_price = calculateTotal();
-            if (total_price > 99999999.99) { showToast('Сумма слишком большая', true); return; }
-            let formData = { client_name, employee_id: employee_id || null, services: servicesStr, order_date, total_price, status };
-            try {
-                if (editId) await supabaseClient.from('orders').update(formData).eq('id', editId);
-                else { formData.created_at = new Date().toISOString(); await supabaseClient.from('orders').insert([formData]); }
-                showToast(editId ? 'Заказ обновлён' : 'Заказ создан');
-                document.getElementById('orderModal').classList.remove('show');
-                await loadAllData();
-                document.querySelector('.nav-btn[data-section="orders"]').click();
-            } catch(error) { showToast('Ошибка: ' + error.message, true); }
-        });
-        
-        document.getElementById('closeOrderModalBtn').addEventListener('click', () => document.getElementById('orderModal').classList.remove('show'));
-        document.getElementById('closeSimpleModalBtn').addEventListener('click', () => document.getElementById('simpleModal').classList.remove('show'));
-        
-        function filterEmployeeOrders() {
-            let start = document.getElementById('employeeStartDate').value, end = document.getElementById('employeeEndDate').value;
-            if(!start || !end) { 
-                let d=new Date(); 
-                start=new Date(d.getFullYear(),0,1).toISOString().split('T')[0]; 
-                end=d.toISOString().split('T')[0]; 
-                document.getElementById('employeeStartDate').value=start; 
-                document.getElementById('employeeEndDate').value=end; 
-            }
-            let filtered = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
-            let tbody = document.getElementById('employeeOrdersTable'), detail = document.getElementById('employeeOrdersDetailTableBody');
-            if (!allEmployees.length) { 
-                tbody.innerHTML = '<tr><td colspan="5">Нет данных о сотрудниках<\/td><\/tr>'; 
-                detail.innerHTML = '<tr><td colspan="7">Нет данных<\/td><\/tr>'; 
-                return; 
-            }
-            let sumHtml = '', detHtml = '';
-            allEmployees.forEach(emp => {
-                let empOrders = filtered.filter(o => o.employee_id === emp.id), total = empOrders.reduce((s,o) => s + (o.total_price||0),0), avg = empOrders.length ? (total/empOrders.length).toFixed(0) : 0;
-                sumHtml += `<tr><strong>${escapeHtml(emp.full_name)}<\/strong><\/td><td>${escapeHtml(emp.position)}<\/td><td>${empOrders.length}<\/td><td>${total.toLocaleString()} ₽<\/td><td>${avg || '—'} ₽<\/td><\/tr>`;
-                if (empOrders.length) {
-                    detHtml += `<tr><td colspan="7" style="background:#e2e8f0;font-weight:600;">👤 ${escapeHtml(emp.full_name)}<\/td><\/tr>`;
-                    empOrders.forEach(o => detHtml += `<tr><td>${o.id}<\/td><td>${escapeHtml(emp.full_name)}<\/td><td>${escapeHtml(o.client_name)}<\/td><td>${escapeHtml(o.services)}<\/td><td>${o.order_date}<\/td><td>${(o.total_price||0).toLocaleString()} ₽<\/td><td>${escapeHtml(o.status)}<\/td><\/tr>`);
-                }
-            });
-            tbody.innerHTML = sumHtml || '<tr><td colspan="5">Нет заказов<\/td><\/tr>';
-            detail.innerHTML = detHtml || '<tr><td colspan="7">Нет заказов за период<\/td><\/tr>';
-        }
-
-        document.getElementById('filterEmployeeOrdersBtn').addEventListener('click', filterEmployeeOrders);
-        document.getElementById('employeeOrdersPdfBtn').addEventListener('click', () => { showToast('PDF подготовлен'); window.print(); });
-        document.getElementById('employeeOrdersPrintBtn').addEventListener('click', () => window.print());
-        
-        document.getElementById('generateReportsBtn').addEventListener('click', function() {
-            let start = document.getElementById('startDate').value, end = document.getElementById('endDate').value;
-            let filteredOrders = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
-            let filteredClients = allClients.filter(c => c.created_at && new Date(c.created_at).toISOString().split('T')[0] >= start && new Date(c.created_at).toISOString().split('T')[0] <= end);
-            let filteredEmployees = allEmployees.filter(e => e.created_at && new Date(e.created_at).toISOString().split('T')[0] >= start && new Date(e.created_at).toISOString().split('T')[0] <= end);
-            let filteredServices = allServices.filter(s => s.created_at && new Date(s.created_at).toISOString().split('T')[0] >= start && new Date(s.created_at).toISOString().split('T')[0] <= end);
-            document.getElementById('periodOrders').textContent = filteredOrders.length;
-            document.getElementById('periodRevenue').textContent = filteredOrders.reduce((s,o) => s + (o.total_price||0),0).toLocaleString() + ' ₽';
-            document.getElementById('periodNewClients').textContent = filteredClients.length;
-            document.getElementById('periodNewEmployees').textContent = filteredEmployees.length;
-            document.getElementById('periodNewServices').textContent = filteredServices.length;
-            document.getElementById('periodCompleted').textContent = filteredOrders.filter(o => o.status === 'выполнен').length;
-        });
-        
-        document.getElementById('pdfBtn').addEventListener('click', () => window.print());
-        document.getElementById('printBtn').addEventListener('click', () => window.print());
-
-        document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', async function() {
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            let section = this.dataset.section;
-            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-            document.getElementById('reportsSection').style.display = 'none';
-            if (section === 'reports') {
-                document.getElementById('reportsSection').style.display = 'block';
-                document.getElementById('generateReportsBtn').click();
-            } else if (section === 'employeeOrders') {
-                document.getElementById('employeeOrdersSection').style.display = 'block';
-                setDefaultEmployeeDates();
-                filterEmployeeOrders();
-            } else {
-                document.getElementById(section + 'Section').style.display = 'block';
-                await loadTable(section);
-            }
-        }));
-    </script>
-</body>
-</html>
+                // Принудительно обновляем все таблицы
+                await loadTable('clients
