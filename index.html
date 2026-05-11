@@ -524,16 +524,6 @@
             margin-bottom: 0.5rem;
         }
 
-        .footer .names {
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-
-        .footer .names span {
-            color: #0a2e4d;
-            font-weight: 500;
-        }
-
         .modal {
             display: none;
             position: fixed;
@@ -803,7 +793,7 @@
                 <div class="stat-card"><div class="stat-value" id="statOrders">0</div><div class="stat-label">Заказов</div></div>
             </div>
 
-            <!-- Секция отчётов (Аналитический) -->
+            <!-- Аналитический отчёт -->
             <div id="reportsSection" class="reports-section">
                 <div class="reports-header"><h3>📊 Отчёт Аналитический</h3>
                     <div class="date-range"><input type="date" id="startDate"><span>—</span><input type="date" id="endDate"><button class="btn-primary" id="generateReportsBtn">Сформировать</button></div>
@@ -821,7 +811,7 @@
                 <div class="export-buttons"><button class="btn-secondary" id="pdfBtn">📄 PDF</button><button class="btn-secondary" id="printBtn">🖨️ Печать</button></div>
             </div>
 
-            <!-- Секция заказов по сотрудникам -->
+            <!-- Заказы по сотрудникам -->
             <div id="employeeOrdersSection" class="section" style="display: none;">
                 <div class="section-header"><h2>📊👥 Отчёт Заказы по сотрудникам</h2>
                     <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
@@ -829,32 +819,36 @@
                         <div class="export-buttons"><button class="btn-secondary" id="employeeOrdersPdfBtn">📄 PDF</button><button class="btn-secondary" id="employeeOrdersPrintBtn">🖨️ Печать</button></div>
                     </div>
                 </div>
-                <div class="table-wrapper"><table><thead><tr><th>Сотрудник</th><th>Должность</th><th>Заказов</th><th>Сумма</th><th>Средний чек</th></tr></thead><tbody id="employeeOrdersTable"></tbody></tr></div>
-                <div style="padding: 1.5rem;"><h3 style="color:#0a2e4d;">📋 Детализация заказов за период</h3><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Сотрудник</th><th>Клиент</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th></tr></thead><tbody id="employeeOrdersDetailTableBody"></tbody></table></div></div>
+                <div class="table-wrapper"><table><thead><tr><th>Сотрудник</th><th>Должность</th><th>Заказов</th><th>Сумма</th><th>Средний чек</th></tr></thead><tbody id="employeeOrdersTable"></tbody></table></div>
+                <div style="padding: 1.5rem;"><h3 style="color:#0a2e4d;">📋 Детализация заказов за период</h3><div class="table-wrapper"><tr><thead><table><th>ID</th><th>Сотрудник</th><th>Клиент</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th></tr></thead><tbody id="employeeOrdersDetailTableBody"></tbody></table></div></div>
             </div>
 
-            <!-- Секция клиентов -->
+            <!-- Клиенты -->
             <div id="clientsSection" class="section" style="display: none;">
                 <div class="section-header"><h2>👤 Клиенты</h2><button class="btn-primary" id="addClientBtn">+ Добавить</button></div>
-                <div class="table-wrapper"><table><thead><tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th>Дата</th><th></th></tr></thead><tbody id="clientsTable"></tbody></table></div>
+                <div class="table-wrapper"><tr><thead><tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th>Дата</th><th></th></tr></thead>
+                <tbody id="clientsTable"></tbody></table></div>
             </div>
 
-            <!-- Секция сотрудников -->
+            <!-- Сотрудники -->
             <div id="employeesSection" class="section" style="display: none;">
                 <div class="section-header"><h2>👩‍💼 Сотрудники</h2><button class="btn-primary" id="addEmployeeBtn">+ Добавить</button></div>
-                <div class="table-wrapper"><tr><thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата</th><th></th></tr></thead><tbody id="employeesTable"></tbody></td></div>
+                <div class="table-wrapper"></td><thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата</th><th></th></tr></thead>
+                <tbody id="employeesTable"></tbody></tr></div>
             </div>
 
-            <!-- Секция услуг -->
+            <!-- Услуги -->
             <div id="servicesSection" class="section" style="display: none;">
                 <div class="section-header"><h2>🪣 Услуги</h2><button class="btn-primary" id="addServiceBtn">+ Добавить</button></div>
-                <div class="table-wrapper"></tr><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время</th><th>Дата</th><th></th></tr></thead><tbody id="servicesTable"></tbody></table></div>
+                <div class="table-wrapper"><td><thead><td><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время</th><th>Дата</th><th></th></tr></thead>
+                <tbody id="servicesTable"></tbody></table></div>
             </div>
 
-            <!-- Секция заказов -->
+            <!-- Заказы -->
             <div id="ordersSection" class="section" style="display: none;">
                 <div class="section-header"><h2>📋 Заказы</h2><button class="btn-primary" id="addOrderBtn">+ Создать заказ</button></div>
-                <div class="table-wrapper"><tr><thead><tr><th>ID</th><th>Клиент</th><th>Сотрудник</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th><th>Создан</th><th></th></tr></thead><tbody id="ordersTable"></tbody></table></div>
+                <div class="table-wrapper"></td><thead><tr><th>ID</th><th>Клиент</th><th>Сотрудник</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th><th>Создан</th><th></th></tr></thead>
+                <tbody id="ordersTable"></tbody></table></div>
             </div>
         </main>
         <footer class="footer"><div class="company">ООО «СервисКлин» 2026</div></footer>
