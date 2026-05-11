@@ -592,14 +592,8 @@
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            user-select: none;
-            font-size: 1.2rem;
-            color: #64748b;
             background: transparent;
             border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .service-row {
@@ -658,7 +652,6 @@
         .modal-buttons button {
             flex: 1;
             padding: 0.75rem;
-            border: none;
             border-radius: 0.5rem;
             cursor: pointer;
         }
@@ -666,11 +659,13 @@
         .modal-buttons button[type="submit"] {
             background: #0a2e4d;
             color: white;
+            border: none;
         }
 
         .modal-buttons button[type="button"] {
             background: #e2e8f0;
             color: #1e293b;
+            border: none;
         }
 
         .toast {
@@ -681,7 +676,6 @@
             color: white;
             padding: 1rem 2rem;
             border-radius: 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             display: none;
             z-index: 1001;
         }
@@ -721,6 +715,7 @@
         .login-box input {
             width: 100%;
             padding: 0.75rem;
+            margin-bottom: 1rem;
             border: 1px solid #e2e8f0;
             border-radius: 0.5rem;
         }
@@ -794,8 +789,8 @@
                 <button class="nav-btn" data-section="employees">Сотрудники</button>
                 <button class="nav-btn" data-section="services">Услуги</button>
                 <button class="nav-btn" data-section="orders">Заказы</button>
-                <button class="nav-btn" data-section="employeeOrders">👥 Заказы по сотрудникам</button>
-                <button class="nav-btn active" data-section="reports">📊 Отчёты</button>
+                <button class="nav-btn" data-section="employeeOrders">📊👥 Отчёт Заказы по сотрудникам</button>
+                <button class="nav-btn active" data-section="reports">📊 Отчёт Аналитический</button>
             </div>
             <div class="user-info"><span>Администратор</span><button class="btn-secondary" onclick="handleLogout()">Выйти</button></div>
         </header>
@@ -808,8 +803,9 @@
                 <div class="stat-card"><div class="stat-value" id="statOrders">0</div><div class="stat-label">Заказов</div></div>
             </div>
 
+            <!-- Секция отчётов (Аналитический) -->
             <div id="reportsSection" class="reports-section">
-                <div class="reports-header"><h3>📊 Аналитические отчёты</h3>
+                <div class="reports-header"><h3>📊 Отчёт Аналитический</h3>
                     <div class="date-range"><input type="date" id="startDate"><span>—</span><input type="date" id="endDate"><button class="btn-primary" id="generateReportsBtn">Сформировать</button></div>
                 </div>
                 <div class="report-cards"><div class="report-card"><h4>📅 ИТОГО ЗА ПЕРИОД</h4>
@@ -825,44 +821,46 @@
                 <div class="export-buttons"><button class="btn-secondary" id="pdfBtn">📄 PDF</button><button class="btn-secondary" id="printBtn">🖨️ Печать</button></div>
             </div>
 
+            <!-- Секция заказов по сотрудникам -->
             <div id="employeeOrdersSection" class="section" style="display: none;">
-                <div class="section-header"><h2>👥 Заказы по сотрудникам</h2>
+                <div class="section-header"><h2>📊👥 Отчёт Заказы по сотрудникам</h2>
                     <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
                         <div class="date-range"><input type="date" id="employeeStartDate"><span>—</span><input type="date" id="employeeEndDate"><button class="btn-primary" id="filterEmployeeOrdersBtn">Применить</button></div>
                         <div class="export-buttons"><button class="btn-secondary" id="employeeOrdersPdfBtn">📄 PDF</button><button class="btn-secondary" id="employeeOrdersPrintBtn">🖨️ Печать</button></div>
                     </div>
                 </div>
-                <div class="table-wrapper"><td><thead><tr><th>Сотрудник</th><th>Должность</th><th>Заказов</th><th>Сумма</th><th>Средний чек</th></tr></thead><tbody id="employeeOrdersTable"></tbody></table></div>
-                <div style="padding: 1.5rem;"><h3 style="color:#0a2e4d;">📋 Детализация</h3><div class="table-wrapper"></tr><thead><tr><th>ID</th><th>Сотрудник</th><th>Клиент</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th></tr></thead><tbody id="employeeOrdersDetailTableBody"></tbody></table></div></div>
+                <div class="table-wrapper"><table><thead><tr><th>Сотрудник</th><th>Должность</th><th>Заказов</th><th>Сумма</th><th>Средний чек</th></tr></thead><tbody id="employeeOrdersTable"></tbody></tr></div>
+                <div style="padding: 1.5rem;"><h3 style="color:#0a2e4d;">📋 Детализация заказов за период</h3><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Сотрудник</th><th>Клиент</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th></tr></thead><tbody id="employeeOrdersDetailTableBody"></tbody></table></div></div>
             </div>
 
+            <!-- Секция клиентов -->
             <div id="clientsSection" class="section" style="display: none;">
                 <div class="section-header"><h2>👤 Клиенты</h2><button class="btn-primary" id="addClientBtn">+ Добавить</button></div>
-                <div class="table-wrapper"><table><thead></tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th>Дата</th><th></th></td></thead>
-                <tbody id="clientsTable"></tbody></table></div>
+                <div class="table-wrapper"><table><thead><tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th>Дата</th><th></th></tr></thead><tbody id="clientsTable"></tbody></table></div>
             </div>
 
+            <!-- Секция сотрудников -->
             <div id="employeesSection" class="section" style="display: none;">
                 <div class="section-header"><h2>👩‍💼 Сотрудники</h2><button class="btn-primary" id="addEmployeeBtn">+ Добавить</button></div>
-                <div class="table-wrapper"><tr><thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата</th><th></th></tr></thead>
-                <tbody id="employeesTable"></tbody></tr></div>
+                <div class="table-wrapper"><tr><thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата</th><th></th></tr></thead><tbody id="employeesTable"></tbody></td></div>
             </div>
 
+            <!-- Секция услуг -->
             <div id="servicesSection" class="section" style="display: none;">
                 <div class="section-header"><h2>🪣 Услуги</h2><button class="btn-primary" id="addServiceBtn">+ Добавить</button></div>
-                <div class="table-wrapper"><tr><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время</th><th>Дата</th><th></th></tr></thead>
-                <tbody id="servicesTable"></tbody></table></div>
+                <div class="table-wrapper"></tr><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время</th><th>Дата</th><th></th></tr></thead><tbody id="servicesTable"></tbody></table></div>
             </div>
 
+            <!-- Секция заказов -->
             <div id="ordersSection" class="section" style="display: none;">
                 <div class="section-header"><h2>📋 Заказы</h2><button class="btn-primary" id="addOrderBtn">+ Создать заказ</button></div>
-                <div class="table-wrapper"></table><thead><tr><th>ID</th><th>Клиент</th><th>Сотрудник</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th><th>Создан</th><th></th></tr></thead>
-                <tbody id="ordersTable"></tbody></table></div>
+                <div class="table-wrapper"><tr><thead><tr><th>ID</th><th>Клиент</th><th>Сотрудник</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th><th>Создан</th><th></th></tr></thead><tbody id="ordersTable"></tbody></table></div>
             </div>
         </main>
         <footer class="footer"><div class="company">ООО «СервисКлин» 2026</div></footer>
     </div>
 
+    <!-- Модальные окна -->
     <div class="modal" id="orderModal"><div class="modal-content"><h3 id="orderModalTitle">➕ Создание заказа</h3><form id="orderForm"><input type="hidden" id="orderEditId"><input type="text" id="client_name" placeholder="Имя клиента *" required><select id="employee_id" required><option value="">Выберите сотрудника *</option></select><div id="servicesList"></div><button type="button" class="add-service-btn" id="addServiceRowBtn">+ Добавить услугу</button><div class="total-amount" id="totalAmount">Итого: 0 ₽</div><input type="date" id="order_date" required><select id="status" required><option value="новый">Новый</option><option value="в работе">В работе</option><option value="выполнен">Выполнен</option></select><div class="modal-buttons"><button type="submit">Сохранить</button><button type="button" id="closeOrderModalBtn">Отмена</button></div></form></div></div>
     <div class="modal" id="simpleModal"><div class="modal-content"><h3 id="simpleModalTitle">Добавление</h3><form id="simpleModalForm"><input type="hidden" id="simpleEditId"><div id="simpleModalFields"></div><div class="modal-buttons"><button type="submit">Сохранить</button><button type="button" id="closeSimpleModalBtn">Отмена</button></div></form></div></div>
     <div class="toast" id="toast">Сохранено</div>
@@ -929,12 +927,12 @@
                 console.log('Загружено услуг:', allServices.length);
                 console.log('Загружено заказов:', allOrders.length);
                 await updateStats();
-                // Принудительно загружаем все таблицы
+                // Принудительно загружаем все таблицы после загрузки данных
                 await loadTable('clients');
                 await loadTable('employees');
                 await loadTable('services');
                 await loadTable('orders');
-                // Если открыта другая вкладка, обновляем и её
+                // Если открыта другая вкладка (не клиенты), обновляем и её
                 let active = document.querySelector('.nav-btn.active')?.dataset.section;
                 if (active && active !== 'reports' && active !== 'employeeOrders') {
                     await loadTable(active);
@@ -973,7 +971,7 @@
                     html += '<td>' + escapeHtml(item.name) + '<\/td><td>' + escapeHtml(item.description) + '<\/td><td>' + (item.price_per_m2 || 0) + ' ₽<\/td><td>' + (item.duration || 0) + ' мин<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
                 } else if (table === 'orders') {
                     let emp = allEmployees.find(e => e.id == item.employee_id);
-                    html += '<td>' + escapeHtml(item.client_name) + '<\/td><td>' + escapeHtml(emp?.full_name || '—') + '<\/td><td>' + escapeHtml(item.services) + '<\/td></td>' + escapeHtml(item.order_date) + '<\/td><td>' + (item.total_price?.toLocaleString() || 0) + ' ₽<\/td><td>' + escapeHtml(item.status) + '<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
+                    html += '<td>' + escapeHtml(item.client_name) + '<\/td><td>' + escapeHtml(emp?.full_name || '—') + '<\/td><td>' + escapeHtml(item.services) + '<\/td><td>' + escapeHtml(item.order_date) + '<\/td><td>' + (item.total_price?.toLocaleString() || 0) + ' ₽<\/td><td>' + escapeHtml(item.status) + '<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
                 }
                 html += '<td><button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️<\/button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️<\/button><\/td><\/tr>';
             });
@@ -1142,6 +1140,7 @@
             if(!start || !end) { let d=new Date(); start=new Date(d.getFullYear(),0,1).toISOString().split('T')[0]; end=d.toISOString().split('T')[0]; document.getElementById('employeeStartDate').value=start; document.getElementById('employeeEndDate').value=end; }
             let filtered = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
             let tbody = document.getElementById('employeeOrdersTable'), detail = document.getElementById('employeeOrdersDetailTableBody');
+            if (!tbody || !detail) { console.warn('Элементы таблицы для отчёта по сотрудникам не найдены'); return; }
             if (!allEmployees.length) { tbody.innerHTML = '<tr><td colspan="5">Нет данных о сотрудниках<\/td><\/tr>'; detail.innerHTML = '<tr><td colspan="7">Нет данных<\/td><\/tr>'; return; }
             let sumHtml = '', detHtml = '';
             allEmployees.forEach(emp => {
@@ -1159,6 +1158,7 @@
         document.getElementById('filterEmployeeOrdersBtn').addEventListener('click', filterEmployeeOrders);
         document.getElementById('employeeOrdersPdfBtn').addEventListener('click', () => { showToast('PDF подготовлен'); window.print(); });
         document.getElementById('employeeOrdersPrintBtn').addEventListener('click', () => window.print());
+        
         document.getElementById('generateReportsBtn').addEventListener('click', function() {
             let start = document.getElementById('startDate').value, end = document.getElementById('endDate').value;
             let filteredOrders = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
@@ -1172,6 +1172,7 @@
             document.getElementById('periodNewServices').textContent = filteredServices.length;
             document.getElementById('periodCompleted').textContent = filteredOrders.filter(o => o.status === 'выполнен').length;
         });
+        
         document.getElementById('pdfBtn').addEventListener('click', () => window.print());
         document.getElementById('printBtn').addEventListener('click', () => window.print());
     </script>
