@@ -4,244 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>СервисКлин — Корпоративная информационная система</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧼</text></svg>">
     <style>
-        /* ===== ПОЛНЫЙ ДИЗАЙН (БЕЗ СОКРАЩЕНИЙ) ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
         }
-
         body {
             background: #f0f4f8;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
-
-        /* УЛУЧШЕННАЯ АДАПТАЦИЯ ДЛЯ СМАРТФОНОВ */
+        /* Адаптивность */
         @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                padding: 0.8rem;
-                gap: 0.5rem;
-            }
-            
-            .logo {
-                font-size: 1.3rem;
-            }
-            
-            .nav-menu {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 0.4rem;
-                width: 100%;
-            }
-            
-            .nav-btn {
-                padding: 0.5rem 0.3rem;
-                font-size: 0.75rem;
-                text-align: center;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-            
-            .user-info {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                gap: 0.5rem;
-            }
-            
-            .user-info span {
-                font-size: 0.8rem;
-            }
-            
-            .user-info button {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.8rem;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.6rem;
-                margin-bottom: 1rem;
-            }
-            
-            .stat-card {
-                padding: 0.8rem;
-            }
-            
-            .stat-value {
-                font-size: 1.4rem;
-            }
-            
-            .stat-label {
-                font-size: 0.7rem;
-            }
-            
-            .section-header {
-                flex-direction: column;
-                gap: 0.6rem;
-                align-items: stretch;
-                padding: 1rem;
-            }
-            
-            .section-header h2 {
-                font-size: 1.1rem;
-                text-align: center;
-            }
-            
-            .btn-primary, .btn-secondary {
-                padding: 0.5rem 1rem;
-                font-size: 0.85rem;
-                width: 100%;
-            }
-            
-            .export-buttons {
-                flex-direction: column;
-                gap: 0.5rem;
-                width: 100%;
-            }
-            
-            .export-buttons button {
-                width: 100%;
-            }
-            
-            .table-wrapper {
-                padding: 0.5rem;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            
-            table {
-                min-width: 600px;
-                font-size: 0.75rem;
-            }
-            
-            th, td {
-                padding: 0.5rem 0.3rem;
-            }
-            
-            .btn-warning, .btn-danger {
-                padding: 0.2rem 0.4rem;
-                font-size: 0.7rem;
-                margin: 0.1rem;
-            }
-            
-            .reports-header {
-                flex-direction: column;
-                gap: 0.8rem;
-            }
-            
-            .date-range {
-                flex-direction: column;
-                width: 100%;
-            }
-            
-            .date-range input {
-                width: 100%;
-            }
-            
-            .date-range button {
-                width: 100%;
-            }
-            
-            .report-card {
-                padding: 0.8rem;
-            }
-            
-            .report-item {
-                font-size: 0.85rem;
-            }
-            
-            .qr-btn {
-                width: 100%;
-                padding: 0.6rem;
-                font-size: 0.9rem;
-            }
-            
-            .qr-container {
-                padding: 1rem;
-            }
-            
-            .qr-container img {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .modal-content {
-                padding: 1rem;
-                width: 95%;
-                max-height: 80vh;
-            }
-            
-            .service-row {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-            
-            .service-row select,
-            .service-row input,
-            .service-row button {
-                width: 100%;
-            }
-            
-            .add-service-btn {
-                width: 100%;
-            }
-            
-            .total-amount {
-                font-size: 1rem;
-                padding: 0.8rem;
-            }
-            
-            .modal-buttons {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-            
-            .modal-buttons button {
-                width: 100%;
-            }
-            
-            .footer {
-                padding: 1rem;
-                font-size: 0.8rem;
-            }
-            
-            .footer .company {
-                font-size: 1rem;
-            }
+            .header { flex-direction: column; padding: 0.8rem; gap: 0.5rem; }
+            .logo { font-size: 1.3rem; }
+            .nav-menu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; width: 100%; }
+            .nav-btn { padding: 0.5rem 0.3rem; font-size: 0.75rem; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            .user-info { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; margin-bottom: 1rem; }
+            .stat-card { padding: 0.8rem; }
+            .stat-value { font-size: 1.4rem; }
+            .section-header { flex-direction: column; gap: 0.6rem; padding: 1rem; }
+            .btn-primary, .btn-secondary { padding: 0.5rem 1rem; font-size: 0.85rem; width: 100%; }
+            .export-buttons { flex-direction: column; gap: 0.5rem; width: 100%; }
+            .table-wrapper { padding: 0.5rem; overflow-x: auto; }
+            table { min-width: 600px; font-size: 0.75rem; }
+            th, td { padding: 0.5rem 0.3rem; }
+            .modal-content { padding: 1rem; width: 95%; max-height: 80vh; }
+            .service-row { flex-direction: column; gap: 0.5rem; }
+            .service-row select, .service-row input, .service-row button { width: 100%; }
+            .modal-buttons { flex-direction: column; gap: 0.5rem; }
+            .footer { padding: 1rem; font-size: 0.8rem; }
+            .filters { flex-direction: column; align-items: stretch; }
+            .filter-group { width: 100%; }
         }
-
-        @media (max-width: 480px) {
-            .nav-menu {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .nav-btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
         }
-
-        @media (max-width: 360px) {
-            .nav-menu {
-                grid-template-columns: 1fr;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            .stat-card {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
-
         .header {
             background: #0a2e4d;
             color: white;
@@ -250,22 +53,11 @@
             align-items: center;
             justify-content: space-between;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 0.5rem;
             flex-wrap: wrap;
+            gap: 1rem;
         }
-
+        .logo { font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-menu { display: flex; gap: 0.5rem; flex-wrap: wrap; }
         .nav-btn {
             background: transparent;
             border: none;
@@ -276,500 +68,83 @@
             cursor: pointer;
             transition: 0.2s;
         }
-
-        .nav-btn:hover {
-            background: rgba(255,255,255,0.1);
-            color: white;
-        }
-
-        .nav-btn.active {
-            background: white;
-            color: #0a2e4d;
-            font-weight: 600;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .main {
-            flex: 1;
-            max-width: 1300px;
-            width: 100%;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0;
-        }
-
-        .stat-value {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #0a2e4d;
-        }
-
-        .stat-label {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        .section {
-            background: white;
-            border-radius: 1rem;
-            border: 1px solid #e2e8f0;
-            overflow: hidden;
-            margin-bottom: 2rem;
-        }
-
-        .section-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #f8fafc;
-        }
-
-        .section-header h2 {
-            color: #0a2e4d;
-            font-size: 1.3rem;
-        }
-
-        .btn-primary {
-            background: #0a2e4d;
-            color: white;
-            border: none;
-            padding: 0.6rem 1.5rem;
-            border-radius: 2rem;
-            font-size: 0.95rem;
-            cursor: pointer;
-        }
-
-        .btn-primary:hover {
-            background: #1f3e5e;
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #0a2e4d;
-            border: 1px solid #0a2e4d;
-            padding: 0.6rem 1.5rem;
-            border-radius: 2rem;
-            cursor: pointer;
-        }
-
-        .btn-warning {
-            background: #f59e0b;
-            color: white;
-            border: none;
-            padding: 0.3rem 0.8rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            margin-right: 0.5rem;
-        }
-
-        .btn-warning:hover {
-            background: #d97706;
-        }
-
-        .btn-danger {
-            background: #fee2e2;
-            color: #dc2626;
-            border: 1px solid #fecaca;
-            padding: 0.3rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.85rem;
-            cursor: pointer;
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
-            color: white;
-        }
-
-        .reports-section {
-            background: white;
-            border-radius: 1rem;
-            border: 1px solid #e2e8f0;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .reports-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .reports-header h3 {
-            color: #0a2e4d;
-            font-size: 1.3rem;
-        }
-
-        .date-range {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .date-range input {
-            padding: 0.5rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-        }
-
-        .report-cards {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-            margin: 1.5rem 0;
-        }
-
-        .report-card {
-            background: #f8fafc;
-            border-radius: 0.75rem;
-            padding: 1.25rem;
-            border: 1px solid #e2e8f0;
-        }
-
-        .report-card h4 {
-            color: #0a2e4d;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            border-bottom: 2px solid #0a2e4d;
-            padding-bottom: 0.5rem;
-        }
-
-        .report-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px dashed #e2e8f0;
-        }
-
-        .export-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 1rem;
-        }
-
-        .qr-section {
-            text-align: center;
-            margin: 2rem 0;
-        }
-
-        .qr-btn {
-            background: white;
-            border: 1px solid #0a2e4d;
-            color: #0a2e4d;
-            padding: 0.8rem 2.5rem;
-            border-radius: 2rem;
-            cursor: pointer;
-        }
-
-        .qr-container {
-            display: none;
-            margin: 1.5rem auto 0;
-            padding: 1.5rem;
-            background: white;
-            border: 1px dashed #0a2e4d;
-            border-radius: 1rem;
-            max-width: 280px;
-        }
-
-        .qr-container.show {
-            display: block;
-        }
-
-        .qr-container img {
-            width: 180px;
-            height: 180px;
-            margin: 0 auto 1rem;
-            display: block;
-        }
-
-        .footer {
-            background: white;
-            border-top: 1px solid #e2e8f0;
-            padding: 2rem;
-            text-align: center;
-            color: #475569;
-            margin-top: 2rem;
-        }
-
-        .footer .company {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #0a2e4d;
-            margin-bottom: 0.5rem;
-        }
-
-        .footer .names {
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-
-        .footer .names span {
-            color: #0a2e4d;
-            font-weight: 500;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-content h3 {
-            color: #0a2e4d;
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-content input,
-        .modal-content select {
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-        }
-
-        .password-wrapper {
-            position: relative;
-            width: 100%;
-            margin-bottom: 1rem;
-        }
-        
-        .password-wrapper input {
-            margin-bottom: 0;
-            padding-right: 2.5rem;
-        }
-        
-        .toggle-password {
-            position: absolute;
-            right: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            user-select: none;
-            font-size: 1.2rem;
-            color: #64748b;
-            background: transparent;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .service-row {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-            align-items: center;
-        }
-
-        .service-row select {
-            flex: 2;
-            margin-bottom: 0;
-        }
-
-        .service-row input {
-            flex: 1;
-            margin-bottom: 0;
-        }
-
-        .service-row button {
-            background: #dc2626;
-            color: white;
-            border: none;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-        }
-
-        .add-service-btn {
-            background: #0a2e4d;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            margin: 0.5rem 0;
-        }
-
-        .total-amount {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #0a2e4d;
-            margin: 1rem 0;
-            padding: 1rem;
-            background: #f8fafc;
-            border-radius: 0.5rem;
-            text-align: right;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .modal-buttons button {
-            flex: 1;
-            padding: 0.75rem;
-            border: none;
-            border-radius: 0.5rem;
-            cursor: pointer;
-        }
-
-        .modal-buttons button[type="submit"] {
-            background: #0a2e4d;
-            color: white;
-        }
-
-        .modal-buttons button[type="button"] {
-            background: #e2e8f0;
-            color: #1e293b;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #0a2e4d;
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            display: none;
-            z-index: 1001;
-        }
-
-        .toast.show {
-            display: block;
-        }
-
-        .login-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #0a2e4d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-
-        .login-box {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .login-box h2 {
-            color: #0a2e4d;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .login-box input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-        }
-        
-        .login-box .password-wrapper {
-            margin-bottom: 1rem;
-        }
-
-        .login-box button {
-            width: 100%;
-            padding: 0.75rem;
-            background: #0a2e4d;
-            color: white;
-            border: none;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            font-size: 1rem;
-            margin-top: 0.5rem;
-        }
-
-        .login-box button:hover {
-            background: #1f3e5e;
-        }
-
-        .login-error {
-            color: #dc2626;
-            margin-top: 0.5rem;
-            text-align: center;
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th, td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        th {
-            background: #f8fafc;
-            color: #0a2e4d;
-        }
+        .nav-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .nav-btn.active { background: white; color: #0a2e4d; font-weight: 600; }
+        .user-info { display: flex; align-items: center; gap: 1rem; }
+        .main { flex: 1; max-width: 1400px; width: 100%; margin: 2rem auto; padding: 0 2rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: white; padding: 1.5rem; border-radius: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: transform 0.2s, box-shadow 0.2s; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .stat-value { font-size: 2.2rem; font-weight: 700; color: #0a2e4d; }
+        .stat-label { color: #64748b; font-size: 0.9rem; margin-top: 0.25rem; }
+        .section { background: white; border-radius: 1rem; border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 2rem; }
+        .section-header { padding: 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; background: #f8fafc; flex-wrap: wrap; gap: 1rem; }
+        .section-header h2 { color: #0a2e4d; font-size: 1.3rem; }
+        .btn-primary { background: #0a2e4d; color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 2rem; font-size: 0.95rem; cursor: pointer; transition: background 0.2s; }
+        .btn-primary:hover { background: #1f3e5e; }
+        .btn-secondary { background: white; color: #0a2e4d; border: 1px solid #0a2e4d; padding: 0.6rem 1.5rem; border-radius: 2rem; cursor: pointer; transition: all 0.2s; }
+        .btn-secondary:hover { background: #e2e8f0; }
+        .btn-success { background: #10b981; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 0.5rem; cursor: pointer; margin-right: 0.5rem; }
+        .btn-warning { background: #f59e0b; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 0.5rem; cursor: pointer; margin-right: 0.5rem; }
+        .btn-danger { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; padding: 0.3rem 1rem; border-radius: 2rem; cursor: pointer; transition: all 0.2s; }
+        .btn-danger:hover { background: #fecaca; }
+        .reports-section { background: white; border-radius: 1rem; border: 1px solid #e2e8f0; padding: 1.5rem; margin-bottom: 2rem; }
+        .reports-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+        .date-range { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+        .date-range input { padding: 0.5rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
+        .report-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1.5rem 0; }
+        .report-card { background: #f8fafc; border-radius: 0.75rem; padding: 1.25rem; border: 1px solid #e2e8f0; }
+        .report-card h4 { color: #0a2e4d; margin-bottom: 1rem; border-bottom: 2px solid #0a2e4d; padding-bottom: 0.5rem; }
+        .report-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed #e2e8f0; }
+        .report-item:last-child { border-bottom: none; }
+        .export-buttons { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem; flex-wrap: wrap; }
+        .footer { background: white; border-top: 1px solid #e2e8f0; padding: 2rem; text-align: center; color: #475569; margin-top: 2rem; }
+        .footer .company { font-size: 1.2rem; font-weight: 600; color: #0a2e4d; margin-bottom: 0.5rem; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000; }
+        .modal.show { display: flex; }
+        .modal-content { background: white; padding: 2rem; border-radius: 1rem; max-width: 650px; width: 90%; max-height: 85vh; overflow-y: auto; }
+        .modal-content h3 { color: #0a2e4d; margin-bottom: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+        .modal-content input, .modal-content select, .modal-content textarea { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
+        .modal-content textarea { min-height: 80px; resize: vertical; }
+        .password-wrapper { position: relative; width: 100%; margin-bottom: 1rem; }
+        .password-wrapper input { margin-bottom: 0; padding-right: 2.5rem; }
+        .toggle-password { position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); cursor: pointer; background: transparent; border: none; font-size: 1.2rem; }
+        .service-row { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center; flex-wrap: wrap; }
+        .service-row select { flex: 2; margin-bottom: 0; }
+        .service-row input { flex: 1; margin-bottom: 0; }
+        .service-row button { background: #dc2626; color: white; border: none; padding: 0.75rem 1rem; border-radius: 0.5rem; cursor: pointer; }
+        .add-service-btn { background: #0a2e4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; margin: 0.5rem 0; transition: background 0.2s; }
+        .add-service-btn:hover { background: #1f3e5e; }
+        .total-amount { font-size: 1.2rem; font-weight: 600; color: #0a2e4d; margin: 1rem 0; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; text-align: right; }
+        .modal-buttons { display: flex; gap: 1rem; margin-top: 1.5rem; }
+        .modal-buttons button { flex: 1; padding: 0.75rem; border-radius: 0.5rem; cursor: pointer; font-size: 1rem; }
+        .modal-buttons button[type="submit"] { background: #0a2e4d; color: white; border: none; }
+        .modal-buttons button[type="button"] { background: #e2e8f0; color: #1e293b; border: none; }
+        .toast { position: fixed; bottom: 20px; right: 20px; background: #0a2e4d; color: white; padding: 1rem 2rem; border-radius: 2rem; display: none; z-index: 1001; animation: fadeIn 0.3s; }
+        .toast.show { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0a2e4d 0%, #1a4a6e 100%); display: flex; align-items: center; justify-content: center; z-index: 2000; }
+        .login-box { background: white; padding: 2rem; border-radius: 1rem; max-width: 400px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .login-box h2 { color: #0a2e4d; margin-bottom: 1.5rem; text-align: center; }
+        .login-box input { width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; margin-bottom: 1rem; }
+        .login-box button { width: 100%; padding: 0.75rem; background: #0a2e4d; color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-size: 1rem; margin-top: 0.5rem; transition: background 0.2s; }
+        .login-box button:hover { background: #1f3e5e; }
+        .login-error { color: #dc2626; margin-top: 0.5rem; text-align: center; }
+        .table-wrapper { overflow-x: auto; border-radius: 0.5rem; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background: #f8fafc; color: #0a2e4d; font-weight: 600; position: sticky; top: 0; }
+        tr:hover { background: #f8fafc; }
+        .filters { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: flex-end; }
+        .filter-group { display: flex; flex-direction: column; gap: 0.25rem; }
+        .filter-group label { font-size: 0.8rem; color: #64748b; }
+        .filter-group input, .filter-group select { padding: 0.5rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
+        .status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 2rem; font-size: 0.75rem; font-weight: 500; }
+        .status-new { background: #e2e8f0; color: #475569; }
+        .status-work { background: #fef3c7; color: #d97706; }
+        .status-done { background: #d1fae5; color: #059669; }
+        .loading { text-align: center; padding: 2rem; color: #64748b; }
+        .search-box { padding: 0.5rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; min-width: 200px; }
     </style>
 </head>
 <body>
@@ -779,7 +154,7 @@
             <input type="text" id="loginUsername" placeholder="Логин" value="admin">
             <div class="password-wrapper">
                 <input type="password" id="loginPassword" placeholder="Пароль" value="admin123">
-                <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
+                <span class="toggle-password" onclick="togglePassword()">👁️</span>
             </div>
             <button onclick="handleLogin()">Войти</button>
             <div class="login-error" id="loginError"></div>
@@ -788,402 +163,948 @@
 
     <div id="mainContent" style="display: none;">
         <header class="header">
-            <div class="logo"><span>🧼</span> СервисКлин</div>
+            <div class="logo">🧼 СервисКлин</div>
             <div class="nav-menu">
-                <button class="nav-btn" data-section="clients">Клиенты</button>
-                <button class="nav-btn" data-section="employees">Сотрудники</button>
-                <button class="nav-btn" data-section="services">Услуги</button>
-                <button class="nav-btn" data-section="orders">Заказы</button>
-                <button class="nav-btn" data-section="employeeOrders">📊👥 Отчёт Заказы по сотрудникам</button>
-                <button class="nav-btn active" data-section="reports">📊 Отчёт Аналитический</button>
+                <button class="nav-btn" data-section="clients">👤 Клиенты</button>
+                <button class="nav-btn" data-section="employees">👩‍💼 Сотрудники</button>
+                <button class="nav-btn" data-section="services">🪣 Услуги</button>
+                <button class="nav-btn" data-section="orders">📋 Заказы</button>
+                <button class="nav-btn" data-section="employeeOrders">📊👥 Отчёт по сотрудникам</button>
+                <button class="nav-btn active" data-section="reports">📈 Аналитический отчёт</button>
             </div>
-            <div class="user-info"><span>Администратор</span><button class="btn-secondary" onclick="handleLogout()">Выйти</button></div>
+            <div class="user-info">
+                <span>👨‍💼 Администратор</span>
+                <button class="btn-secondary" onclick="handleLogout()">🚪 Выйти</button>
+            </div>
         </header>
 
         <main class="main">
+            <!-- Статистика -->
             <div class="stats-grid">
-                <div class="stat-card"><div class="stat-value" id="statClients">0</div><div class="stat-label">Клиентов</div></div>
-                <div class="stat-card"><div class="stat-value" id="statEmployees">0</div><div class="stat-label">Сотрудников</div></div>
-                <div class="stat-card"><div class="stat-value" id="statServices">0</div><div class="stat-label">Услуг</div></div>
-                <div class="stat-card"><div class="stat-value" id="statOrders">0</div><div class="stat-label">Заказов</div></div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statClients">0</div>
+                    <div class="stat-label">👥 Всего клиентов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statEmployees">0</div>
+                    <div class="stat-label">👩‍💼 Сотрудников</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statServices">0</div>
+                    <div class="stat-label">🪣 Услуг</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statOrders">0</div>
+                    <div class="stat-label">📋 Заказов</div>
+                </div>
             </div>
 
             <!-- Аналитический отчёт -->
             <div id="reportsSection" class="reports-section">
-                <div class="reports-header"><h3>📊 Отчёт Аналитический</h3>
-                    <div class="date-range"><input type="date" id="startDate"><span>—</span><input type="date" id="endDate"><button class="btn-primary" id="generateReportsBtn">Сформировать</button></div>
-                </div>
-                <div class="report-cards"><div class="report-card"><h4>📅 ИТОГО ЗА ПЕРИОД</h4>
-                    <div id="periodStats">
-                        <div class="report-item"><span>Заказов:</span><span id="periodOrders">0</span></div>
-                        <div class="report-item"><span>Выручка:</span><span id="periodRevenue">0 ₽</span></div>
-                        <div class="report-item"><span>Новых клиентов:</span><span id="periodNewClients">0</span></div>
-                        <div class="report-item"><span>Новых сотрудников:</span><span id="periodNewEmployees">0</span></div>
-                        <div class="report-item"><span>Новых услуг:</span><span id="periodNewServices">0</span></div>
-                        <div class="report-item"><span>Выполнено заказов:</span><span id="periodCompleted">0</span></div>
+                <div class="reports-header">
+                    <h3>📊 Аналитический отчёт</h3>
+                    <div class="date-range">
+                        <input type="date" id="startDate">
+                        <span>—</span>
+                        <input type="date" id="endDate">
+                        <button class="btn-primary" id="generateReportsBtn">📅 Сформировать</button>
                     </div>
-                </div></div>
-                <div class="export-buttons"><button class="btn-secondary" id="pdfBtn">📄 PDF</button><button class="btn-secondary" id="printBtn">🖨️ Печать</button></div>
+                </div>
+                <div class="report-cards">
+                    <div class="report-card">
+                        <h4>📅 ИТОГО ЗА ПЕРИОД</h4>
+                        <div id="periodStats">
+                            <div class="report-item"><span>📋 Заказов:</span><span id="periodOrders" class="font-bold">0</span></div>
+                            <div class="report-item"><span>💰 Выручка:</span><span id="periodRevenue" class="font-bold text-green">0 ₽</span></div>
+                            <div class="report-item"><span>🆕 Новых клиентов:</span><span id="periodNewClients">0</span></div>
+                            <div class="report-item"><span>🆕 Новых сотрудников:</span><span id="periodNewEmployees">0</span></div>
+                            <div class="report-item"><span>🆕 Новых услуг:</span><span id="periodNewServices">0</span></div>
+                            <div class="report-item"><span>✅ Выполнено заказов:</span><span id="periodCompleted">0</span></div>
+                            <div class="report-item"><span>📊 Средний чек:</span><span id="periodAvgCheck">0 ₽</span></div>
+                        </div>
+                    </div>
+                    <div class="report-card">
+                        <h4>🏆 ТОП-5 услуг</h4>
+                        <div id="topServicesList"></div>
+                    </div>
+                    <div class="report-card">
+                        <h4>👑 ТОП-5 сотрудников</h4>
+                        <div id="topEmployeesList"></div>
+                    </div>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-secondary" id="pdfBtn">📄 Экспорт PDF</button>
+                    <button class="btn-secondary" id="printBtn">🖨️ Печать</button>
+                    <button class="btn-secondary" id="exportExcelBtn">📊 Excel</button>
+                </div>
             </div>
 
             <!-- Заказы по сотрудникам -->
             <div id="employeeOrdersSection" class="section" style="display: none;">
-                <div class="section-header"><h2>📊👥 Отчёт Заказы по сотрудникам</h2>
+                <div class="section-header">
+                    <h2>📊👥 Отчёт: Заказы по сотрудникам</h2>
                     <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-                        <div class="date-range"><input type="date" id="employeeStartDate"><span>—</span><input type="date" id="employeeEndDate"><button class="btn-primary" id="filterEmployeeOrdersBtn">Применить</button></div>
-                        <div class="export-buttons"><button class="btn-secondary" id="employeeOrdersPdfBtn">📄 PDF</button><button class="btn-secondary" id="employeeOrdersPrintBtn">🖨️ Печать</button></div>
+                        <div class="date-range">
+                            <input type="date" id="employeeStartDate">
+                            <span>—</span>
+                            <input type="date" id="employeeEndDate">
+                            <button class="btn-primary" id="filterEmployeeOrdersBtn">🔍 Применить</button>
+                        </div>
+                        <div class="export-buttons">
+                            <button class="btn-secondary" id="employeeOrdersPdfBtn">📄 PDF</button>
+                            <button class="btn-secondary" id="employeeOrdersPrintBtn">🖨️ Печать</button>
+                        </div>
                     </div>
                 </div>
-                <div class="table-wrapper"><td><thead><tr><th>Сотрудник</th><th>Должность</th><th>Заказов</th><th>Сумма</th><th>Средний чек</th></tr></thead><tbody id="employeeOrdersTable"></tbody></table></div>
-                <div style="padding: 1.5rem;"><h3 style="color:#0a2e4d;">📋 Детализация</h3><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Сотрудник</th><th>Клиент</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th></tr></thead><tbody id="employeeOrdersDetailTableBody"></tbody></table></div></div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>👤 Сотрудник</th><th>💼 Должность</th><th>📋 Заказов</th><th>💰 Сумма</th><th>📊 Средний чек</th></tr>
+                        </thead>
+                        <tbody id="employeeOrdersTable"></tbody>
+                    </table>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <h3 style="color:#0a2e4d; margin-bottom: 1rem;">📋 Детализация заказов</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead><tr><th>ID</th><th>Сотрудник</th><th>Клиент</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th></tr></thead>
+                            <tbody id="employeeOrdersDetailTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <!-- Клиенты -->
+            <!-- Секция клиентов -->
             <div id="clientsSection" class="section" style="display: none;">
-                <div class="section-header"><h2>👤 Клиенты</h2><button class="btn-primary" id="addClientBtn">+ Добавить</button></div>
-                <div class="table-wrapper"><table><thead><tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th>Дата</th><th></th></tr></thead>
-                <tbody id="clientsTable"></tbody></table></div>
+                <div class="section-header">
+                    <h2>👤 Клиенты</h2>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <input type="text" id="clientSearch" class="search-box" placeholder="🔍 Поиск по ФИО или телефону...">
+                        <button class="btn-primary" id="addClientBtn">+ Добавить клиента</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th>Дата регистрации</th><th>Действия</th></tr></thead>
+                        <tbody id="clientsTable"></tbody>
+                    </table>
+                </div>
             </div>
 
-            <!-- Сотрудники -->
+            <!-- Секция сотрудников -->
             <div id="employeesSection" class="section" style="display: none;">
-                <div class="section-header"><h2>👩‍💼 Сотрудники</h2><button class="btn-primary" id="addEmployeeBtn">+ Добавить</button></div>
-                <div class="table-wrapper"></tr><thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата</th><th></th></tr></thead>
-                <tbody id="employeesTable"></tbody></table></div>
+                <div class="section-header">
+                    <h2>👩‍💼 Сотрудники</h2>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <input type="text" id="employeeSearch" class="search-box" placeholder="🔍 Поиск по ФИО...">
+                        <button class="btn-primary" id="addEmployeeBtn">+ Добавить сотрудника</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Телефон</th><th>Оклад</th><th>Дата приёма</th><th>Действия</th></tr></thead>
+                        <tbody id="employeesTable"></tbody>
+                    </table>
+                </div>
             </div>
 
-            <!-- Услуги -->
+            <!-- Секция услуг -->
             <div id="servicesSection" class="section" style="display: none;">
-                <div class="section-header"><h2>🪣 Услуги</h2><button class="btn-primary" id="addServiceBtn">+ Добавить</button></div>
-                <div class="table-wrapper"></td><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время</th><th>Дата</th><th></th></tr></thead>
-                <tbody id="servicesTable"></tbody></table></div>
+                <div class="section-header">
+                    <h2>🪣 Услуги</h2>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <input type="text" id="serviceSearch" class="search-box" placeholder="🔍 Поиск по названию...">
+                        <button class="btn-primary" id="addServiceBtn">+ Добавить услугу</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена/м²</th><th>Время (мин)</th><th>Дата добавления</th><th>Действия</th></tr></thead>
+                        <tbody id="servicesTable"></tbody>
+                    </table>
+                </div>
             </div>
 
-            <!-- Заказы -->
+            <!-- Секция заказов -->
             <div id="ordersSection" class="section" style="display: none;">
-                <div class="section-header"><h2>📋 Заказы</h2><button class="btn-primary" id="addOrderBtn">+ Создать заказ</button></div>
-                <div class="table-wrapper"><tr><thead><tr><th>ID</th><th>Клиент</th><th>Сотрудник</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th><th>Создан</th><th></th></tr></thead>
-                <tbody id="ordersTable"></tbody></table></div>
+                <div class="section-header">
+                    <h2>📋 Заказы</h2>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                        <div class="filter-group">
+                            <label>Статус:</label>
+                            <select id="orderStatusFilter">
+                                <option value="all">Все</option>
+                                <option value="новый">Новый</option>
+                                <option value="в работе">В работе</option>
+                                <option value="выполнен">Выполнен</option>
+                            </select>
+                        </div>
+                        <input type="text" id="orderSearch" class="search-box" placeholder="🔍 Поиск по клиенту...">
+                        <button class="btn-primary" id="addOrderBtn">+ Создать заказ</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>ID</th><th>Клиент</th><th>Сотрудник</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th><th>Создан</th><th>Действия</th></tr></thead>
+                        <tbody id="ordersTable"></tbody>
+                    </table>
+                </div>
             </div>
         </main>
-        <footer class="footer"><div class="company">ООО «СервисКлин» 2026</div></footer>
+        <footer class="footer">
+            <div class="company">ООО «СервисКлин»</div>
+            <div>© 2026 Все права защищены | Система управления клинингом</div>
+        </footer>
     </div>
 
     <!-- Модальные окна -->
-    <div class="modal" id="orderModal"><div class="modal-content"><h3 id="orderModalTitle">➕ Создание заказа</h3><form id="orderForm"><input type="hidden" id="orderEditId"><input type="text" id="client_name" placeholder="Имя клиента *" required><select id="employee_id" required><option value="">Выберите сотрудника *</option></select><div id="servicesList"></div><button type="button" class="add-service-btn" id="addServiceRowBtn">+ Добавить услугу</button><div class="total-amount" id="totalAmount">Итого: 0 ₽</div><input type="date" id="order_date" required><select id="status" required><option value="новый">Новый</option><option value="в работе">В работе</option><option value="выполнен">Выполнен</option></select><div class="modal-buttons"><button type="submit">Сохранить</button><button type="button" id="closeOrderModalBtn">Отмена</button></div></form></div></div>
-    <div class="modal" id="simpleModal"><div class="modal-content"><h3 id="simpleModalTitle">Добавление</h3><form id="simpleModalForm"><input type="hidden" id="simpleEditId"><div id="simpleModalFields"></div><div class="modal-buttons"><button type="submit">Сохранить</button><button type="button" id="closeSimpleModalBtn">Отмена</button></div></form></div></div>
-    <div class="toast" id="toast">Сохранено</div>
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <h3 id="orderModalTitle">➕ Создание заказа</h3>
+            <form id="orderForm">
+                <input type="hidden" id="orderEditId">
+                <input type="text" id="client_name" placeholder="👤 Имя клиента *" required>
+                <select id="employee_id" required><option value="">👩‍💼 Выберите сотрудника *</option></select>
+                <label style="font-weight: 500; margin-bottom: 0.25rem; display: block;">🪣 Услуги:</label>
+                <div id="servicesList"></div>
+                <button type="button" class="add-service-btn" id="addServiceRowBtn">+ Добавить услугу</button>
+                <div class="total-amount" id="totalAmount">💰 Итого: 0 ₽</div>
+                <input type="date" id="order_date" required>
+                <select id="status" required>
+                    <option value="новый">🟡 Новый</option>
+                    <option value="в работе">🔵 В работе</option>
+                    <option value="выполнен">🟢 Выполнен</option>
+                </select>
+                <div class="modal-buttons">
+                    <button type="submit">💾 Сохранить</button>
+                    <button type="button" id="closeOrderModalBtn">❌ Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="simpleModal">
+        <div class="modal-content">
+            <h3 id="simpleModalTitle">Добавление</h3>
+            <form id="simpleModalForm">
+                <input type="hidden" id="simpleEditId">
+                <div id="simpleModalFields"></div>
+                <div class="modal-buttons">
+                    <button type="submit">💾 Сохранить</button>
+                    <button type="button" id="closeSimpleModalBtn">❌ Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">✅ Сохранено</div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        function togglePasswordVisibility() {
+        // ==================== Глобальные переменные ====================
+        const SUPABASE_URL = 'https://pyojgyasaccwrcdogexx.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_db9nx0GejLB8Cw7XNB3ACg_FmTeP-WX';
+        let supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // Данные
+        let allOrders = [];
+        let allEmployees = [];
+        let allServices = [];
+        let allClients = [];
+        let currentTable = 'clients';
+        
+        // Фильтры
+        let orderStatusFilter = 'all';
+        let orderSearchTerm = '';
+        let clientSearchTerm = '';
+        let employeeSearchTerm = '';
+        let serviceSearchTerm = '';
+
+        // ==================== Вспомогательные функции ====================
+        function escapeHtml(s) { 
+            if (!s) return ''; 
+            return String(s).replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); 
+        }
+        
+        function showToast(text, isError = false) { 
+            let t = document.getElementById('toast'); 
+            t.textContent = isError ? '❌ ' + text : '✅ ' + text; 
+            t.style.background = isError ? '#dc2626' : '#0a2e4d'; 
+            t.classList.add('show'); 
+            setTimeout(() => t.classList.remove('show'), 3000); 
+        }
+
+        function formatDate(dateStr) {
+            if(!dateStr) return '-';
+            let d = new Date(dateStr);
+            if(isNaN(d.getTime())) return dateStr.split('T')[0] || dateStr;
+            return d.toLocaleDateString('ru-RU');
+        }
+
+        function getStatusBadge(status) {
+            const statusMap = {
+                'новый': '<span class="status-badge status-new">🟡 Новый</span>',
+                'в работе': '<span class="status-badge status-work">🔵 В работе</span>',
+                'выполнен': '<span class="status-badge status-done">🟢 Выполнен</span>'
+            };
+            return statusMap[status] || status;
+        }
+
+        window.togglePassword = function() {
             const pwd = document.getElementById('loginPassword');
             const btn = document.querySelector('.toggle-password');
             if (pwd.type === 'password') { pwd.type = 'text'; btn.textContent = '🙈'; }
             else { pwd.type = 'password'; btn.textContent = '👁️'; }
-        }
-
-        const SUPABASE_URL = 'https://pyojgyasaccwrcdogexx.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_db9nx0GejLB8Cw7XNB3ACg_FmTeP-WX';
-        let supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        let allOrders = [], allEmployees = [], allServices = [], allClients = [];
-        let currentTable = 'clients';
-        let isAppInitialized = false;
-
-        function escapeHtml(s) { if (!s) return ''; return String(s).replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
-
-        window.handleLogin = function() {
-            const user = document.getElementById('loginUsername').value, pwd = document.getElementById('loginPassword').value;
-            if (user === 'admin' && pwd === 'admin123') {
-                localStorage.setItem('serviceClean_loggedIn', 'true');
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('mainContent').style.display = 'block';
-                if (!isAppInitialized) { loadAllData(); isAppInitialized = true; }
-                document.querySelector('.nav-btn[data-section="clients"]').click();
-            } else document.getElementById('loginError').textContent = 'Неверный логин или пароль';
         };
-        window.handleLogout = function() { localStorage.removeItem('serviceClean_loggedIn'); document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('mainContent').style.display = 'none'; };
-        window.addEventListener('load', function() { if (localStorage.getItem('serviceClean_loggedIn') === 'true') { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('mainContent').style.display = 'block'; loadAllData(); isAppInitialized = true; document.querySelector('.nav-btn[data-section="clients"]').click(); } });
 
-        function showToast(text, isError = false) { let t = document.getElementById('toast'); t.textContent = text; t.style.background = isError ? '#dc2626' : '#0a2e4d'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
-
-        document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', async function() {
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            let section = this.dataset.section;
-            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-            document.getElementById('reportsSection').style.display = 'none';
-            if (section === 'reports') {
-                document.getElementById('reportsSection').style.display = 'block';
-                if (allOrders.length) document.getElementById('generateReportsBtn').click();
-            } else if (section === 'employeeOrders') {
-                document.getElementById('employeeOrdersSection').style.display = 'block';
-                setDefaultEmployeeDates();
-                if (allOrders.length) filterEmployeeOrders();
-            } else {
-                document.getElementById(section + 'Section').style.display = 'block';
-                await loadTable(section);
-            }
-        }));
-
+        // ==================== Загрузка данных из Supabase ====================
         async function loadAllData() {
-            if (!supabaseClient) return;
             try {
+                showToast('Загрузка данных...');
                 let [ordersRes, employeesRes, servicesRes, clientsRes] = await Promise.all([
-                    supabaseClient.from('orders').select('*'),
-                    supabaseClient.from('employees').select('*'),
-                    supabaseClient.from('services').select('*'),
-                    supabaseClient.from('clients').select('*')
+                    supabaseClient.from('orders').select('*').order('id', {ascending: false}),
+                    supabaseClient.from('employees').select('*').order('id', {ascending: false}),
+                    supabaseClient.from('services').select('*').order('id', {ascending: false}),
+                    supabaseClient.from('clients').select('*').order('id', {ascending: false})
                 ]);
+                
+                if(ordersRes.error) throw ordersRes.error;
+                if(employeesRes.error) throw employeesRes.error;
+                if(servicesRes.error) throw servicesRes.error;
+                if(clientsRes.error) throw clientsRes.error;
+                
                 allOrders = ordersRes.data || [];
                 allEmployees = employeesRes.data || [];
                 allServices = servicesRes.data || [];
                 allClients = clientsRes.data || [];
-                console.log('✅ Загружено клиентов:', allClients.length);
-                console.log('✅ Загружено сотрудников:', allEmployees.length);
-                console.log('✅ Загружено услуг:', allServices.length);
-                console.log('✅ Загружено заказов:', allOrders.length);
-                await updateStats();
-                // Принудительно обновляем все таблицы
-                await loadTable('clients');
-                await loadTable('employees');
-                await loadTable('services');
-                await loadTable('orders');
-                // Обновляем отчёты, если активны
-                let active = document.querySelector('.nav-btn.active')?.dataset.section;
-                if (active === 'reports') document.getElementById('generateReportsBtn').click();
-                if (active === 'employeeOrders') { setDefaultEmployeeDates(); filterEmployeeOrders(); }
-            } catch(e) { console.error('Ошибка загрузки:', e); showToast('Ошибка загрузки данных', true); }
+                
+                updateStats();
+                
+                const activeSection = document.querySelector('.nav-btn.active')?.dataset.section;
+                if (activeSection && ['clients','employees','services','orders'].includes(activeSection)) {
+                    loadTable(activeSection);
+                }
+                if (activeSection === 'employeeOrders') { 
+                    setDefaultEmployeeDates(); 
+                    filterEmployeeOrders(); 
+                }
+                if (activeSection === 'reports') {
+                    setDefaultReportDates();
+                    generateReports();
+                }
+                showToast('Данные загружены');
+            } catch(e) { 
+                console.error(e); 
+                showToast('Ошибка загрузки данных: ' + e.message, true); 
+            }
         }
 
-        async function updateStats() {
+        function updateStats() {
             document.getElementById('statClients').textContent = allClients.length;
             document.getElementById('statEmployees').textContent = allEmployees.length;
             document.getElementById('statServices').textContent = allServices.length;
             document.getElementById('statOrders').textContent = allOrders.length;
         }
 
-        function setDefaultEmployeeDates() { let d = new Date(); document.getElementById('employeeStartDate').value = new Date(d.getFullYear(),0,1).toISOString().split('T')[0]; document.getElementById('employeeEndDate').value = d.toISOString().split('T')[0]; }
+        // ==================== Загрузка таблиц с фильтрацией ====================
+        function filterClients() {
+            if (!clientSearchTerm) return allClients;
+            return allClients.filter(c => 
+                (c.full_name && c.full_name.toLowerCase().includes(clientSearchTerm)) ||
+                (c.phone && c.phone.includes(clientSearchTerm))
+            );
+        }
+
+        function filterEmployees() {
+            if (!employeeSearchTerm) return allEmployees;
+            return allEmployees.filter(e => 
+                e.full_name && e.full_name.toLowerCase().includes(employeeSearchTerm)
+            );
+        }
+
+        function filterServices() {
+            if (!serviceSearchTerm) return allServices;
+            return allServices.filter(s => 
+                s.name && s.name.toLowerCase().includes(serviceSearchTerm)
+            );
+        }
+
+        function filterOrders() {
+            let filtered = [...allOrders];
+            if (orderStatusFilter !== 'all') {
+                filtered = filtered.filter(o => o.status === orderStatusFilter);
+            }
+            if (orderSearchTerm) {
+                filtered = filtered.filter(o => 
+                    o.client_name && o.client_name.toLowerCase().includes(orderSearchTerm)
+                );
+            }
+            return filtered;
+        }
 
         async function loadTable(table) {
-            let data = [];
-            if (table === 'clients') data = allClients;
-            else if (table === 'employees') data = allEmployees;
-            else if (table === 'services') data = allServices;
-            else if (table === 'orders') data = allOrders;
+            let data;
             let tbody = document.getElementById(table + 'Table');
-            if (!tbody) { console.error('Элемент не найден:', table + 'Table'); return; }
-            if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="10">Нет данных<\/td><\/tr>'; return; }
+            if (!tbody) return;
+            
+            if (table === 'clients') data = filterClients();
+            else if (table === 'employees') data = filterEmployees();
+            else if (table === 'services') data = filterServices();
+            else if (table === 'orders') data = filterOrders();
+            else return;
+            
+            if (!data.length) { 
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align: center;">📭 Нет данных</td></tr>'; 
+                return; 
+            }
+            
             let html = '';
             data.forEach(item => {
                 html += '<tr>';
-                html += '<td>' + escapeHtml(item.id) + '<\/td>';
+                html += '<td>' + escapeHtml(item.id) + '</td>';
+                
                 if (table === 'clients') {
-                    html += '<td>' + escapeHtml(item.full_name) + '<\/td><td>' + escapeHtml(item.phone) + '<\/td><td>' + escapeHtml(item.email) + '<\/td><td>' + escapeHtml(item.address) + '<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
+                    html += '<td>' + escapeHtml(item.full_name) + '</td>';
+                    html += '<td>' + escapeHtml(item.phone || '-') + '</td>';
+                    html += '<td>' + escapeHtml(item.email || '-') + '</td>';
+                    html += '<td>' + escapeHtml(item.address || '-') + '</td>';
+                    html += '<td>' + formatDate(item.created_at) + '</td>';
                 } else if (table === 'employees') {
-                    html += '<td>' + escapeHtml(item.full_name) + '<\/td><td>' + escapeHtml(item.position) + '<\/td><td>' + escapeHtml(item.phone) + '<\/td><td>' + (item.salary || 0) + ' ₽<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
+                    html += '<td>' + escapeHtml(item.full_name) + '</td>';
+                    html += '<td>' + escapeHtml(item.position || '-') + '</td>';
+                    html += '<td>' + escapeHtml(item.phone || '-') + '</td>';
+                    html += '<td>' + (item.salary ? Number(item.salary).toLocaleString() : 0) + ' ₽</td>';
+                    html += '<td>' + formatDate(item.created_at) + '</td>';
                 } else if (table === 'services') {
-                    html += '<td>' + escapeHtml(item.name) + '<\/td><td>' + escapeHtml(item.description) + '<\/td><td>' + (item.price_per_m2 || 0) + ' ₽<\/td><td>' + (item.duration || 0) + ' мин<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
+                    html += '<td>' + escapeHtml(item.name) + '</td>';
+                    html += '<td>' + escapeHtml(item.description || '-') + '</td>';
+                    html += '<td>' + (item.price_per_m2 ? Number(item.price_per_m2).toLocaleString() : 0) + ' ₽</td>';
+                    html += '<td>' + (item.duration || 0) + ' мин</td>';
+                    html += '<td>' + formatDate(item.created_at) + '</td>';
                 } else if (table === 'orders') {
                     let emp = allEmployees.find(e => e.id == item.employee_id);
-                    html += '<td>' + escapeHtml(item.client_name) + '<\/td><td>' + escapeHtml(emp?.full_name || '—') + '<\/td><td>' + escapeHtml(item.services) + '<\/td><td>' + escapeHtml(item.order_date) + '<\/td><td>' + (item.total_price?.toLocaleString() || 0) + ' ₽<\/td><td>' + escapeHtml(item.status) + '<\/td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '<\/td>';
+                    html += '<td>' + escapeHtml(item.client_name) + '</td>';
+                    html += '<td>' + escapeHtml(emp?.full_name || '—') + '</td>';
+                    html += '<td style="max-width: 200px; word-break: break-word;">' + escapeHtml(item.services) + '</td>';
+                    html += '<td>' + escapeHtml(item.order_date) + '</td>';
+                    html += '<td>' + (item.total_price ? Number(item.total_price).toLocaleString() : 0) + ' ₽</td>';
+                    html += '<td>' + getStatusBadge(item.status) + '</td>';
+                    html += '<td>' + formatDate(item.created_at) + '</td>';
                 }
-                html += '<td><button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️<\/button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️<\/button><\/td><\/tr>';
+                
+                html += '<td>';
+                html += '<button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️</button>';
+                html += '<button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button>';
+                html += '</td></tr>';
             });
             tbody.innerHTML = html;
         }
 
+        // ==================== CRUD операции ====================
         window.editItem = async function(table, id) {
             let data = null;
             if (table === 'clients') data = allClients.find(i => i.id == id);
             else if (table === 'employees') data = allEmployees.find(i => i.id == id);
             else if (table === 'services') data = allServices.find(i => i.id == id);
             if (!data) return;
+            
             currentTable = table;
-            let titles = { clients:'Редактировать клиента', employees:'Редактировать сотрудника', services:'Редактировать услугу' };
+            let titles = { 
+                clients: '✏️ Редактировать клиента', 
+                employees: '✏️ Редактировать сотрудника', 
+                services: '✏️ Редактировать услугу' 
+            };
             document.getElementById('simpleModalTitle').textContent = titles[table];
             document.getElementById('simpleEditId').value = id;
+            
             let fields = '';
-            if (table === 'clients') fields = `<input type="text" id="full_name" value="${escapeHtml(data.full_name)}" placeholder="ФИО *" required><input type="text" id="phone" value="${escapeHtml(data.phone)}" placeholder="Телефон *" required><input type="email" id="email" value="${escapeHtml(data.email)}" placeholder="Email"><input type="text" id="address" value="${escapeHtml(data.address)}" placeholder="Адрес">`;
-            else if (table === 'employees') fields = `<input type="text" id="full_name" value="${escapeHtml(data.full_name)}" placeholder="ФИО *" required><input type="text" id="position" value="${escapeHtml(data.position)}" placeholder="Должность *" required><input type="text" id="phone" value="${escapeHtml(data.phone)}" placeholder="Телефон *" required><input type="number" id="salary" step="0.01" value="${data.salary||0}" placeholder="Оклад">`;
-            else if (table === 'services') fields = `<input type="text" id="name" value="${escapeHtml(data.name)}" placeholder="Название *" required><input type="text" id="description" value="${escapeHtml(data.description)}" placeholder="Описание"><input type="number" id="price_per_m2" step="0.01" value="${data.price_per_m2||0}" placeholder="Цена/м² *" required><input type="number" id="duration" value="${data.duration||0}" placeholder="Длительность (мин)">`;
+            if (table === 'clients') {
+                fields = `
+                    <input type="text" id="full_name" value="${escapeHtml(data.full_name)}" placeholder="ФИО *" required>
+                    <input type="text" id="phone" value="${escapeHtml(data.phone)}" placeholder="Телефон *" required>
+                    <input type="email" id="email" value="${escapeHtml(data.email)}" placeholder="Email">
+                    <input type="text" id="address" value="${escapeHtml(data.address)}" placeholder="Адрес">
+                `;
+            } else if (table === 'employees') {
+                fields = `
+                    <input type="text" id="full_name" value="${escapeHtml(data.full_name)}" placeholder="ФИО *" required>
+                    <input type="text" id="position" value="${escapeHtml(data.position)}" placeholder="Должность *" required>
+                    <input type="text" id="phone" value="${escapeHtml(data.phone)}" placeholder="Телефон *" required>
+                    <input type="number" id="salary" step="0.01" value="${data.salary || 0}" placeholder="Оклад">
+                `;
+            } else if (table === 'services') {
+                fields = `
+                    <input type="text" id="name" value="${escapeHtml(data.name)}" placeholder="Название *" required>
+                    <textarea id="description" placeholder="Описание">${escapeHtml(data.description || '')}</textarea>
+                    <input type="number" id="price_per_m2" step="0.01" value="${data.price_per_m2 || 0}" placeholder="Цена/м² *" required>
+                    <input type="number" id="duration" value="${data.duration || 0}" placeholder="Длительность (мин)">
+                `;
+            }
             document.getElementById('simpleModalFields').innerHTML = fields;
             document.getElementById('simpleModal').classList.add('show');
         };
 
-        window.deleteItem = async function(table, id) { if(confirm('Удалить?')) try{ await supabaseClient.from(table).delete().eq('id',id); showToast('Удалено'); await loadAllData(); document.querySelector(`.nav-btn[data-section="${table}"]`).click(); } catch(e){ showToast('Ошибка', true); } };
-
-        document.getElementById('addClientBtn').addEventListener('click', () => { currentTable='clients'; document.getElementById('simpleModalTitle').textContent='Добавить клиента'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="email" id="email" placeholder="Email"><input type="text" id="address" placeholder="Адрес">'; document.getElementById('simpleModal').classList.add('show'); });
-        document.getElementById('addEmployeeBtn').addEventListener('click', () => { currentTable='employees'; document.getElementById('simpleModalTitle').textContent='Добавить сотрудника'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="position" placeholder="Должность *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="number" id="salary" step="0.01" placeholder="Оклад">'; document.getElementById('simpleModal').classList.add('show'); });
-        document.getElementById('addServiceBtn').addEventListener('click', () => { currentTable='services'; document.getElementById('simpleModalTitle').textContent='Добавить услугу'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="name" placeholder="Название *" required><input type="text" id="description" placeholder="Описание"><input type="number" id="price_per_m2" step="0.01" placeholder="Цена/м² *" required><input type="number" id="duration" placeholder="Длительность (мин)">'; document.getElementById('simpleModal').classList.add('show'); });
-
-        document.getElementById('simpleModalForm').addEventListener('submit', async(e) => { 
-            e.preventDefault(); 
-            let form={}, inputs=document.querySelectorAll('#simpleModalFields input'); 
-            inputs.forEach(i=>{ if(i.type==='number') form[i.id]=parseFloat(i.value)||0; else form[i.id]=i.value; }); 
-            let id=document.getElementById('simpleEditId').value; 
-            try{ 
-                if(id) await supabaseClient.from(currentTable).update(form).eq('id',id); 
-                else { form.created_at=new Date().toISOString(); await supabaseClient.from(currentTable).insert([form]); } 
-                showToast(id?'Обновлено':'Добавлено'); 
-                document.getElementById('simpleModal').classList.remove('show'); 
-                await loadAllData(); 
-                document.querySelector(`.nav-btn[data-section="${currentTable}"]`).click();
-            } catch(error){ showToast('Ошибка: '+error.message, true); } 
-        });
-
-        document.getElementById('addOrderBtn').addEventListener('click', () => { 
-            if(!allEmployees.length||!allServices.length){ showToast('Данные загружаются, подождите секунду', true); return; } 
-            document.getElementById('orderModalTitle').textContent='➕ Создание заказа'; 
-            document.getElementById('orderEditId').value=''; 
-            document.getElementById('client_name').value=''; 
-            document.getElementById('order_date').value=''; 
-            document.getElementById('status').value='новый'; 
-            let sel=document.getElementById('employee_id'); 
-            sel.innerHTML='<option value="">Выберите сотрудника *</option>'; 
-            allEmployees.forEach(e=>sel.innerHTML+=`<option value="${e.id}">${escapeHtml(e.full_name)}</option>`); 
-            document.getElementById('servicesList').innerHTML=''; 
-            addServiceRow(); 
-            document.getElementById('orderModal').classList.add('show'); 
-        });
-        
-        document.getElementById('addServiceRowBtn').addEventListener('click', () => addServiceRow());
-
-        // ИСПРАВЛЕННОЕ РЕДАКТИРОВАНИЕ ЗАКАЗОВ (работает)
-        window.editOrder = async function(id) {
-            if (!supabaseClient) { showToast('Нет подключения к БД', true); return; }
-            // Если данные ещё не загружены — ждём
-            if (!allEmployees.length || !allServices.length) {
-                showToast('Загрузка данных, подождите...', false);
+        window.deleteItem = async function(table, id) {
+            if (!confirm('⚠️ Удалить запись? Это действие нельзя отменить!')) return;
+            try {
+                const { error } = await supabaseClient.from(table).delete().eq('id', id);
+                if(error) throw error;
+                showToast('Запись удалена');
                 await loadAllData();
-                await editOrder(id);
-                return;
+                document.querySelector(`.nav-btn[data-section="${table}"]`).click();
+            } catch(e) { 
+                showToast('Ошибка удаления: ' + e.message, true); 
             }
-            const { data } = await supabaseClient.from('orders').select('*').eq('id', id).single();
-            if (!data) { showToast('Заказ не найден', true); return; }
+        };
+
+        // Добавление через модальное окно
+        document.getElementById('addClientBtn').onclick = () => { 
+            currentTable = 'clients'; 
+            document.getElementById('simpleModalTitle').textContent = '➕ Добавить клиента'; 
+            document.getElementById('simpleEditId').value = ''; 
+            document.getElementById('simpleModalFields').innerHTML = `
+                <input type="text" id="full_name" placeholder="ФИО *" required>
+                <input type="text" id="phone" placeholder="Телефон *" required>
+                <input type="email" id="email" placeholder="Email">
+                <input type="text" id="address" placeholder="Адрес">
+            `; 
+            document.getElementById('simpleModal').classList.add('show'); 
+        };
+        
+        document.getElementById('addEmployeeBtn').onclick = () => { 
+            currentTable = 'employees'; 
+            document.getElementById('simpleModalTitle').textContent = '➕ Добавить сотрудника'; 
+            document.getElementById('simpleEditId').value = ''; 
+            document.getElementById('simpleModalFields').innerHTML = `
+                <input type="text" id="full_name" placeholder="ФИО *" required>
+                <input type="text" id="position" placeholder="Должность *" required>
+                <input type="text" id="phone" placeholder="Телефон *" required>
+                <input type="number" id="salary" step="0.01" placeholder="Оклад">
+            `; 
+            document.getElementById('simpleModal').classList.add('show'); 
+        };
+        
+        document.getElementById('addServiceBtn').onclick = () => { 
+            currentTable = 'services'; 
+            document.getElementById('simpleModalTitle').textContent = '➕ Добавить услугу'; 
+            document.getElementById('simpleEditId').value = ''; 
+            document.getElementById('simpleModalFields').innerHTML = `
+                <input type="text" id="name" placeholder="Название *" required>
+                <textarea id="description" placeholder="Описание"></textarea>
+                <input type="number" id="price_per_m2" step="0.01" placeholder="Цена/м² *" required>
+                <input type="number" id="duration" placeholder="Длительность (мин)">
+            `; 
+            document.getElementById('simpleModal').classList.add('show'); 
+        };
+
+        document.getElementById('simpleModalForm').addEventListener('submit', async(e) => {
+            e.preventDefault();
+            let form = {};
+            let inputs = document.querySelectorAll('#simpleModalFields input, #simpleModalFields textarea');
+            inputs.forEach(i => { 
+                if(i.type === 'number') form[i.id] = parseFloat(i.value) || 0; 
+                else if(i.id) form[i.id] = i.value; 
+            });
+            let id = document.getElementById('simpleEditId').value;
+            try {
+                if(id) {
+                    const { error } = await supabaseClient.from(currentTable).update(form).eq('id', id);
+                    if(error) throw error;
+                    showToast('Запись обновлена');
+                } else {
+                    const { error } = await supabaseClient.from(currentTable).insert([form]);
+                    if(error) throw error;
+                    showToast('Запись добавлена');
+                }
+                document.getElementById('simpleModal').classList.remove('show');
+                await loadAllData();
+                document.querySelector(`.nav-btn[data-section="${currentTable}"]`).click();
+            } catch(error) { 
+                showToast('Ошибка: ' + error.message, true); 
+            }
+        });
+
+        // ==================== Работа с заказами ====================
+        function addServiceRow(selectedServiceId = null, quantity = 1) {
+            const container = document.getElementById('servicesList');
+            const row = document.createElement('div');
+            row.className = 'service-row';
+            let options = '<option value="">📋 Выберите услугу</option>';
+            allServices.forEach(s => {
+                options += `<option value="${s.id}" data-price="${s.price_per_m2}" ${s.id == selectedServiceId ? 'selected' : ''}>
+                    ${escapeHtml(s.name)} (${s.price_per_m2 ? Number(s.price_per_m2).toLocaleString() : 0} ₽/м²)
+                </option>`;
+            });
+            row.innerHTML = `
+                <select class="service-select" required>${options}</select>
+                <input type="number" class="service-quantity" placeholder="м²" value="${quantity}" min="0.1" step="0.1">
+                <button type="button" class="remove-service">🗑️</button>
+            `;
+            container.appendChild(row);
+            row.querySelector('.service-select').addEventListener('change', calculateTotal);
+            row.querySelector('.service-quantity').addEventListener('input', calculateTotal);
+            row.querySelector('.remove-service').addEventListener('click', () => { 
+                row.remove(); 
+                if(container.children.length === 0) addServiceRow(); 
+                else calculateTotal(); 
+            });
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            document.querySelectorAll('.service-row').forEach(row => {
+                let sel = row.querySelector('.service-select');
+                let qty = row.querySelector('.service-quantity');
+                if(sel && sel.value && qty && qty.value) {
+                    let price = parseFloat(sel.selectedOptions[0]?.dataset.price || 0);
+                    let qtyVal = parseFloat(qty.value);
+                    if(!isNaN(price) && !isNaN(qtyVal)) total += price * qtyVal;
+                }
+            });
+            document.getElementById('totalAmount').innerHTML = `💰 Итого: ${total.toLocaleString()} ₽`;
+            return total;
+        }
+
+        document.getElementById('addOrderBtn').onclick = () => {
+            if(!allEmployees.length) { showToast('⚠️ Нет сотрудников в базе', true); return; }
+            if(!allServices.length) { showToast('⚠️ Нет услуг в базе', true); return; }
+            
+            document.getElementById('orderModalTitle').textContent = '➕ Создание заказа';
+            document.getElementById('orderEditId').value = '';
+            document.getElementById('client_name').value = '';
+            document.getElementById('order_date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('status').value = 'новый';
+            
+            let sel = document.getElementById('employee_id');
+            sel.innerHTML = '<option value="">👩‍💼 Выберите сотрудника *</option>';
+            allEmployees.forEach(e => sel.innerHTML += `<option value="${e.id}">${escapeHtml(e.full_name)}</option>`);
+            
+            document.getElementById('servicesList').innerHTML = '';
+            addServiceRow();
+            document.getElementById('orderModal').classList.add('show');
+        };
+
+        window.editOrder = async function(id) {
+            if(!allEmployees.length || !allServices.length) { 
+                showToast('⚠️ Данные загружаются', true); 
+                return; 
+            }
+            const { data, error } = await supabaseClient.from('orders').select('*').eq('id', id).single();
+            if(error || !data) { 
+                showToast('Ошибка загрузки заказа', true); 
+                return; 
+            }
+            
             document.getElementById('orderModalTitle').textContent = '✏️ Редактирование заказа';
-            document.getElementById('orderEditId').value = id;
+            document.getElementById('orderEditId').value = data.id;
             document.getElementById('client_name').value = data.client_name || '';
             document.getElementById('order_date').value = data.order_date || '';
             document.getElementById('status').value = data.status || 'новый';
-            const employeeSelect = document.getElementById('employee_id');
-            employeeSelect.innerHTML = '<option value="">Выберите сотрудника *</option>';
-            allEmployees.forEach(emp => {
-                employeeSelect.innerHTML += `<option value="${emp.id}" ${emp.id == data.employee_id ? 'selected' : ''}>${escapeHtml(emp.full_name)}</option>`;
-            });
+            
+            let sel = document.getElementById('employee_id');
+            sel.innerHTML = '<option value="">👩‍💼 Выберите сотрудника *</option>';
+            allEmployees.forEach(e => sel.innerHTML += `<option value="${e.id}" ${e.id == data.employee_id ? 'selected' : ''}>${escapeHtml(e.full_name)}</option>`);
+            
             document.getElementById('servicesList').innerHTML = '';
-            if (data.services) {
-                const serviceStrings = data.services.split(',').map(s => s.trim());
-                for (const serviceStr of serviceStrings) {
-                    const match = serviceStr.match(/(.+?)\s*\((\d+(?:\.\d+)?)\s*м²\)/);
-                    if (match) {
-                        const serviceName = match[1].trim();
-                        const quantity = parseFloat(match[2]);
-                        const service = allServices.find(s => s.name === serviceName);
-                        if (service) addServiceRow(service.id, quantity);
-                        else addServiceRow();
-                    } else addServiceRow();
+            if(data.services) {
+                let parts = data.services.split(',');
+                let hasRows = false;
+                for(let part of parts) {
+                    let match = part.match(/(.+?)\s*\(([\d.]+)\s*м²\)/);
+                    if(match) {
+                        let srvName = match[1].trim();
+                        let qty = parseFloat(match[2]);
+                        let srv = allServices.find(s => s.name === srvName);
+                        if(srv) { 
+                            addServiceRow(srv.id, qty); 
+                            hasRows = true; 
+                        }
+                    }
                 }
-            } else addServiceRow();
+                if(!hasRows) addServiceRow();
+            } else {
+                addServiceRow();
+            }
             calculateTotal();
             document.getElementById('orderModal').classList.add('show');
         };
 
-        function addServiceRow(selectedServiceId, quantity) {
-            const servicesList = document.getElementById('servicesList');
-            const newRow = document.createElement('div');
-            newRow.className = 'service-row';
-            let options = '<option value="">Выберите услугу</option>';
-            if (allServices.length === 0) {
-                options += '<option disabled>Нет услуг — добавьте сначала</option>';
-            } else {
-                allServices.forEach(service => {
-                    const selected = (service.id == selectedServiceId) ? 'selected' : '';
-                    options += `<option value="${service.id}" data-price="${service.price_per_m2}" ${selected}>${escapeHtml(service.name)} (${escapeHtml(service.price_per_m2)} ₽/м²)</option>`;
-                });
-            }
-            newRow.innerHTML = `<select class="service-select" required>${options}</select><input type="number" class="service-quantity" placeholder="Кол-во м²" value="${quantity || 1}" min="0.1" step="0.1"><button type="button" class="remove-service">✖</button>`;
-            servicesList.appendChild(newRow);
-            newRow.querySelector('.service-select').addEventListener('change', calculateTotal);
-            newRow.querySelector('.service-quantity').addEventListener('input', calculateTotal);
-            newRow.querySelector('.remove-service').addEventListener('click', function() { newRow.remove(); if (document.querySelectorAll('.service-row').length === 0) addServiceRow(); else calculateTotal(); });
-            calculateTotal();
-        }
-
-        function calculateTotal() { let total = 0; document.querySelectorAll('.service-row').forEach(row => { let sel = row.querySelector('.service-select'), qty = row.querySelector('.service-quantity'); if(sel.value && qty.value) { let price = parseFloat(sel.selectedOptions[0]?.dataset.price || 0); total += price * parseFloat(qty.value); } }); document.getElementById('totalAmount').textContent = `Итого: ${total.toLocaleString()} ₽`; return total; }
-
         document.getElementById('orderForm').addEventListener('submit', async(e) => {
             e.preventDefault();
-            let client_name = document.getElementById('client_name').value;
+            let client_name = document.getElementById('client_name').value.trim();
             let employee_id = document.getElementById('employee_id').value;
             let order_date = document.getElementById('order_date').value;
             let status = document.getElementById('status').value;
             let editId = document.getElementById('orderEditId').value;
             let rows = document.querySelectorAll('.service-row');
-            if (rows.length === 0) { showToast('Добавьте хотя бы одну услугу', true); return; }
-            let services = [];
+            
+            if(rows.length === 0) { showToast('⚠️ Добавьте хотя бы одну услугу', true); return; }
+            
+            let servicesList = [];
             rows.forEach(row => {
-                let sel = row.querySelector('.service-select'), qty = row.querySelector('.service-quantity');
-                if (sel.value && qty.value) {
-                    let service = allServices.find(s => s.id == sel.value);
-                    if (service) services.push(service.name + ' (' + qty.value + ' м²)');
+                let sel = row.querySelector('.service-select');
+                let qty = row.querySelector('.service-quantity');
+                if(sel.value && qty.value) {
+                    let srv = allServices.find(s => s.id == sel.value);
+                    if(srv) servicesList.push(`${srv.name} (${qty.value} м²)`);
                 }
             });
-            if (services.length === 0) { showToast('Выберите услуги и укажите количество', true); return; }
-            let servicesStr = services.join(', ');
+            if(servicesList.length === 0) { showToast('⚠️ Выберите услуги', true); return; }
+            
             let total_price = calculateTotal();
-            if (total_price > 99999999.99) { showToast('Сумма слишком большая', true); return; }
-            let formData = { client_name, employee_id: employee_id || null, services: servicesStr, order_date, total_price, status };
+            let formData = { 
+                client_name, 
+                employee_id: employee_id || null, 
+                services: servicesList.join(', '), 
+                order_date, 
+                total_price, 
+                status 
+            };
+            
             try {
-                if (editId) await supabaseClient.from('orders').update(formData).eq('id', editId);
-                else { formData.created_at = new Date().toISOString(); await supabaseClient.from('orders').insert([formData]); }
-                showToast(editId ? 'Заказ обновлён' : 'Заказ создан');
+                if(editId) {
+                    const { error } = await supabaseClient.from('orders').update(formData).eq('id', editId);
+                    if(error) throw error;
+                    showToast('Заказ обновлён');
+                } else {
+                    const { error } = await supabaseClient.from('orders').insert([formData]);
+                    if(error) throw error;
+                    showToast('Заказ создан');
+                }
                 document.getElementById('orderModal').classList.remove('show');
                 await loadAllData();
                 document.querySelector('.nav-btn[data-section="orders"]').click();
-            } catch(error) { showToast('Ошибка: ' + error.message, true); }
+            } catch(error) { 
+                showToast('Ошибка: ' + error.message, true); 
+            }
         });
 
-        document.getElementById('closeOrderModalBtn').addEventListener('click', () => document.getElementById('orderModal').classList.remove('show'));
-        document.getElementById('closeSimpleModalBtn').addEventListener('click', () => document.getElementById('simpleModal').classList.remove('show'));
+        document.getElementById('addServiceRowBtn').onclick = () => addServiceRow();
+        document.getElementById('closeOrderModalBtn').onclick = () => document.getElementById('orderModal').classList.remove('show');
+        document.getElementById('closeSimpleModalBtn').onclick = () => document.getElementById('simpleModal').classList.remove('show');
 
-        function filterEmployeeOrders() {
-            let start = document.getElementById('employeeStartDate').value, end = document.getElementById('employeeEndDate').value;
-            if(!start || !end) { let d=new Date(); start=new Date(d.getFullYear(),0,1).toISOString().split('T')[0]; end=d.toISOString().split('T')[0]; document.getElementById('employeeStartDate').value=start; document.getElementById('employeeEndDate').value=end; }
-            let filtered = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
-            let tbody = document.getElementById('employeeOrdersTable'), detail = document.getElementById('employeeOrdersDetailTableBody');
-            if (!allEmployees.length) { tbody.innerHTML = '<tr><td colspan="5">Нет данных о сотрудниках<\/td><\/tr>'; detail.innerHTML = '<tr><td colspan="7">Нет данных<\/td><\/tr>'; return; }
-            let sumHtml = '', detHtml = '';
-            allEmployees.forEach(emp => {
-                let empOrders = filtered.filter(o => o.employee_id === emp.id), total = empOrders.reduce((s,o) => s + (o.total_price||0),0), avg = empOrders.length ? (total/empOrders.length).toFixed(0) : 0;
-                sumHtml += `<tr><strong>${escapeHtml(emp.full_name)}<\/strong><\/td><td>${escapeHtml(emp.position)}<\/td><td>${empOrders.length}<\/td><td>${total.toLocaleString()} ₽<\/td><td>${avg || '—'} ₽<\/td><\/tr>`;
-                if (empOrders.length) {
-                    detHtml += `<tr><td colspan="7" style="background:#e2e8f0;font-weight:600;">👤 ${escapeHtml(emp.full_name)}<\/td><\/tr>`;
-                    empOrders.forEach(o => detHtml += `<tr><td>${o.id}<\/td><td>${escapeHtml(emp.full_name)}<\/td><td>${escapeHtml(o.client_name)}<\/td><td>${escapeHtml(o.services)}<\/td><td>${o.order_date}<\/td><td>${(o.total_price||0).toLocaleString()} ₽<\/td><td>${escapeHtml(o.status)}<\/td><\/tr>`);
-                }
-            });
-            tbody.innerHTML = sumHtml || '</table><td colspan="5">Нет заказов<\/td><\/tr>';
-            detail.innerHTML = detHtml || '<tr><td colspan="7">Нет заказов за период<\/td><\/tr>';
+        // ==================== Отчёты ====================
+        function setDefaultReportDates() {
+            let today = new Date();
+            let monthAgo = new Date();
+            monthAgo.setMonth(monthAgo.getMonth() - 1);
+            document.getElementById('startDate').value = monthAgo.toISOString().split('T')[0];
+            document.getElementById('endDate').value = today.toISOString().split('T')[0];
         }
 
-        document.getElementById('filterEmployeeOrdersBtn').addEventListener('click', filterEmployeeOrders);
-        document.getElementById('employeeOrdersPdfBtn').addEventListener('click', () => { showToast('PDF подготовлен'); window.print(); });
-        document.getElementById('employeeOrdersPrintBtn').addEventListener('click', () => window.print());
-        document.getElementById('generateReportsBtn').addEventListener('click', function() {
-            let start = document.getElementById('startDate').value, end = document.getElementById('endDate').value;
+        function generateReports() {
+            let start = document.getElementById('startDate').value;
+            let end = document.getElementById('endDate').value;
+            if(!start || !end) { showToast('⚠️ Выберите период', true); return; }
+            
             let filteredOrders = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
-            let filteredClients = allClients.filter(c => c.created_at && new Date(c.created_at).toISOString().split('T')[0] >= start && new Date(c.created_at).toISOString().split('T')[0] <= end);
-            let filteredEmployees = allEmployees.filter(e => e.created_at && new Date(e.created_at).toISOString().split('T')[0] >= start && new Date(e.created_at).toISOString().split('T')[0] <= end);
-            let filteredServices = allServices.filter(s => s.created_at && new Date(s.created_at).toISOString().split('T')[0] >= start && new Date(s.created_at).toISOString().split('T')[0] <= end);
+            let newClients = allClients.filter(c => c.created_at && c.created_at.split('T')[0] >= start && c.created_at.split('T')[0] <= end);
+            let newEmployees = allEmployees.filter(e => e.created_at && e.created_at.split('T')[0] >= start && e.created_at.split('T')[0] <= end);
+            let newServices = allServices.filter(s => s.created_at && s.created_at.split('T')[0] >= start && s.created_at.split('T')[0] <= end);
+            
+            let totalRevenue = filteredOrders.reduce((s,o)=>s+(o.total_price||0),0);
+            let avgCheck = filteredOrders.length ? totalRevenue / filteredOrders.length : 0;
+            
             document.getElementById('periodOrders').textContent = filteredOrders.length;
-            document.getElementById('periodRevenue').textContent = filteredOrders.reduce((s,o) => s + (o.total_price||0),0).toLocaleString() + ' ₽';
-            document.getElementById('periodNewClients').textContent = filteredClients.length;
-            document.getElementById('periodNewEmployees').textContent = filteredEmployees.length;
-            document.getElementById('periodNewServices').textContent = filteredServices.length;
-            document.getElementById('periodCompleted').textContent = filteredOrders.filter(o => o.status === 'выполнен').length;
+            document.getElementById('periodRevenue').textContent = totalRevenue.toLocaleString() + ' ₽';
+            document.getElementById('periodNewClients').textContent = newClients.length;
+            document.getElementById('periodNewEmployees').textContent = newEmployees.length;
+            document.getElementById('periodNewServices').textContent = newServices.length;
+            document.getElementById('periodCompleted').textContent = filteredOrders.filter(o=>o.status==='выполнен').length;
+            document.getElementById('periodAvgCheck').textContent = Math.round(avgCheck).toLocaleString() + ' ₽';
+            
+            // ТОП-5 услуг
+            let serviceStats = {};
+            filteredOrders.forEach(order => {
+                if(order.services) {
+                    let services = order.services.split(',');
+                    services.forEach(s => {
+                        let match = s.match(/(.+?)\s*\(/);
+                        let name = match ? match[1].trim() : s.trim();
+                        serviceStats[name] = (serviceStats[name] || 0) + 1;
+                    });
+                }
+            });
+            let topServices = Object.entries(serviceStats).sort((a,b) => b[1] - a[1]).slice(0,5);
+            let topServicesHtml = '';
+            topServices.forEach(([name, count], idx) => {
+                topServicesHtml += `<div class="report-item"><span>${idx+1}. ${escapeHtml(name)}</span><span>📊 ${count} раз</span></div>`;
+            });
+            document.getElementById('topServicesList').innerHTML = topServicesHtml || '<div class="report-item">Нет данных</div>';
+            
+            // ТОП-5 сотрудников
+            let employeeStats = {};
+            filteredOrders.forEach(order => {
+                if(order.employee_id) {
+                    let emp = allEmployees.find(e => e.id == order.employee_id);
+                    let empName = emp ? emp.full_name : 'Не назначен';
+                    employeeStats[empName] = (employeeStats[empName] || 0) + (order.total_price || 0);
+                }
+            });
+            let topEmployees = Object.entries(employeeStats).sort((a,b) => b[1] - a[1]).slice(0,5);
+            let topEmployeesHtml = '';
+            topEmployees.forEach(([name, revenue], idx) => {
+                topEmployeesHtml += `<div class="report-item"><span>${idx+1}. ${escapeHtml(name)}</span><span>💰 ${revenue.toLocaleString()} ₽</span></div>`;
+            });
+            document.getElementById('topEmployeesList').innerHTML = topEmployeesHtml || '<div class="report-item">Нет данных</div>';
+        }
+
+        function setDefaultEmployeeDates() {
+            let d = new Date();
+            let start = new Date(d.getFullYear(), 0, 1);
+            document.getElementById('employeeStartDate').value = start.toISOString().split('T')[0];
+            document.getElementById('employeeEndDate').value = d.toISOString().split('T')[0];
+        }
+
+        function filterEmployeeOrders() {
+            let start = document.getElementById('employeeStartDate').value;
+            let end = document.getElementById('employeeEndDate').value;
+            if(!start || !end) { setDefaultEmployeeDates(); start = document.getElementById('employeeStartDate').value; end = document.getElementById('employeeEndDate').value; }
+            
+            let filtered = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
+            let tbody = document.getElementById('employeeOrdersTable');
+            let dtl = document.getElementById('employeeOrdersDetailTableBody');
+            
+            if(!allEmployees.length) { 
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Нет данных о сотрудниках</td></tr>'; 
+                dtl.innerHTML = '<tr><td colspan="7" style="text-align: center;">Нет данных</td></tr>'; 
+                return; 
+            }
+            
+            let sumHtml = '', detHtml = '';
+            allEmployees.forEach(emp => {
+                let empOrders = filtered.filter(o => o.employee_id === emp.id);
+                let total = empOrders.reduce((s,o)=>s+(o.total_price||0),0);
+                let avg = empOrders.length ? (total/empOrders.length).toFixed(0) : 0;
+                sumHtml += `<tr>
+                    <td><strong>${escapeHtml(emp.full_name)}</strong></td>
+                    <td>${escapeHtml(emp.position || '-')}</td>
+                    <td>${empOrders.length}</td>
+                    <td>${total.toLocaleString()} ₽</td>
+                    <td>${avg || '—'} ₽</td>
+                </tr>`;
+                
+                if(empOrders.length) {
+                    detHtml += `<tr style="background:#e2e8f0;"><td colspan="7"><strong>👤 ${escapeHtml(emp.full_name)}</strong></td></tr>`;
+                    empOrders.forEach(o => {
+                        detHtml += `<tr>
+                            <td>${o.id}</td>
+                            <td>${escapeHtml(emp.full_name)}</td>
+                            <td>${escapeHtml(o.client_name)}</td>
+                            <td style="max-width: 200px; word-break: break-word;">${escapeHtml(o.services)}</td>
+                            <td>${o.order_date}</td>
+                            <td>${(o.total_price||0).toLocaleString()} ₽</td>
+                            <td>${getStatusBadge(o.status)}</td>
+                        </tr>`;
+                    });
+                }
+            });
+            tbody.innerHTML = sumHtml || '<tr><td colspan="5" style="text-align: center;">Нет заказов за период</td></tr>';
+            dtl.innerHTML = detHtml || '<tr><td colspan="7" style="text-align: center;">Нет заказов за период</td></tr>';
+        }
+
+        // ==================== Экспорт ====================
+        function exportToExcel() {
+            let table = document.querySelector('.section:not([style*="display: none"]) table');
+            if(!table) return;
+            let html = table.outerHTML;
+            let blob = new Blob([html], {type: 'application/vnd.ms-excel'});
+            let link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'report.xls';
+            link.click();
+            URL.revokeObjectURL(link.href);
+            showToast('Экспорт выполнен');
+        }
+
+        // ==================== Обработчики фильтров ====================
+        document.getElementById('clientSearch')?.addEventListener('input', (e) => {
+            clientSearchTerm = e.target.value.toLowerCase();
+            loadTable('clients');
         });
-        document.getElementById('pdfBtn').addEventListener('click', () => window.print());
-        document.getElementById('printBtn').addEventListener('click', () => window.print());
+        document.getElementById('employeeSearch')?.addEventListener('input', (e) => {
+            employeeSearchTerm = e.target.value.toLowerCase();
+            loadTable('employees');
+        });
+        document.getElementById('serviceSearch')?.addEventListener('input', (e) => {
+            serviceSearchTerm = e.target.value.toLowerCase();
+            loadTable('services');
+        });
+        document.getElementById('orderStatusFilter')?.addEventListener('change', (e) => {
+            orderStatusFilter = e.target.value;
+            loadTable('orders');
+        });
+        document.getElementById('orderSearch')?.addEventListener('input', (e) => {
+            orderSearchTerm = e.target.value.toLowerCase();
+            loadTable('orders');
+        });
+
+        // ==================== Навигация ====================
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                let section = this.dataset.section;
+                
+                document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+                document.getElementById('reportsSection').style.display = 'none';
+                document.getElementById('employeeOrdersSection').style.display = 'none';
+                
+                if(section === 'reports') {
+                    document.getElementById('reportsSection').style.display = 'block';
+                    setDefaultReportDates();
+                    generateReports();
+                } else if(section === 'employeeOrders') {
+                    document.getElementById('employeeOrdersSection').style.display = 'block';
+                    setDefaultEmployeeDates();
+                    filterEmployeeOrders();
+                } else {
+                    document.getElementById(section + 'Section').style.display = 'block';
+                    loadTable(section);
+                }
+            });
+        });
+
+        // ==================== Кнопки экспорта ====================
+        document.getElementById('generateReportsBtn')?.addEventListener('click', generateReports);
+        document.getElementById('filterEmployeeOrdersBtn')?.addEventListener('click', filterEmployeeOrders);
+        document.getElementById('pdfBtn')?.addEventListener('click', () => window.print());
+        document.getElementById('printBtn')?.addEventListener('click', () => window.print());
+        document.getElementById('exportExcelBtn')?.addEventListener('click', exportToExcel);
+        document.getElementById('employeeOrdersPdfBtn')?.addEventListener('click', () => window.print());
+        document.getElementById('employeeOrdersPrintBtn')?.addEventListener('click', () => window.print());
+
+        // ==================== Авторизация ====================
+        window.handleLogin = function() {
+            const user = document.getElementById('loginUsername').value;
+            const pwd = document.getElementById('loginPassword').value;
+            if(user === 'admin' && pwd === 'admin123') {
+                localStorage.setItem('serviceClean_loggedIn', 'true');
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                loadAllData();
+                document.querySelector('.nav-btn[data-section="clients"]').click();
+            } else {
+                document.getElementById('loginError').textContent = '❌ Неверный логин или пароль';
+            }
+        };
+        
+        window.handleLogout = function() {
+            localStorage.removeItem('serviceClean_loggedIn');
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mainContent').style.display = 'none';
+        };
+        
+        window.addEventListener('load', () => {
+            if(localStorage.getItem('serviceClean_loggedIn') === 'true') {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                loadAllData();
+                document.querySelector('.nav-btn[data-section="clients"]').click();
+            }
+        });
     </script>
 </body>
 </html>
