@@ -236,26 +236,61 @@
             } catch(e) { showToast('Ошибка: ' + e.message, true); }
         }
 
-        function setDefaultEmployeeDates() { let d = new Date(); document.getElementById('employeeStartDate').value = new Date(d.getFullYear(),0,1).toISOString().split('T')[0]; document.getElementById('employeeEndDate').value = d.toISOString().split('T')[0]; }
+        function setDefaultEmployeeDates() {
+    let d = new Date();
+    let startInput = document.getElementById('employeeStartDate');
+    let endInput = document.getElementById('employeeEndDate');
+    if (startInput) startInput.value = new Date(d.getFullYear(), 0, 1).toISOString().split('T')[0];
+    if (endInput) endInput.value = d.toISOString().split('T')[0];
+    if (startInput && endInput) filterEmployeeOrders();
+}
         
-        function filterEmployeeOrders() {
-            let start = document.getElementById('employeeStartDate').value, end = document.getElementById('employeeEndDate').value;
-            let filtered = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
-            let tbody = document.getElementById('employeeOrdersTable'), detail = document.getElementById('employeeOrdersDetailTableBody');
-            if (!allEmployees.length) { tbody.innerHTML = '<tr><td colspan="5">Нет данных</td></tr>'; detail.innerHTML = '<tr><td colspan="7">Нет данных</td></tr>'; return; }
-            let sumHtml = '', detHtml = '';
-            allEmployees.forEach(emp => {
-                let empOrders = filtered.filter(o => o.employee_id === emp.id), total = empOrders.reduce((s,o) => s + (o.total_price||0),0), avg = empOrders.length ? (total/empOrders.length).toFixed(0) : 0;
-                sumHtml += `<tr><td><strong>${escapeHtml(emp.full_name)}</strong></td><td>${escapeHtml(emp.position)}</td><td>${empOrders.length}</td><td>${total.toLocaleString()} ₽</td><td>${avg || '—'} ₽</td></tr>`;
-                if (empOrders.length) {
-                    detHtml += `<tr><td colspan="7" style="background:#e2e8f0;font-weight:600;">👤 ${escapeHtml(emp.full_name)}</td></tr>`;
-                    empOrders.forEach(o => detHtml += `<tr><td>${o.id}</td><td>${escapeHtml(emp.full_name)}</td><td>${escapeHtml(o.client_name)}</td><td>${escapeHtml(o.services)}</td><td>${o.order_date}</td><td>${(o.total_price||0).toLocaleString()} ₽</td><td>${escapeHtml(o.status)}</td></tr>`);
-                }
-            });
-            tbody.innerHTML = sumHtml || '<tr><td colspan="5">Нет заказов</td></tr>';
-            detail.innerHTML = detHtml || '<tr><td colspan="7">Нет заказов за период</td></tr>';
+    function filterEmployeeOrders() {
+    let start = document.getElementById('employeeStartDate').value;
+    let end = document.getElementById('employeeEndDate').value;
+    let tbody = document.getElementById('employeeOrdersTable');
+    let detail = document.getElementById('employeeOrdersDetailTableBody');
+    
+    if (!tbody || !detail) return;
+    if (!start || !end) {
+        tbody.innerHTML = '<tr><td colspan="5">Выберите даты</td></tr>';
+        detail.innerHTML = '<tr><td colspan="7">Выберите даты</td></tr>';
+        return;
+    }
+    
+    let filtered = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
+    
+    if (!allEmployees.length) {
+        tbody.innerHTML = '<tr><td colspan="5">Нет данных</td></tr>';
+        detail.innerHTML = '<tr><td colspan="7">Нет данных</td></tr>';
+        return;
+    }
+    
+    let sumHtml = '', detHtml = '';
+    
+    for (let i = 0; i < allEmployees.length; i++) {
+        let emp = allEmployees[i];
+        let empOrders = filtered.filter(o => o.employee_id === emp.id);
+        let total = 0;
+        for (let j = 0; j < empOrders.length; j++) {
+            total = total + (empOrders[j].total_price || 0);
         }
-
+        let avg = empOrders.length ? (total / empOrders.length).toFixed(0) : 0;
+        
+        sumHtml = sumHtml + '<tr><td><strong>' + escapeHtml(emp.full_name) + '</strong></td><td>' + escapeHtml(emp.position) + '</td><td>' + empOrders.length + '</td><td>' + total.toLocaleString() + ' ₽</td><td>' + (avg || '—') + ' ₽</td></tr>';
+        
+        if (empOrders.length) {
+            detHtml = detHtml + '<tr><td colspan="7" style="background:#e2e8f0;font-weight:600;">👤 ' + escapeHtml(emp.full_name) + '</td></tr>';
+            for (let j = 0; j < empOrders.length; j++) {
+                let o = empOrders[j];
+                detHtml = detHtml + '<tr><td>' + o.id + '</td><td>' + escapeHtml(emp.full_name) + '</td><td>' + escapeHtml(o.client_name) + '</td><td>' + escapeHtml(o.services) + '</td><td>' + o.order_date + '</td><td>' + (o.total_price || 0).toLocaleString() + ' ₽</td><td>' + escapeHtml(o.status) + '</td></tr>';
+            }
+        }
+    }
+    
+    tbody.innerHTML = sumHtml || '<tr><td colspan="5">Нет заказов</td></tr>';
+    detail.innerHTML = detHtml || '<tr><td colspan="7">Нет заказов</td></tr>';
+}
         window.editItem = async function(table, id) {
             if (!supabaseClient) return;
             currentTable = table;
