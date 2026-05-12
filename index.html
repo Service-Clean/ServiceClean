@@ -225,7 +225,11 @@
                         let emp = allEmployees.find(e => e.id == item.employee_id);
                         html += '<td>' + escapeHtml(item.client_name) + '</td><td>' + escapeHtml(emp?.full_name || '—') + '</td><td>' + escapeHtml(item.services) + '</td><td>' + escapeHtml(item.order_date) + '</td><td>' + (item.total_price?.toLocaleString() || 0) + ' ₽</td><td>' + escapeHtml(item.status) + '</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
                     }
-                    html += '<td><button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️</button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button></td></tr>';
+                    if (table === 'orders') {
+    html += '<td><button class="btn-warning" onclick="editOrder(' + item.id + ')">✏️</button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button></td>';
+} else {
+    html += '<td><button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️</button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button></td>';
+}
                 });
                 tbody.innerHTML = html;
                 updateStats();
