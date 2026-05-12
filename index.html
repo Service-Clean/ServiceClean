@@ -150,7 +150,7 @@
                     </div>
                 </div>
                 <div class="table-wrapper"><table><thead><tr><th>Сотрудник</th><th>Должность</th><th>Заказов</th><th>Сумма</th><th>Средний чек</th></tr></thead><tbody id="employeeOrdersTable"><tr><td colspan="5">Загрузка...<\/td></tr></tbody></table></div>
-                <div style="padding: 1.5rem;"><h3 style="color:#0a2e4d;">📋 Детализация</h3><div class="table-wrapper"><tr><thead><tr><th>ID</th><th>Сотрудник</th><th>Клиент</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th></tr></thead><tbody id="employeeOrdersDetailTableBody"><tr><td colspan="7">Загрузка...<\/td></tr></tbody></table></div></div>
+                <div style="padding: 1.5rem;"><h3 style="color:#0a2e4d;">📋 Детализация</h3><div class="table-wrapper"><table><thead><tr><th>ID</th><th>Сотрудник</th><th>Клиент</th><th>Услуги</th><th>Дата</th><th>Сумма</th><th>Статус</th></tr></thead><tbody id="employeeOrdersDetailTableBody"><tr><td colspan="7">Загрузка...<\/td></tr></tbody></table></div></div>
             </div>
 
             <div id="clientsSection" class="section" style="display: none;"><div class="section-header"><h2>👤 Клиенты</h2><button class="btn-primary" id="addClientBtn">+ Добавить</button></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th>Дата</th><th></th></tr></thead><tbody id="clientsTable"></tbody></table></div></div>
@@ -167,76 +167,78 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        function togglePasswordVisibility() {
-            const pwd = document.getElementById('loginPassword');
-            const btn = document.querySelector('.toggle-password');
-            if (pwd.type === 'password') { pwd.type = 'text'; btn.textContent = '🙈'; }
-            else { pwd.type = 'password'; btn.textContent = '👁️'; }
-        }
-
-        const SUPABASE_URL = 'https://pyojgyasaccwrcdogexx.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_db9nx0GejLB8Cw7XNB3ACg_FmTeP-WX';
-        let supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        let allOrders = [], allEmployees = [], allServices = [], allClients = [];
-        let currentTable = 'clients';
-        let isAppInitialized = false;
-
-        function escapeHtml(s) { if (!s) return ''; return String(s).replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
-
-        window.handleLogin = function() {
-            const user = document.getElementById('loginUsername').value, pwd = document.getElementById('loginPassword').value;
-            if (user === 'admin' && pwd === 'admin123') {
-                localStorage.setItem('serviceClean_loggedIn', 'true');
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('mainContent').style.display = 'block';
-                if (!isAppInitialized) { initApp(); isAppInitialized = true; }
-                document.querySelector('.nav-btn[data-section="clients"]').click();
-            } else document.getElementById('loginError').textContent = 'Неверный логин или пароль';
-        };
-        window.handleLogout = function() { localStorage.removeItem('serviceClean_loggedIn'); document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('mainContent').style.display = 'none'; };
-        window.addEventListener('load', function() { if (localStorage.getItem('serviceClean_loggedIn') === 'true') { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('mainContent').style.display = 'block'; initApp(); isAppInitialized = true; document.querySelector('.nav-btn[data-section="clients"]').click(); } });
-
-        function showToast(text, isError = false) { let t = document.getElementById('toast'); t.textContent = text; t.style.background = isError ? '#dc2626' : '#0a2e4d'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
-
-        document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', function() {
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            let section = this.dataset.section;
-            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-            document.getElementById('reportsSection').style.display = 'none';
-            if (section === 'reports') document.getElementById('reportsSection').style.display = 'block';
-            else if (section === 'employeeOrders') { document.getElementById('employeeOrdersSection').style.display = 'block'; setDefaultEmployeeDates(); filterEmployeeOrders(); }
-            else { document.getElementById(section + 'Section').style.display = 'block'; loadTable(section); }
-        }));
-
-        async function loadTable(table) {
-            if (!supabaseClient) return;
-            try {
-                let { data, error } = await supabaseClient.from(table).select('*').order('id');
-                if (error) throw error;
-                let tbody = document.getElementById(table + 'Table'), html = '';
-                if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="10">Нет данных</td></tr>'; updateStats(); return; }
-                data.forEach(item => {
-                    html += '<tr><td>' + escapeHtml(item.id) + '</td>';
-                    if (table === 'clients') html += '<td>' + escapeHtml(item.full_name) + '</td><td>' + escapeHtml(item.phone) + '</td><td>' + escapeHtml(item.email) + '</td><td>' + escapeHtml(item.address) + '</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
-                    else if (table === 'employees') html += '<td>' + escapeHtml(item.full_name) + '</td><td>' + escapeHtml(item.position) + '</td><td>' + escapeHtml(item.phone) + '</td><td>' + (item.salary || 0) + ' ₽</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
-                    else if (table === 'services') html += '<td>' + escapeHtml(item.name) + '</td><td>' + escapeHtml(item.description) + '</td><td>' + (item.price_per_m2 || 0) + ' ₽</td><td>' + (item.duration || 0) + ' мин</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
-                    else if (table === 'orders') {
-                        let emp = allEmployees.find(e => e.id == item.employee_id);
-                        html += '<td>' + escapeHtml(item.client_name) + '</td><td>' + escapeHtml(emp?.full_name || '—') + '</td><td>' + escapeHtml(item.services) + '</td><td>' + escapeHtml(item.order_date) + '</td><td>' + (item.total_price?.toLocaleString() || 0) + ' ₽</td><td>' + escapeHtml(item.status) + '</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
-                    }
-                    if (table === 'orders') {
-    html += '<td><button class="btn-warning" onclick="editOrder(' + item.id + ')">✏️</button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button></td>';
-} else {
-    html += '<td><button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️</button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button></td>';
+function togglePasswordVisibility() {
+    const pwd = document.getElementById('loginPassword');
+    const btn = document.querySelector('.toggle-password');
+    if (pwd.type === 'password') { pwd.type = 'text'; btn.textContent = '🙈'; }
+    else { pwd.type = 'password'; btn.textContent = '👁️'; }
 }
-                });
-                tbody.innerHTML = html;
-                updateStats();
-            } catch(e) { showToast('Ошибка: ' + e.message, true); }
-        }
 
-        function setDefaultEmployeeDates() {
+const SUPABASE_URL = 'https://pyojgyasaccwrcdogexx.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_db9nx0GejLB8Cw7XNB3ACg_FmTeP-WX';
+let supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let allOrders = [], allEmployees = [], allServices = [], allClients = [];
+let currentTable = 'clients';
+let isAppInitialized = false;
+
+function escapeHtml(s) { if (!s) return ''; return String(s).replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+
+window.handleLogin = function() {
+    const user = document.getElementById('loginUsername').value, pwd = document.getElementById('loginPassword').value;
+    if (user === 'admin' && pwd === 'admin123') {
+        localStorage.setItem('serviceClean_loggedIn', 'true');
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        if (!isAppInitialized) { initApp(); isAppInitialized = true; }
+        document.querySelector('.nav-btn[data-section="clients"]').click();
+    } else document.getElementById('loginError').textContent = 'Неверный логин или пароль';
+};
+window.handleLogout = function() { localStorage.removeItem('serviceClean_loggedIn'); document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('mainContent').style.display = 'none'; };
+window.addEventListener('load', function() { if (localStorage.getItem('serviceClean_loggedIn') === 'true') { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('mainContent').style.display = 'block'; initApp(); isAppInitialized = true; document.querySelector('.nav-btn[data-section="clients"]').click(); } });
+
+function showToast(text, isError = false) { let t = document.getElementById('toast'); t.textContent = text; t.style.background = isError ? '#dc2626' : '#0a2e4d'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+
+document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', function() {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    let section = this.dataset.section;
+    document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+    document.getElementById('reportsSection').style.display = 'none';
+    if (section === 'reports') document.getElementById('reportsSection').style.display = 'block';
+    else if (section === 'employeeOrders') { document.getElementById('employeeOrdersSection').style.display = 'block'; setDefaultEmployeeDates(); filterEmployeeOrders(); }
+    else { document.getElementById(section + 'Section').style.display = 'block'; loadTable(section); }
+}));
+
+async function loadTable(table) {
+    if (!supabaseClient) return;
+    try {
+        let { data, error } = await supabaseClient.from(table).select('*').order('id');
+        if (error) throw error;
+        let tbody = document.getElementById(table + 'Table'), html = '';
+        if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="10">Нет данных<\/td></tr>'; updateStats(); return; }
+        data.forEach(item => {
+            html += '<tr>';
+            html += '<td>' + escapeHtml(item.id) + '</td>';
+            if (table === 'clients') html += '<td>' + escapeHtml(item.full_name) + '</td><td>' + escapeHtml(item.phone) + '</td><td>' + escapeHtml(item.email) + '</td><td>' + escapeHtml(item.address) + '</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
+            else if (table === 'employees') html += '<td>' + escapeHtml(item.full_name) + '<td><td>' + escapeHtml(item.position) + '</td><td>' + escapeHtml(item.phone) + '</td><td>' + (item.salary || 0) + ' ₽</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
+            else if (table === 'services') html += '<td>' + escapeHtml(item.name) + '</td><td>' + escapeHtml(item.description) + '</td><td>' + (item.price_per_m2 || 0) + ' ₽</td><td>' + (item.duration || 0) + ' мин</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
+            else if (table === 'orders') {
+                let emp = allEmployees.find(e => e.id == item.employee_id);
+                html += '<td>' + escapeHtml(item.client_name) + '</td><td>' + escapeHtml(emp?.full_name || '—') + '</td><td>' + escapeHtml(item.services) + '</td><td>' + escapeHtml(item.order_date) + '</td><td>' + (item.total_price?.toLocaleString() || 0) + ' ₽</td><td>' + escapeHtml(item.status) + '</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
+            }
+            if (table === 'orders') {
+                html += '<td><button class="btn-warning" onclick="editOrder(' + item.id + ')">✏️</button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button></td>';
+            } else {
+                html += '<td><button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️</button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button></td>';
+            }
+            html += '</tr>';
+        });
+        tbody.innerHTML = html;
+        updateStats();
+    } catch(e) { showToast('Ошибка: ' + e.message, true); }
+}
+
+function setDefaultEmployeeDates() {
     let d = new Date();
     let startInput = document.getElementById('employeeStartDate');
     let endInput = document.getElementById('employeeEndDate');
@@ -244,8 +246,8 @@
     if (endInput) endInput.value = d.toISOString().split('T')[0];
     if (startInput && endInput) filterEmployeeOrders();
 }
-        
-    function filterEmployeeOrders() {
+
+function filterEmployeeOrders() {
     let start = document.getElementById('employeeStartDate').value;
     let end = document.getElementById('employeeEndDate').value;
     let tbody = document.getElementById('employeeOrdersTable');
@@ -253,192 +255,216 @@
     
     if (!tbody || !detail) return;
     if (!start || !end) {
-        tbody.innerHTML = '<tr><td colspan="5">Выберите даты</td></tr>';
-        detail.innerHTML = '<tr><td colspan="7">Выберите даты</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5">Выберите даты<\/td></tr>';
+        detail.innerHTML = '<tr><td colspan="7">Выберите даты<\/td></tr>';
         return;
     }
     
-    let filtered = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
-    
-    if (!allEmployees.length) {
-        tbody.innerHTML = '<tr><td colspan="5">Нет данных</td></tr>';
-        detail.innerHTML = '<tr><td colspan="7">Нет данных</td></tr>';
+    if (!allEmployees.length || !allOrders.length) {
+        tbody.innerHTML = '<tr><td colspan="5">Данные загружаются...<\/td></tr>';
+        detail.innerHTML = '<tr><td colspan="7">Данные загружаются...<\/td></tr>';
         return;
     }
     
-    let sumHtml = '', detHtml = '';
+    let filtered = [];
+    for (let i = 0; i < allOrders.length; i++) {
+        if (allOrders[i].order_date >= start && allOrders[i].order_date <= end) {
+            filtered.push(allOrders[i]);
+        }
+    }
+    
+    let sumHtml = '';
+    let detHtml = '';
     
     for (let i = 0; i < allEmployees.length; i++) {
         let emp = allEmployees[i];
-        let empOrders = filtered.filter(o => o.employee_id === emp.id);
+        let empOrders = [];
         let total = 0;
-        for (let j = 0; j < empOrders.length; j++) {
-            total = total + (empOrders[j].total_price || 0);
+        
+        for (let j = 0; j < filtered.length; j++) {
+            if (filtered[j].employee_id === emp.id) {
+                empOrders.push(filtered[j]);
+                total = total + (filtered[j].total_price || 0);
+            }
         }
+        
         let avg = empOrders.length ? (total / empOrders.length).toFixed(0) : 0;
         
-        sumHtml = sumHtml + '<tr><td><strong>' + escapeHtml(emp.full_name) + '</strong></td><td>' + escapeHtml(emp.position) + '</td><td>' + empOrders.length + '</td><td>' + total.toLocaleString() + ' ₽</td><td>' + (avg || '—') + ' ₽</td></tr>';
+        sumHtml = sumHtml + '<tr>' +
+            '<td><strong>' + escapeHtml(emp.full_name) + '</strong></td>' +
+            '<td>' + escapeHtml(emp.position) + '</td>' +
+            '<td>' + empOrders.length + '</td>' +
+            '<td>' + total.toLocaleString() + ' ₽</td>' +
+            '<td>' + (avg || '—') + ' ₽</td>' +
+            '</tr>';
         
-        if (empOrders.length) {
+        if (empOrders.length > 0) {
             detHtml = detHtml + '<tr><td colspan="7" style="background:#e2e8f0;font-weight:600;">👤 ' + escapeHtml(emp.full_name) + '</td></tr>';
             for (let j = 0; j < empOrders.length; j++) {
                 let o = empOrders[j];
-                detHtml = detHtml + '<tr><td>' + o.id + '</td><td>' + escapeHtml(emp.full_name) + '</td><td>' + escapeHtml(o.client_name) + '</td><td>' + escapeHtml(o.services) + '</td><td>' + o.order_date + '</td><td>' + (o.total_price || 0).toLocaleString() + ' ₽</td><td>' + escapeHtml(o.status) + '</td></tr>';
+                detHtml = detHtml + '<tr>' +
+                    '<td>' + o.id + '</td>' +
+                    '<td>' + escapeHtml(emp.full_name) + '</td>' +
+                    '<td>' + escapeHtml(o.client_name) + '</td>' +
+                    '<td>' + escapeHtml(o.services) + '</td>' +
+                    '<td>' + o.order_date + '</td>' +
+                    '<td>' + (o.total_price || 0).toLocaleString() + ' ₽</td>' +
+                    '<td>' + escapeHtml(o.status) + '</td>' +
+                    '</tr>';
             }
         }
     }
     
-    tbody.innerHTML = sumHtml || '<tr><td colspan="5">Нет заказов</td></tr>';
-    detail.innerHTML = detHtml || '<tr><td colspan="7">Нет заказов</td></tr>';
+    tbody.innerHTML = sumHtml || '<tr><td colspan="5">Нет заказов за период<\/td></tr>';
+    detail.innerHTML = detHtml || '<tr><td colspan="7">Нет заказов за период<\/td></tr>';
 }
-        window.editItem = async function(table, id) {
-            if (!supabaseClient) return;
-            currentTable = table;
-            let { data } = await supabaseClient.from(table).select('*').eq('id', id).single();
-            if (!data) return;
-            let titles = { clients:'Редактировать клиента', employees:'Редактировать сотрудника', services:'Редактировать услугу' };
-            document.getElementById('simpleModalTitle').textContent = titles[table];
-            document.getElementById('simpleEditId').value = id;
-            let fields = '';
-            if (table === 'clients') fields = `<input type="text" id="full_name" value="${escapeHtml(data.full_name)}" placeholder="ФИО *" required><input type="text" id="phone" value="${escapeHtml(data.phone)}" placeholder="Телефон *" required><input type="email" id="email" value="${escapeHtml(data.email)}" placeholder="Email"><input type="text" id="address" value="${escapeHtml(data.address)}" placeholder="Адрес">`;
-            else if (table === 'employees') fields = `<input type="text" id="full_name" value="${escapeHtml(data.full_name)}" placeholder="ФИО *" required><input type="text" id="position" value="${escapeHtml(data.position)}" placeholder="Должность *" required><input type="text" id="phone" value="${escapeHtml(data.phone)}" placeholder="Телефон *" required><input type="number" id="salary" step="0.01" value="${data.salary||0}" placeholder="Оклад">`;
-            else if (table === 'services') fields = `<input type="text" id="name" value="${escapeHtml(data.name)}" placeholder="Название *" required><input type="text" id="description" value="${escapeHtml(data.description)}" placeholder="Описание"><input type="number" id="price_per_m2" step="0.01" value="${data.price_per_m2||0}" placeholder="Цена/м² *" required><input type="number" id="duration" value="${data.duration||0}" placeholder="Длительность (мин)">`;
-            document.getElementById('simpleModalFields').innerHTML = fields;
-            document.getElementById('simpleModal').classList.add('show');
-        };
 
-        window.editOrder = async function(id) {
-            if (!supabaseClient || !allEmployees.length || !allServices.length) { showToast('Данные загружаются', true); return; }
-            let { data } = await supabaseClient.from('orders').select('*').eq('id', id).single();
-            if (!data) return;
-            document.getElementById('orderModalTitle').textContent = '✏️ Редактирование заказа';
-            document.getElementById('orderEditId').value = id;
-            document.getElementById('client_name').value = data.client_name || '';
-            document.getElementById('order_date').value = data.order_date || '';
-            document.getElementById('status').value = data.status || 'новый';
-            let empSelect = document.getElementById('employee_id');
-            empSelect.innerHTML = '<option value="">Выберите сотрудника *</option>';
-            allEmployees.forEach(e => empSelect.innerHTML += `<option value="${e.id}" ${e.id == data.employee_id ? 'selected' : ''}>${escapeHtml(e.full_name)}</option>`);
-            document.getElementById('servicesList').innerHTML = '';
-            if (data.services) {
-                let parts = data.services.split(',').map(s => s.trim());
-                parts.forEach(p => {
-                    let match = p.match(/(.+?)\s*\(([\d\.]+)\s*м²\)/);
-                    if (match) { let srv = allServices.find(s => s.name === match[1]); if(srv) addServiceRow(srv.id, parseFloat(match[2])); else addServiceRow(null, 1); }
-                    else addServiceRow(null, 1);
-                });
-            } else addServiceRow(null, 1);
-            calculateTotal();
-            document.getElementById('orderModal').classList.add('show');
-        };
+window.editItem = async function(table, id) {
+    if (!supabaseClient) return;
+    currentTable = table;
+    let { data } = await supabaseClient.from(table).select('*').eq('id', id).single();
+    if (!data) return;
+    let titles = { clients:'Редактировать клиента', employees:'Редактировать сотрудника', services:'Редактировать услугу' };
+    document.getElementById('simpleModalTitle').textContent = titles[table];
+    document.getElementById('simpleEditId').value = id;
+    let fields = '';
+    if (table === 'clients') fields = `<input type="text" id="full_name" value="${escapeHtml(data.full_name)}" placeholder="ФИО *" required><input type="text" id="phone" value="${escapeHtml(data.phone)}" placeholder="Телефон *" required><input type="email" id="email" value="${escapeHtml(data.email)}" placeholder="Email"><input type="text" id="address" value="${escapeHtml(data.address)}" placeholder="Адрес">`;
+    else if (table === 'employees') fields = `<input type="text" id="full_name" value="${escapeHtml(data.full_name)}" placeholder="ФИО *" required><input type="text" id="position" value="${escapeHtml(data.position)}" placeholder="Должность *" required><input type="text" id="phone" value="${escapeHtml(data.phone)}" placeholder="Телефон *" required><input type="number" id="salary" step="0.01" value="${data.salary||0}" placeholder="Оклад">`;
+    else if (table === 'services') fields = `<input type="text" id="name" value="${escapeHtml(data.name)}" placeholder="Название *" required><input type="text" id="description" value="${escapeHtml(data.description)}" placeholder="Описание"><input type="number" id="price_per_m2" step="0.01" value="${data.price_per_m2||0}" placeholder="Цена/м² *" required><input type="number" id="duration" value="${data.duration||0}" placeholder="Длительность (мин)">`;
+    document.getElementById('simpleModalFields').innerHTML = fields;
+    document.getElementById('simpleModal').classList.add('show');
+};
 
-        function addServiceRow(selectedServiceId, quantity) {
-            const servicesList = document.getElementById('servicesList');
-            const newRow = document.createElement('div');
-            newRow.className = 'service-row';
-            
-            let options = '<option value="">Выберите услугу</option>';
-            allServices.forEach(service => {
-                const selected = service.id == selectedServiceId ? 'selected' : '';
-                options += '<option value="' + escapeHtml(service.id) + '" data-price="' + escapeHtml(service.price_per_m2) + '" ' + selected + '>' + escapeHtml(service.name) + ' (' + escapeHtml(service.price_per_m2) + ' ₽/м²)</option>';
-            });
+window.editOrder = async function(id) {
+    if (!supabaseClient || !allEmployees.length || !allServices.length) { showToast('Данные загружаются', true); return; }
+    let { data } = await supabaseClient.from('orders').select('*').eq('id', id).single();
+    if (!data) return;
+    document.getElementById('orderModalTitle').textContent = '✏️ Редактирование заказа';
+    document.getElementById('orderEditId').value = id;
+    document.getElementById('client_name').value = data.client_name || '';
+    document.getElementById('order_date').value = data.order_date || '';
+    document.getElementById('status').value = data.status || 'новый';
+    let empSelect = document.getElementById('employee_id');
+    empSelect.innerHTML = '<option value="">Выберите сотрудника *</option>';
+    allEmployees.forEach(e => empSelect.innerHTML += `<option value="${e.id}" ${e.id == data.employee_id ? 'selected' : ''}>${escapeHtml(e.full_name)}</option>`);
+    document.getElementById('servicesList').innerHTML = '';
+    if (data.services) {
+        let parts = data.services.split(',').map(s => s.trim());
+        parts.forEach(p => {
+            let match = p.match(/(.+?)\s*\(([\d\.]+)\s*м²\)/);
+            if (match) { let srv = allServices.find(s => s.name === match[1]); if(srv) addServiceRow(srv.id, parseFloat(match[2])); else addServiceRow(null, 1); }
+            else addServiceRow(null, 1);
+        });
+    } else addServiceRow(null, 1);
+    calculateTotal();
+    document.getElementById('orderModal').classList.add('show');
+};
+function addServiceRow(selectedServiceId, quantity) {
+    const servicesList = document.getElementById('servicesList');
+    const newRow = document.createElement('div');
+    newRow.className = 'service-row';
+    
+    let options = '<option value="">Выберите услугу</option>';
+    allServices.forEach(service => {
+        const selected = service.id == selectedServiceId ? 'selected' : '';
+        options += '<option value="' + escapeHtml(service.id) + '" data-price="' + escapeHtml(service.price_per_m2) + '" ' + selected + '>' + escapeHtml(service.name) + ' (' + escapeHtml(service.price_per_m2) + ' ₽/м²)</option>';
+    });
 
-            newRow.innerHTML = '<select class="service-select" required>' + options + '</select>' +
-                               '<input type="number" class="service-quantity" placeholder="Кол-во м²" value="' + (quantity || 1) + '" min="0.1" step="0.1">' +
-                               '<button type="button" class="remove-service">✖</button>';
+    newRow.innerHTML = '<select class="service-select" required>' + options + '</select>' +
+                       '<input type="number" class="service-quantity" placeholder="Кол-во м²" value="' + (quantity || 1) + '" min="0.1" step="0.1">' +
+                       '<button type="button" class="remove-service">✖</button>';
 
-            servicesList.appendChild(newRow);
+    servicesList.appendChild(newRow);
 
-            newRow.querySelector('.service-select').addEventListener('change', calculateTotal);
-            newRow.querySelector('.service-quantity').addEventListener('input', calculateTotal);
-            newRow.querySelector('.remove-service').addEventListener('click', function() {
-                newRow.remove();
-                if (document.querySelectorAll('.service-row').length === 0) {
-                    addServiceRow(null, 1);
-                } else {
-                    calculateTotal();
-                }
-            });
-
+    newRow.querySelector('.service-select').addEventListener('change', calculateTotal);
+    newRow.querySelector('.service-quantity').addEventListener('input', calculateTotal);
+    newRow.querySelector('.remove-service').addEventListener('click', function() {
+        newRow.remove();
+        if (document.querySelectorAll('.service-row').length === 0) {
+            addServiceRow(null, 1);
+        } else {
             calculateTotal();
         }
+    });
 
-        function calculateTotal() {
-            let total = 0;
-            document.querySelectorAll('.service-row').forEach(row => {
-                let sel = row.querySelector('.service-select'), qty = row.querySelector('.service-quantity');
-                if(sel.value && qty.value) { let price = parseFloat(sel.selectedOptions[0]?.dataset.price || 0); total += price * parseFloat(qty.value); }
-            });
-            document.getElementById('totalAmount').textContent = `Итого: ${total.toLocaleString()} ₽`;
-            return total;
+    calculateTotal();
+}
+
+function calculateTotal() {
+    let total = 0;
+    document.querySelectorAll('.service-row').forEach(row => {
+        let sel = row.querySelector('.service-select'), qty = row.querySelector('.service-quantity');
+        if(sel.value && qty.value) { let price = parseFloat(sel.selectedOptions[0]?.dataset.price || 0); total += price * parseFloat(qty.value); }
+    });
+    document.getElementById('totalAmount').textContent = `Итого: ${total.toLocaleString()} ₽`;
+    return total;
+}
+
+document.getElementById('addClientBtn').addEventListener('click', () => { currentTable='clients'; document.getElementById('simpleModalTitle').textContent='Добавить клиента'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="email" id="email" placeholder="Email"><input type="text" id="address" placeholder="Адрес">'; document.getElementById('simpleModal').classList.add('show'); });
+document.getElementById('addEmployeeBtn').addEventListener('click', () => { currentTable='employees'; document.getElementById('simpleModalTitle').textContent='Добавить сотрудника'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="position" placeholder="Должность *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="number" id="salary" step="0.01" placeholder="Оклад">'; document.getElementById('simpleModal').classList.add('show'); });
+document.getElementById('addServiceBtn').addEventListener('click', () => { currentTable='services'; document.getElementById('simpleModalTitle').textContent='Добавить услугу'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="name" placeholder="Название *" required><input type="text" id="description" placeholder="Описание"><input type="number" id="price_per_m2" step="0.01" placeholder="Цена/м² *" required><input type="number" id="duration" placeholder="Длительность (мин)">'; document.getElementById('simpleModal').classList.add('show'); });
+
+document.getElementById('addOrderBtn').addEventListener('click', () => { 
+    if(!allEmployees.length||!allServices.length){ showToast('Данные загружаются, подождите секунду', true); return; } 
+    document.getElementById('orderModalTitle').textContent='➕ Создание заказа'; 
+    document.getElementById('orderEditId').value=''; 
+    document.getElementById('client_name').value=''; 
+    document.getElementById('order_date').value=''; 
+    document.getElementById('status').value='новый'; 
+    let sel=document.getElementById('employee_id'); 
+    sel.innerHTML='<option value="">Выберите сотрудника *</option>'; 
+    allEmployees.forEach(e=>sel.innerHTML+=`<option value="${e.id}">${escapeHtml(e.full_name)}</option>`); 
+    document.getElementById('servicesList').innerHTML=''; 
+    addServiceRow(null, 1); 
+    document.getElementById('orderModal').classList.add('show'); 
+});
+
+document.getElementById('addServiceRowBtn').addEventListener('click', () => addServiceRow(null, 1));
+
+document.getElementById('simpleModalForm').addEventListener('submit', async(e) => { 
+    e.preventDefault(); 
+    let form={}, inputs=document.querySelectorAll('#simpleModalFields input'); 
+    inputs.forEach(i=>{ if(i.type==='number') form[i.id]=parseFloat(i.value)||0; else form[i.id]=i.value; }); 
+    let id=document.getElementById('simpleEditId').value; 
+    try{ 
+        if(id) await supabaseClient.from(currentTable).update(form).eq('id',id); 
+        else { form.created_at=new Date().toISOString(); await supabaseClient.from(currentTable).insert([form]); } 
+        showToast(id?'Обновлено':'Добавлено'); 
+        document.getElementById('simpleModal').classList.remove('show'); 
+        loadTable(currentTable); 
+        loadAllData(); 
+    } catch(error){ showToast('Ошибка: '+error.message, true); } 
+});
+
+document.getElementById('orderForm').addEventListener('submit', async(e) => {
+    e.preventDefault();
+    let client_name = document.getElementById('client_name').value;
+    let employee_id = document.getElementById('employee_id').value;
+    let order_date = document.getElementById('order_date').value;
+    let status = document.getElementById('status').value;
+    let editId = document.getElementById('orderEditId').value;
+    let rows = document.querySelectorAll('.service-row');
+    if(rows.length === 0) { showToast('Добавьте услугу', true); return; }
+    let services = [];
+    rows.forEach(row => {
+        let sel = row.querySelector('.service-select'), qty = row.querySelector('.service-quantity');
+        if(sel.value && qty.value) {
+            let service = allServices.find(s => s.id == sel.value);
+            if(service) services.push(service.name + ' (' + qty.value + ' м²)');
         }
-
-        document.getElementById('addClientBtn').addEventListener('click', () => { currentTable='clients'; document.getElementById('simpleModalTitle').textContent='Добавить клиента'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="email" id="email" placeholder="Email"><input type="text" id="address" placeholder="Адрес">'; document.getElementById('simpleModal').classList.add('show'); });
-        document.getElementById('addEmployeeBtn').addEventListener('click', () => { currentTable='employees'; document.getElementById('simpleModalTitle').textContent='Добавить сотрудника'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="position" placeholder="Должность *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="number" id="salary" step="0.01" placeholder="Оклад">'; document.getElementById('simpleModal').classList.add('show'); });
-        document.getElementById('addServiceBtn').addEventListener('click', () => { currentTable='services'; document.getElementById('simpleModalTitle').textContent='Добавить услугу'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="name" placeholder="Название *" required><input type="text" id="description" placeholder="Описание"><input type="number" id="price_per_m2" step="0.01" placeholder="Цена/м² *" required><input type="number" id="duration" placeholder="Длительность (мин)">'; document.getElementById('simpleModal').classList.add('show'); });
-        
-        document.getElementById('addOrderBtn').addEventListener('click', () => { 
-            if(!allEmployees.length||!allServices.length){ showToast('Данные загружаются, подождите секунду', true); return; } 
-            document.getElementById('orderModalTitle').textContent='➕ Создание заказа'; 
-            document.getElementById('orderEditId').value=''; 
-            document.getElementById('client_name').value=''; 
-            document.getElementById('order_date').value=''; 
-            document.getElementById('status').value='новый'; 
-            let sel=document.getElementById('employee_id'); 
-            sel.innerHTML='<option value="">Выберите сотрудника *</option>'; 
-            allEmployees.forEach(e=>sel.innerHTML+=`<option value="${e.id}">${escapeHtml(e.full_name)}</option>`); 
-            document.getElementById('servicesList').innerHTML=''; 
-            addServiceRow(null, 1); 
-            document.getElementById('orderModal').classList.add('show'); 
-        });
-        
-        document.getElementById('addServiceRowBtn').addEventListener('click', () => addServiceRow(null, 1));
-        
-        document.getElementById('simpleModalForm').addEventListener('submit', async(e) => { 
-            e.preventDefault(); 
-            let form={}, inputs=document.querySelectorAll('#simpleModalFields input'); 
-            inputs.forEach(i=>{ if(i.type==='number') form[i.id]=parseFloat(i.value)||0; else form[i.id]=i.value; }); 
-            let id=document.getElementById('simpleEditId').value; 
-            try{ 
-                if(id) await supabaseClient.from(currentTable).update(form).eq('id',id); 
-                else { form.created_at=new Date().toISOString(); await supabaseClient.from(currentTable).insert([form]); } 
-                showToast(id?'Обновлено':'Добавлено'); 
-                document.getElementById('simpleModal').classList.remove('show'); 
-                loadTable(currentTable); 
-                loadAllData(); 
-            } catch(error){ showToast('Ошибка: '+error.message, true); } 
-        });
-
-        document.getElementById('orderForm').addEventListener('submit', async(e) => {
-            e.preventDefault();
-            let client_name = document.getElementById('client_name').value;
-            let employee_id = document.getElementById('employee_id').value;
-            let order_date = document.getElementById('order_date').value;
-            let status = document.getElementById('status').value;
-            let editId = document.getElementById('orderEditId').value;
-            let rows = document.querySelectorAll('.service-row');
-            if(rows.length === 0) { showToast('Добавьте услугу', true); return; }
-            let services = [];
-            rows.forEach(row => {
-                let sel = row.querySelector('.service-select'), qty = row.querySelector('.service-quantity');
-                if(sel.value && qty.value) {
-                    let service = allServices.find(s => s.id == sel.value);
-                    if(service) services.push(service.name + ' (' + qty.value + ' м²)');
-                }
-            });
-            if(services.length === 0) { showToast('Выберите услуги', true); return; }
-            let total_price = calculateTotal();
-            let formData = { client_name, employee_id: employee_id || null, services: services.join(', '), order_date, total_price, status };
-            try {
-                if(editId) await supabaseClient.from('orders').update(formData).eq('id', editId);
-                else { formData.created_at = new Date().toISOString(); await supabaseClient.from('orders').insert([formData]); }
-                showToast(editId ? 'Заказ обновлён' : 'Заказ создан');
-                document.getElementById('orderModal').classList.remove('show');
-                loadTable('orders');
-                loadAllData();
-            } catch(error) { showToast('Ошибка: ' + error.message, true); }
-        });
-
+    });
+    if(services.length === 0) { showToast('Выберите услуги', true); return; }
+    let total_price = calculateTotal();
+    let formData = { client_name, employee_id: employee_id || null, services: services.join(', '), order_date, total_price, status };
+    try {
+        if(editId) await supabaseClient.from('orders').update(formData).eq('id', editId);
+        else { formData.created_at = new Date().toISOString(); await supabaseClient.from('orders').insert([formData]); }
+        showToast(editId ? 'Заказ обновлён' : 'Заказ создан');
+        document.getElementById('orderModal').classList.remove('show');
+        loadTable('orders');
+        loadAllData();
+    } catch(error) { showToast('Ошибка: ' + error.message, true); }
+});
         document.getElementById('closeOrderModalBtn').addEventListener('click', () => document.getElementById('orderModal').classList.remove('show'));
         document.getElementById('closeSimpleModalBtn').addEventListener('click', () => document.getElementById('simpleModal').classList.remove('show'));
         window.deleteItem = async function(table, id) { if(confirm('Удалить?')) try{ await supabaseClient.from(table).delete().eq('id',id); showToast('Удалено'); loadTable(table); loadAllData(); } catch(e){ showToast('Ошибка', true); } };
