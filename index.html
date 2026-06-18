@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>СервисКлин — Корпоративная информационная система</title>
+    <title>СервисКлин — Офлайн‑демо</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧼</text></svg>">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; }
@@ -165,360 +165,522 @@
     <div class="modal" id="simpleModal"><div class="modal-content"><h3 id="simpleModalTitle">Добавление</h3><form id="simpleModalForm"><input type="hidden" id="simpleEditId"><div id="simpleModalFields"></div><div class="modal-buttons"><button type="submit">Сохранить</button><button type="button" id="closeSimpleModalBtn">Отмена</button></div></form></div></div>
     <div class="toast" id="toast">Сохранено</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-function togglePasswordVisibility() {
-    const pwd = document.getElementById('loginPassword');
-    const btn = document.querySelector('.toggle-password');
-    if (pwd.type === 'password') { pwd.type = 'text'; btn.textContent = '🙈'; }
-    else { pwd.type = 'password'; btn.textContent = '👁️'; }
-}
+        function togglePasswordVisibility() {
+            const pwd = document.getElementById('loginPassword');
+            const btn = document.querySelector('.toggle-password');
+            if (pwd.type === 'password') { pwd.type = 'text'; btn.textContent = '🙈'; }
+            else { pwd.type = 'password'; btn.textContent = '👁️'; }
+        }
 
-const SUPABASE_URL = 'https://pyojgyasaccwrcdogexx.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_db9nx0GejLB8Cw7XNB3ACg_FmTeP-WX';
-let supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let allOrders = [], allEmployees = [], allServices = [], allClients = [];
-let currentTable = 'clients';
-let isAppInitialized = false;
+        // --- РАБОТА С LOCALSTORAGE (ОФЛАЙН) ---
+        const STORAGE_KEY = 'serviceclean_offline_data';
 
-function escapeHtml(s) { if (!s) return ''; return String(s).replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+        function getDefaultData() {
+            return {
+                clients: [
+                    { id: 41, full_name: 'Степанов Алексей Викторович', phone: '+7 (999) 123-45-09', email: 'stepanov@mail.ru', address: 'ул. Центральная, д. 7, кв. 2', created_at: '2026-03-28' },
+                    { id: 42, full_name: 'Васильев Сергей Андреевич', phone: '+7 (999) 123-45-07', email: 'vasiliev@mail.ru', address: 'ул. Садовая, д. 18, кв. 4', created_at: '2026-03-28' },
+                    { id: 43, full_name: 'Иванов Иван Иванович', phone: '+7 (999) 123-45-01', email: 'ivanov@mail.ru', address: 'ул. Ленина, д. 10, кв. 5', created_at: '2026-03-28' },
+                    { id: 44, full_name: 'Козлова Елена Владимировна', phone: '+7 (999) 123-45-04', email: 'kozlova@mail.ru', address: 'ул. Советская, д. 15, кв. 7', created_at: '2026-03-28' },
+                    { id: 45, full_name: 'Федорова Мария Дмитриевна', phone: '+7 (999) 123-45-10', email: 'fedorova@mail.ru', address: 'ул. Заречная, д. 12, кв. 8', created_at: '2026-03-28' },
+                    { id: 46, full_name: 'Павлова Ольга Николаевна', phone: '+7 (999) 123-45-08', email: 'pavlova@mail.ru', address: 'пр. Ленинградский, д. 56, кв. 15', created_at: '2026-03-28' },
+                    { id: 47, full_name: 'Морозов Дмитрий Павлович', phone: '+7 (999) 123-45-05', email: 'morozov@mail.ru', address: 'пр. Победы, д. 42, кв. 9', created_at: '2026-03-28' },
+                    { id: 48, full_name: 'Николаев Артем Константинович', phone: '+7 (999) 123-45-11', email: 'nikolaev@mail.ru', address: 'пр. Московский, д. 33, кв. 11', created_at: '2026-03-28' },
+                    { id: 49, full_name: 'Сидоров Петр Алексеевич', phone: '+7 (999) 123-45-03', email: 'sidorov@mail.ru', address: 'ул. Гагарина, д. 8, кв. 3', created_at: '2026-03-28' },
+                    { id: 50, full_name: 'Новикова Татьяна Игоревна', phone: '+7 (999) 123-45-06', email: 'novikova@mail.ru', address: 'ул. Школьная, д. 3, кв. 21', created_at: '2026-03-28' },
+                    { id: 51, full_name: 'Соколова Ирина Александровна', phone: '+7 (999) 123-45-12', email: 'sokolova@mail.ru', address: 'ул. Пушкина, д. 21, кв. 6', created_at: '2026-03-28' },
+                    { id: 52, full_name: 'Петрова Анна Сергеевна', phone: '+7 (999) 123-45-02', email: 'petrova@mail.ru', address: 'пр. Мира, д. 25, кв. 12', created_at: '2026-03-28' }
+                ],
+                employees: [
+                    { id: 43, full_name: 'Лебедева Екатерина Петровна', position: 'Клинер', phone: '+7 (999) 234-56-02', salary: 35000, created_at: '2026-03-28' },
+                    { id: 44, full_name: 'Соколов Дмитрий Игоревич', position: 'Клинер', phone: '+7 (999) 234-56-09', salary: 35000, created_at: '2026-03-28' },
+                    { id: 45, full_name: 'Кузнецова Наталья Владимировна', position: 'Старший клинер', phone: '+7 (999) 234-56-04', salary: 45000, created_at: '2026-03-28' },
+                    { id: 46, full_name: 'Ковалев Андрей Сергеевич', position: 'Клинер', phone: '+7 (999) 234-56-01', salary: 35000, created_at: '2026-03-28' },
+                    { id: 47, full_name: 'Орлова Анна Викторовна', position: 'Клинер', phone: '+7 (999) 234-56-06', salary: 35000, created_at: '2026-03-28' },
+                    { id: 48, full_name: 'Волкова Елена Сергеевна', position: 'Клинер', phone: '+7 (999) 234-56-08', salary: 35000, created_at: '2026-03-28' },
+                    { id: 49, full_name: 'Михайлов Павел Андреевич', position: 'Старший клинер', phone: '+7 (999) 234-56-07', salary: 45000, created_at: '2026-03-28' },
+                    { id: 50, full_name: 'Смирнов Денис Александрович', position: 'Клинер', phone: '+7 (999) 234-56-03', salary: 35000, created_at: '2026-03-28' },
+                    { id: 51, full_name: 'Григорьева Елена Николаевна', position: 'Клинер', phone: '+7 (999) 234-56-12', salary: 35000, created_at: '2026-03-28' },
+                    { id: 52, full_name: 'Попов Иван Олегович', position: 'Клинер', phone: '+7 (999) 234-56-05', salary: 35000, created_at: '2026-03-28' },
+                    { id: 53, full_name: 'Морозова Ирина Петровна', position: 'Клинер', phone: '+7 (999) 234-56-10', salary: 35000, created_at: '2026-03-28' },
+                    { id: 54, full_name: 'Захаров Алексей Владимирович', position: 'Клинер', phone: '+7 (999) 234-56-11', salary: 35000, created_at: '2026-03-28' }
+                ],
+                services: [
+                    { id: 54, name: 'Мойка окон', description: 'Мытье окон с двух сторон', price_per_m2: 300, duration: 60, created_at: '2026-03-28' },
+                    { id: 55, name: 'Уборка квартир', description: 'Комплексная уборка жилых помещений', price_per_m2: 250, duration: 120, created_at: '2026-03-28' },
+                    { id: 56, name: 'Уборка офисов', description: 'Поддержание чистоты в офисах', price_per_m2: 200, duration: 180, created_at: '2026-03-28' },
+                    { id: 57, name: 'Химчистка ковров', description: 'Удаление загрязнений с ковров', price_per_m2: 400, duration: 90, created_at: '2026-03-28' },
+                    { id: 58, name: 'Химчистка мебели', description: 'Чистка мягкой мебели', price_per_m2: 450, duration: 120, created_at: '2026-03-28' },
+                    { id: 59, name: 'Мытье фасадов', description: 'Промышленный альпинизм', price_per_m2: 500, duration: 240, created_at: '2026-03-28' },
+                    { id: 60, name: 'Генеральная уборка', description: 'После ремонта, строительства', price_per_m2: 350, duration: 300, created_at: '2026-03-28' },
+                    { id: 61, name: 'Уборка после ремонта', description: 'Удаление строительной пыли', price_per_m2: 380, duration: 240, created_at: '2026-03-28' },
+                    { id: 62, name: 'Мойка витрин', description: 'Профессиональная мойка витрин', price_per_m2: 400, duration: 90, created_at: '2026-03-28' },
+                    { id: 63, name: 'Уборка складов', description: 'Уборка складских помещений', price_per_m2: 180, duration: 180, created_at: '2026-03-28' },
+                    { id: 64, name: 'Дезинфекция помещений', description: 'Обработка от бактерий', price_per_m2: 250, duration: 60, created_at: '2026-03-28' },
+                    { id: 65, name: 'Уборка территории', description: 'Уборка прилегающей территории', price_per_m2: 150, duration: 120, created_at: '2026-03-28' },
+                    { id: 66, name: 'Мойка жалюзи', description: 'Чистка жалюзи всех типов', price_per_m2: 280, duration: 90, created_at: '2026-03-28' },
+                    { id: 67, name: 'Полировка мебели', description: 'Нанесение защитного покрытия', price_per_m2: 320, duration: 60, created_at: '2026-03-28' },
+                    { id: 68, name: 'Обработка паркета', description: 'Натирка и полировка', price_per_m2: 350, duration: 120, created_at: '2026-03-28' }
+                ],
+                orders: []
+            };
+        }
 
-window.handleLogin = function() {
-    const user = document.getElementById('loginUsername').value, pwd = document.getElementById('loginPassword').value;
-    if (user === 'admin' && pwd === 'admin123') {
-        localStorage.setItem('serviceClean_loggedIn', 'true');
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('mainContent').style.display = 'block';
-        if (!isAppInitialized) { initApp(); isAppInitialized = true; }
-        document.querySelector('.nav-btn[data-section="clients"]').click();
-    } else document.getElementById('loginError').textContent = 'Неверный логин или пароль';
-};
-window.handleLogout = function() { localStorage.removeItem('serviceClean_loggedIn'); document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('mainContent').style.display = 'none'; };
-window.addEventListener('load', function() { if (localStorage.getItem('serviceClean_loggedIn') === 'true') { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('mainContent').style.display = 'block'; initApp(); isAppInitialized = true; document.querySelector('.nav-btn[data-section="clients"]').click(); } });
+        // --- СОЗДАЁМ СТАРТОВЫЕ ЗАКАЗЫ ОТДЕЛЬНО (чтобы было всё как на скрине) ---
+        function getDefaultOrders() {
+            return [
+                { id: 98, client_name: 'Иванов Иван Иванович', employee_id: 46, services: 'Мойка окон (50 м²), Уборка квартир (80 м²)', order_date: '2026-03-01', total_price: 35000, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 99, client_name: 'Петрова Анна Сергеевна', employee_id: 43, services: 'Уборка квартир (65 м²)', order_date: '2026-03-02', total_price: 16250, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 100, client_name: 'Сидоров Петр Алексеевич', employee_id: 50, services: 'Генеральная уборка (120 м²)', order_date: '2026-03-03', total_price: 42000, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 101, client_name: 'Козлова Елена Владимировна', employee_id: 45, services: 'Химчистка ковров (30 м²), Уборка квартир (45 м²)', order_date: '2026-03-04', total_price: 23250, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 102, client_name: 'Морозов Дмитрий Павлович', employee_id: 52, services: 'Мойка окон (40 м²)', order_date: '2026-03-05', total_price: 12000, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 103, client_name: 'Новикова Татьяна Игоревна', employee_id: 47, services: 'Уборка офисов (85 м²)', order_date: '2026-03-06', total_price: 17000, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 104, client_name: 'Васильев Сергей Андреевич', employee_id: 49, services: 'Химчистка мебели (4 предмета)', order_date: '2026-03-07', total_price: 18000, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 105, client_name: 'Павлова Ольга Николаевна', employee_id: 48, services: 'Мойка окон (30 м²), Уборка квартир (55 м²)', order_date: '2026-03-08', total_price: 22750, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 106, client_name: 'Степанов Алексей Викторович', employee_id: 44, services: 'Генеральная уборка (95 м²)', order_date: '2026-03-09', total_price: 33250, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 107, client_name: 'Федорова Мария Дмитриевна', employee_id: 53, services: 'Уборка квартир (70 м²)', order_date: '2026-03-10', total_price: 17500, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 108, client_name: 'Николаев Артем Константинович', employee_id: 54, services: 'Мойка фасадов (120 м²)', order_date: '2026-03-11', total_price: 60000, status: 'в работе', created_at: '2026-03-28' },
+                { id: 109, client_name: 'Соколова Ирина Александровна', employee_id: 51, services: 'Уборка после ремонта (85 м²)', order_date: '2026-03-12', total_price: 32300, status: 'в работе', created_at: '2026-03-28' },
+                { id: 110, client_name: 'Иванов Иван Иванович', employee_id: 46, services: 'Дезинфекция (110 м²)', order_date: '2026-03-13', total_price: 27500, status: 'новый', created_at: '2026-03-28' },
+                { id: 111, client_name: 'Петрова Анна Сергеевна', employee_id: 43, services: 'Уборка складов (150 м²)', order_date: '2026-03-14', total_price: 27000, status: 'новый', created_at: '2026-03-28' },
+                { id: 112, client_name: 'Сидоров Петр Алексеевич', employee_id: 50, services: 'Мойка витрин (60 м²)', order_date: '2026-03-15', total_price: 24000, status: 'новый', created_at: '2026-03-28' },
+                { id: 113, client_name: 'Козлова Елена Владимировна', employee_id: 45, services: 'Уборка офисов (90 м²)', order_date: '2026-03-16', total_price: 18000, status: 'новый', created_at: '2026-03-28' },
+                { id: 114, client_name: 'Морозов Дмитрий Павлович', employee_id: 52, services: 'Мойка окон (25 м²), Уборка квартир (40 м²)', order_date: '2026-03-17', total_price: 17500, status: 'новый', created_at: '2026-03-28' },
+                { id: 115, client_name: 'Новикова Татьяна Игоревна', employee_id: 47, services: 'Химчистка ковров (45 м²)', order_date: '2026-03-18', total_price: 18000, status: 'новый', created_at: '2026-03-28' },
+                { id: 116, client_name: 'Васильев Сергей Андреевич', employee_id: 49, services: 'Генеральная уборка (100 м²)', order_date: '2026-03-19', total_price: 35000, status: 'новый', created_at: '2026-03-28' },
+                { id: 117, client_name: 'Павлова Ольга Николаевна', employee_id: 48, services: 'Уборка квартир (60 м²)', order_date: '2026-03-20', total_price: 15000, status: 'новый', created_at: '2026-03-28' },
+                { id: 118, client_name: 'Степанов Алексей Викторович', employee_id: 44, services: 'Мойка окон (35 м²)', order_date: '2026-03-21', total_price: 10500, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 119, client_name: 'Федорова Мария Дмитриевна', employee_id: 53, services: 'Уборка офисов (75 м²)', order_date: '2026-03-22', total_price: 15000, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 120, client_name: 'Николаев Артем Константинович', employee_id: 54, services: 'Химчистка мебели (3 предмета)', order_date: '2026-03-23', total_price: 13500, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 121, client_name: 'Соколова Ирина Александровна', employee_id: 51, services: 'Уборка после ремонта (70 м²)', order_date: '2026-03-24', total_price: 26600, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 122, client_name: 'Иванов Иван Иванович', employee_id: 46, services: 'Мойка витрин (45 м²)', order_date: '2026-03-25', total_price: 18000, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 123, client_name: 'Петрова Анна Сергеевна', employee_id: 43, services: 'Уборка квартир (55 м²)', order_date: '2026-03-26', total_price: 13750, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 124, client_name: 'Сидоров Петр Алексеевич', employee_id: 50, services: 'Дезинфекция (80 м²)', order_date: '2026-03-27', total_price: 20000, status: 'в работе', created_at: '2026-03-28' },
+                { id: 125, client_name: 'Козлова Елена Владимировна', employee_id: 45, services: 'Генеральная уборка (110 м²)', order_date: '2026-03-28', total_price: 38500, status: 'в работе', created_at: '2026-03-28' },
+                { id: 126, client_name: 'Морозов Дмитрий Павлович', employee_id: 52, services: 'Мойка окон (45 м²)', order_date: '2026-03-29', total_price: 13500, status: 'новый', created_at: '2026-03-28' },
+                { id: 127, client_name: 'Новикова Татьяна Игоревна', employee_id: 47, services: 'Уборка квартир (85 м²)', order_date: '2026-03-30', total_price: 21250, status: 'новый', created_at: '2026-03-28' },
+                { id: 128, client_name: 'Васильев Сергей Андреевич', employee_id: 49, services: 'Химчистка ковров (50 м²)', order_date: '2026-03-31', total_price: 20000, status: 'новый', created_at: '2026-03-28' },
+                { id: 129, client_name: 'Павлова Ольга Николаевна', employee_id: 48, services: 'Уборка складов (120 м²)', order_date: '2026-04-01', total_price: 21600, status: 'новый', created_at: '2026-03-28' },
+                { id: 130, client_name: 'Степанов Алексей Викторович', employee_id: 44, services: 'Мойка фасадов (90 м²)', order_date: '2026-04-02', total_price: 45000, status: 'новый', created_at: '2026-03-28' },
+                { id: 131, client_name: 'Федорова Мария Дмитриевна', employee_id: 53, services: 'Уборка офисов (65 м²)', order_date: '2026-04-03', total_price: 13000, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 132, client_name: 'Николаев Артем Константинович', employee_id: 54, services: 'Генеральная уборка (130 м²)', order_date: '2026-04-04', total_price: 45500, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 133, client_name: 'Соколова Ирина Александровна', employee_id: 51, services: 'Мойка окон (55 м²)', order_date: '2026-04-05', total_price: 16500, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 134, client_name: 'Иванов Иван Иванович', employee_id: 46, services: 'Уборка квартир (75 м²)', order_date: '2026-04-06', total_price: 18750, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 135, client_name: 'Петрова Анна Сергеевна', employee_id: 43, services: 'Химчистка мебели (5 предметов)', order_date: '2026-04-07', total_price: 22500, status: 'выполнен', created_at: '2026-03-28' },
+                { id: 136, client_name: 'Сидоров Петр Алексеевич', employee_id: 50, services: 'Дезинфекция (95 м²)', order_date: '2026-04-08', total_price: 23750, status: 'в работе', created_at: '2026-03-28' },
+                { id: 137, client_name: 'Козлова Елена Владимировна', employee_id: 45, services: 'Уборка после ремонта (80 м²)', order_date: '2026-04-09', total_price: 30400, status: 'в работе', created_at: '2026-03-28' },
+                { id: 138, client_name: 'Морозов Дмитрий Павлович', employee_id: 52, services: 'Мойка окон (40 м²), Уборка квартир (60 м²)', order_date: '2026-04-10', total_price: 27000, status: 'новый', created_at: '2026-03-28' },
+                { id: 139, client_name: 'Новикова Татьяна Игоревна', employee_id: 47, services: 'Уборка квартир (50 м²)', order_date: '2026-04-11', total_price: 12500, status: 'новый', created_at: '2026-03-28' },
+                { id: 140, client_name: 'Васильев Сергей Андреевич', employee_id: 49, services: 'Химчистка ковров (35 м²)', order_date: '2026-04-12', total_price: 14000, status: 'новый', created_at: '2026-03-28' },
+                { id: 141, client_name: 'Павлова Ольга Николаевна', employee_id: 48, services: 'Мойка витрин (40 м²)', order_date: '2026-04-13', total_price: 16000, status: 'новый', created_at: '2026-03-28' },
+                { id: 142, client_name: 'Степанов Алексей Викторович', employee_id: 44, services: 'Уборка офисов (100 м²)', order_date: '2026-04-14', total_price: 20000, status: 'новый', created_at: '2026-03-28' },
+                { id: 143, client_name: 'Федорова Мария Дмитриевна', employee_id: 53, services: 'Генеральная уборка (90 м²)', order_date: '2026-04-15', total_price: 31500, status: 'новый', created_at: '2026-03-28' },
+                { id: 144, client_name: 'Николаев Артем Константинович', employee_id: 54, services: 'Мойка фасадов (100 м²)', order_date: '2026-04-16', total_price: 50000, status: 'новый', created_at: '2026-03-28' }
+            ];
+        }
 
-function showToast(text, isError = false) { let t = document.getElementById('toast'); t.textContent = text; t.style.background = isError ? '#dc2626' : '#0a2e4d'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
-
-document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', function() {
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    let section = this.dataset.section;
-    document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-    document.getElementById('reportsSection').style.display = 'none';
-    if (section === 'reports') document.getElementById('reportsSection').style.display = 'block';
-    else if (section === 'employeeOrders') { document.getElementById('employeeOrdersSection').style.display = 'block'; setDefaultEmployeeDates(); filterEmployeeOrders(); }
-    else { document.getElementById(section + 'Section').style.display = 'block'; loadTable(section); }
-}));
-
-async function loadTable(table) {
-    if (!supabaseClient) return;
-    try {
-        let { data, error } = await supabaseClient.from(table).select('*').order('id');
-        if (error) throw error;
-        let tbody = document.getElementById(table + 'Table'), html = '';
-        if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="10">Нет данных<\/td></tr>'; updateStats(); return; }
-        data.forEach(item => {
-            html += '<tr>';
-            html += '<td>' + escapeHtml(item.id) + '</td>';
-            if (table === 'clients') html += '<td>' + escapeHtml(item.full_name) + '</td><td>' + escapeHtml(item.phone) + '</td><td>' + escapeHtml(item.email) + '</td><td>' + escapeHtml(item.address) + '</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
-            else if (table === 'employees') html += '<td>' + escapeHtml(item.full_name) + '<td><td>' + escapeHtml(item.position) + '</td><td>' + escapeHtml(item.phone) + '</td><td>' + (item.salary || 0) + ' ₽</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
-            else if (table === 'services') html += '<td>' + escapeHtml(item.name) + '</td><td>' + escapeHtml(item.description) + '</td><td>' + (item.price_per_m2 || 0) + ' ₽</td><td>' + (item.duration || 0) + ' мин</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
-            else if (table === 'orders') {
-                let emp = allEmployees.find(e => e.id == item.employee_id);
-                html += '<td>' + escapeHtml(item.client_name) + '</td><td>' + escapeHtml(emp?.full_name || '—') + '</td><td>' + escapeHtml(item.services) + '</td><td>' + escapeHtml(item.order_date) + '</td><td>' + (item.total_price?.toLocaleString() || 0) + ' ₽</td><td>' + escapeHtml(item.status) + '</td><td>' + (item.created_at ? new Date(item.created_at).toLocaleDateString() : '-') + '</td>';
+        function getData() {
+            let stored = localStorage.getItem(STORAGE_KEY);
+            if (!stored) {
+                let defaultData = getDefaultData();
+                defaultData.orders = getDefaultOrders();
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
+                return defaultData;
             }
-            if (table === 'orders') {
-                html += '<td><button class="btn-warning" onclick="editOrder(' + item.id + ')">✏️</button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button></td>';
+            let parsed = JSON.parse(stored);
+            if (!parsed.orders || !parsed.orders.length) {
+                parsed.orders = getDefaultOrders();
+            }
+            return parsed;
+        }
+
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        // --- ОБЩИЕ ПЕРЕМЕННЫЕ ---
+        let data = getData();
+        let allClients = data.clients || [];
+        let allEmployees = data.employees || [];
+        let allServices = data.services || [];
+        let allOrders = data.orders || [];
+        let currentTable = 'clients';
+        let isAppInitialized = false;
+
+        function escapeHtml(s) { if (!s) return ''; return String(s).replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+
+        function showToast(text, isError = false) { let t = document.getElementById('toast'); t.textContent = text; t.style.background = isError ? '#dc2626' : '#0a2e4d'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+
+        // --- ОБНОВЛЕНИЕ СТАТИСТИКИ ---
+        function updateStats() {
+            document.getElementById('statClients').textContent = allClients.length;
+            document.getElementById('statEmployees').textContent = allEmployees.length;
+            document.getElementById('statServices').textContent = allServices.length;
+            document.getElementById('statOrders').textContent = allOrders.length;
+        }
+
+        // --- ЗАГРУЗКА ТАБЛИЦЫ ---
+        function loadTable(table) {
+            let tbody = document.getElementById(table + 'Table');
+            if (!tbody) return;
+            let rows = [];
+            if (table === 'clients') rows = allClients;
+            else if (table === 'employees') rows = allEmployees;
+            else if (table === 'services') rows = allServices;
+            else if (table === 'orders') rows = allOrders;
+
+            let html = '';
+            if (!rows || rows.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10">Нет данных<\/td></tr>';
+                updateStats();
+                return;
+            }
+            rows.forEach(item => {
+                html += '<tr>';
+                html += '<td>' + escapeHtml(item.id) + '</td>';
+                if (table === 'clients') html += '<td>' + escapeHtml(item.full_name) + '</td><td>' + escapeHtml(item.phone) + '</td><td>' + escapeHtml(item.email) + '</td><td>' + escapeHtml(item.address) + '</td><td>' + (item.created_at || '-') + '</td>';
+                else if (table === 'employees') html += '<td>' + escapeHtml(item.full_name) + '</td><td>' + escapeHtml(item.position) + '</td><td>' + escapeHtml(item.phone) + '</td><td>' + (item.salary || 0) + ' ₽</td><td>' + (item.created_at || '-') + '</td>';
+                else if (table === 'services') html += '<td>' + escapeHtml(item.name) + '</td><td>' + escapeHtml(item.description) + '</td><td>' + (item.price_per_m2 || 0) + ' ₽</td><td>' + (item.duration || 0) + ' мин</td><td>' + (item.created_at || '-') + '</td>';
+                else if (table === 'orders') {
+                    let emp = allEmployees.find(e => e.id == item.employee_id);
+                    html += '<td>' + escapeHtml(item.client_name) + '</td><td>' + escapeHtml(emp?.full_name || '—') + '</td><td>' + escapeHtml(item.services) + '</td><td>' + escapeHtml(item.order_date) + '</td><td>' + (item.total_price?.toLocaleString() || 0) + ' ₽</td><td>' + escapeHtml(item.status) + '</td><td>' + (item.created_at || '-') + '</td>';
+                }
+                if (table === 'orders') {
+                    html += '<td><button class="btn-warning" onclick="editOrder(' + item.id + ')">✏️</button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button></td>';
+                } else {
+                    html += '<td><button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️</button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button></td>';
+                }
+                html += '</tr>';
+            });
+            tbody.innerHTML = html;
+            updateStats();
+        }
+
+        // --- ДОБАВЛЕНИЕ / РЕДАКТИРОВАНИЕ / УДАЛЕНИЕ ---
+        window.deleteItem = function(table, id) {
+            if (!confirm('Удалить?')) return;
+            let arr = [];
+            if (table === 'clients') arr = allClients;
+            else if (table === 'employees') arr = allEmployees;
+            else if (table === 'services') arr = allServices;
+            else if (table === 'orders') arr = allOrders;
+            let idx = arr.findIndex(i => i.id == id);
+            if (idx !== -1) arr.splice(idx, 1);
+            saveData({ clients: allClients, employees: allEmployees, services: allServices, orders: allOrders });
+            showToast('Удалено');
+            loadTable(table);
+            updateStats();
+            filterEmployeeOrders();
+        };
+
+        window.editItem = async function(table, id) {
+            currentTable = table;
+            let arr = [];
+            if (table === 'clients') arr = allClients;
+            else if (table === 'employees') arr = allEmployees;
+            else if (table === 'services') arr = allServices;
+            let item = arr.find(i => i.id == id);
+            if (!item) return;
+            let titles = { clients: 'Редактировать клиента', employees: 'Редактировать сотрудника', services: 'Редактировать услугу' };
+            document.getElementById('simpleModalTitle').textContent = titles[table];
+            document.getElementById('simpleEditId').value = id;
+            let fields = '';
+            if (table === 'clients') fields = `<input type="text" id="full_name" value="${escapeHtml(item.full_name)}" placeholder="ФИО *" required><input type="text" id="phone" value="${escapeHtml(item.phone)}" placeholder="Телефон *" required><input type="email" id="email" value="${escapeHtml(item.email)}" placeholder="Email"><input type="text" id="address" value="${escapeHtml(item.address)}" placeholder="Адрес">`;
+            else if (table === 'employees') fields = `<input type="text" id="full_name" value="${escapeHtml(item.full_name)}" placeholder="ФИО *" required><input type="text" id="position" value="${escapeHtml(item.position)}" placeholder="Должность *" required><input type="text" id="phone" value="${escapeHtml(item.phone)}" placeholder="Телефон *" required><input type="number" id="salary" step="0.01" value="${item.salary||0}" placeholder="Оклад">`;
+            else if (table === 'services') fields = `<input type="text" id="name" value="${escapeHtml(item.name)}" placeholder="Название *" required><input type="text" id="description" value="${escapeHtml(item.description)}" placeholder="Описание"><input type="number" id="price_per_m2" step="0.01" value="${item.price_per_m2||0}" placeholder="Цена/м² *" required><input type="number" id="duration" value="${item.duration||0}" placeholder="Длительность (мин)">`;
+            document.getElementById('simpleModalFields').innerHTML = fields;
+            document.getElementById('simpleModal').classList.add('show');
+        };
+
+        document.getElementById('simpleModalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let form = {}, inputs = document.querySelectorAll('#simpleModalFields input');
+            inputs.forEach(i => { if (i.type === 'number') form[i.id] = parseFloat(i.value) || 0; else form[i.id] = i.value; });
+            let id = document.getElementById('simpleEditId').value;
+            let arr = [];
+            if (currentTable === 'clients') arr = allClients;
+            else if (currentTable === 'employees') arr = allEmployees;
+            else if (currentTable === 'services') arr = allServices;
+            if (id) {
+                let idx = arr.findIndex(i => i.id == id);
+                if (idx !== -1) { for (let k in form) { arr[idx][k] = form[k]; } }
+                showToast('Обновлено');
             } else {
-                html += '<td><button class="btn-warning" onclick="editItem(\'' + table + '\',' + item.id + ')">✏️</button><button class="btn-danger" onclick="deleteItem(\'' + table + '\',' + item.id + ')">🗑️</button></td>';
+                let newId = Math.max(...arr.map(i => i.id), 0) + 1;
+                form.id = newId;
+                form.created_at = new Date().toISOString().split('T')[0];
+                arr.push(form);
+                showToast('Добавлено');
             }
-            html += '</tr>';
+            saveData({ clients: allClients, employees: allEmployees, services: allServices, orders: allOrders });
+            document.getElementById('simpleModal').classList.remove('show');
+            loadTable(currentTable);
+            updateStats();
         });
-        tbody.innerHTML = html;
-        updateStats();
-    } catch(e) { showToast('Ошибка: ' + e.message, true); }
-}
 
-function setDefaultEmployeeDates() {
-    let d = new Date();
-    let startInput = document.getElementById('employeeStartDate');
-    let endInput = document.getElementById('employeeEndDate');
-    if (startInput) startInput.value = new Date(d.getFullYear(), 0, 1).toISOString().split('T')[0];
-    if (endInput) endInput.value = d.toISOString().split('T')[0];
-    if (startInput && endInput) filterEmployeeOrders();
-}
-
-function filterEmployeeOrders() {
-    let start = document.getElementById('employeeStartDate').value;
-    let end = document.getElementById('employeeEndDate').value;
-    let tbody = document.getElementById('employeeOrdersTable');
-    let detail = document.getElementById('employeeOrdersDetailTableBody');
-    
-    if (!tbody || !detail) return;
-    if (!start || !end) {
-        tbody.innerHTML = '<tr><td colspan="5">Выберите даты<\/td></tr>';
-        detail.innerHTML = '<tr><td colspan="7">Выберите даты<\/td></tr>';
-        return;
-    }
-    
-    if (!allEmployees.length || !allOrders.length) {
-        tbody.innerHTML = '<tr><td colspan="5">Данные загружаются...<\/td></tr>';
-        detail.innerHTML = '<tr><td colspan="7">Данные загружаются...<\/td></tr>';
-        return;
-    }
-    
-    let filtered = [];
-    for (let i = 0; i < allOrders.length; i++) {
-        if (allOrders[i].order_date >= start && allOrders[i].order_date <= end) {
-            filtered.push(allOrders[i]);
-        }
-    }
-    
-    let sumHtml = '';
-    let detHtml = '';
-    
-    for (let i = 0; i < allEmployees.length; i++) {
-        let emp = allEmployees[i];
-        let empOrders = [];
-        let total = 0;
-        
-        for (let j = 0; j < filtered.length; j++) {
-            if (filtered[j].employee_id === emp.id) {
-                empOrders.push(filtered[j]);
-                total = total + (filtered[j].total_price || 0);
-            }
-        }
-        
-        let avg = empOrders.length ? (total / empOrders.length).toFixed(0) : 0;
-        
-        sumHtml = sumHtml + '<tr>' +
-            '<td><strong>' + escapeHtml(emp.full_name) + '</strong></td>' +
-            '<td>' + escapeHtml(emp.position) + '</td>' +
-            '<td>' + empOrders.length + '</td>' +
-            '<td>' + total.toLocaleString() + ' ₽</td>' +
-            '<td>' + (avg || '—') + ' ₽</td>' +
-            '</tr>';
-        
-        if (empOrders.length > 0) {
-            detHtml = detHtml + '<tr><td colspan="7" style="background:#e2e8f0;font-weight:600;">👤 ' + escapeHtml(emp.full_name) + '</td></tr>';
-            for (let j = 0; j < empOrders.length; j++) {
-                let o = empOrders[j];
-                detHtml = detHtml + '<tr>' +
-                    '<td>' + o.id + '</td>' +
-                    '<td>' + escapeHtml(emp.full_name) + '</td>' +
-                    '<td>' + escapeHtml(o.client_name) + '</td>' +
-                    '<td>' + escapeHtml(o.services) + '</td>' +
-                    '<td>' + o.order_date + '</td>' +
-                    '<td>' + (o.total_price || 0).toLocaleString() + ' ₽</td>' +
-                    '<td>' + escapeHtml(o.status) + '</td>' +
-                    '</tr>';
-            }
-        }
-    }
-    
-    tbody.innerHTML = sumHtml || '<tr><td colspan="5">Нет заказов за период<\/td></tr>';
-    detail.innerHTML = detHtml || '<tr><td colspan="7">Нет заказов за период<\/td></tr>';
-}
-
-window.editItem = async function(table, id) {
-    if (!supabaseClient) return;
-    currentTable = table;
-    let { data } = await supabaseClient.from(table).select('*').eq('id', id).single();
-    if (!data) return;
-    let titles = { clients:'Редактировать клиента', employees:'Редактировать сотрудника', services:'Редактировать услугу' };
-    document.getElementById('simpleModalTitle').textContent = titles[table];
-    document.getElementById('simpleEditId').value = id;
-    let fields = '';
-    if (table === 'clients') fields = `<input type="text" id="full_name" value="${escapeHtml(data.full_name)}" placeholder="ФИО *" required><input type="text" id="phone" value="${escapeHtml(data.phone)}" placeholder="Телефон *" required><input type="email" id="email" value="${escapeHtml(data.email)}" placeholder="Email"><input type="text" id="address" value="${escapeHtml(data.address)}" placeholder="Адрес">`;
-    else if (table === 'employees') fields = `<input type="text" id="full_name" value="${escapeHtml(data.full_name)}" placeholder="ФИО *" required><input type="text" id="position" value="${escapeHtml(data.position)}" placeholder="Должность *" required><input type="text" id="phone" value="${escapeHtml(data.phone)}" placeholder="Телефон *" required><input type="number" id="salary" step="0.01" value="${data.salary||0}" placeholder="Оклад">`;
-    else if (table === 'services') fields = `<input type="text" id="name" value="${escapeHtml(data.name)}" placeholder="Название *" required><input type="text" id="description" value="${escapeHtml(data.description)}" placeholder="Описание"><input type="number" id="price_per_m2" step="0.01" value="${data.price_per_m2||0}" placeholder="Цена/м² *" required><input type="number" id="duration" value="${data.duration||0}" placeholder="Длительность (мин)">`;
-    document.getElementById('simpleModalFields').innerHTML = fields;
-    document.getElementById('simpleModal').classList.add('show');
-};
-
-window.editOrder = async function(id) {
-    if (!supabaseClient || !allEmployees.length || !allServices.length) { showToast('Данные загружаются', true); return; }
-    let { data } = await supabaseClient.from('orders').select('*').eq('id', id).single();
-    if (!data) return;
-    document.getElementById('orderModalTitle').textContent = '✏️ Редактирование заказа';
-    document.getElementById('orderEditId').value = id;
-    document.getElementById('client_name').value = data.client_name || '';
-    document.getElementById('order_date').value = data.order_date || '';
-    document.getElementById('status').value = data.status || 'новый';
-    let empSelect = document.getElementById('employee_id');
-    empSelect.innerHTML = '<option value="">Выберите сотрудника *</option>';
-    allEmployees.forEach(e => empSelect.innerHTML += `<option value="${e.id}" ${e.id == data.employee_id ? 'selected' : ''}>${escapeHtml(e.full_name)}</option>`);
-    document.getElementById('servicesList').innerHTML = '';
-    if (data.services) {
-        let parts = data.services.split(',').map(s => s.trim());
-        parts.forEach(p => {
-            let match = p.match(/(.+?)\s*\(([\d\.]+)\s*м²\)/);
-            if (match) { let srv = allServices.find(s => s.name === match[1]); if(srv) addServiceRow(srv.id, parseFloat(match[2])); else addServiceRow(null, 1); }
-            else addServiceRow(null, 1);
-        });
-    } else addServiceRow(null, 1);
-    calculateTotal();
-    document.getElementById('orderModal').classList.add('show');
-};
-function addServiceRow(selectedServiceId, quantity) {
-    const servicesList = document.getElementById('servicesList');
-    const newRow = document.createElement('div');
-    newRow.className = 'service-row';
-    
-    let options = '<option value="">Выберите услугу</option>';
-    allServices.forEach(service => {
-        const selected = service.id == selectedServiceId ? 'selected' : '';
-        options += '<option value="' + escapeHtml(service.id) + '" data-price="' + escapeHtml(service.price_per_m2) + '" ' + selected + '>' + escapeHtml(service.name) + ' (' + escapeHtml(service.price_per_m2) + ' ₽/м²)</option>';
-    });
-
-    newRow.innerHTML = '<select class="service-select" required>' + options + '</select>' +
-                       '<input type="number" class="service-quantity" placeholder="Кол-во м²" value="' + (quantity || 1) + '" min="0.1" step="0.1">' +
-                       '<button type="button" class="remove-service">✖</button>';
-
-    servicesList.appendChild(newRow);
-
-    newRow.querySelector('.service-select').addEventListener('change', calculateTotal);
-    newRow.querySelector('.service-quantity').addEventListener('input', calculateTotal);
-    newRow.querySelector('.remove-service').addEventListener('click', function() {
-        newRow.remove();
-        if (document.querySelectorAll('.service-row').length === 0) {
-            addServiceRow(null, 1);
-        } else {
+        // --- ЗАКАЗЫ ---
+        function addServiceRow(selectedServiceId, quantity) {
+            const servicesList = document.getElementById('servicesList');
+            const newRow = document.createElement('div');
+            newRow.className = 'service-row';
+            let options = '<option value="">Выберите услугу</option>';
+            allServices.forEach(service => {
+                const selected = service.id == selectedServiceId ? 'selected' : '';
+                options += '<option value="' + escapeHtml(service.id) + '" data-price="' + escapeHtml(service.price_per_m2) + '" ' + selected + '>' + escapeHtml(service.name) + ' (' + escapeHtml(service.price_per_m2) + ' ₽/м²)</option>';
+            });
+            newRow.innerHTML = '<select class="service-select" required>' + options + '</select>' +
+                '<input type="number" class="service-quantity" placeholder="Кол-во м²" value="' + (quantity || 1) + '" min="0.1" step="0.1">' +
+                '<button type="button" class="remove-service">✖</button>';
+            servicesList.appendChild(newRow);
+            newRow.querySelector('.service-select').addEventListener('change', calculateTotal);
+            newRow.querySelector('.service-quantity').addEventListener('input', calculateTotal);
+            newRow.querySelector('.remove-service').addEventListener('click', function() {
+                newRow.remove();
+                if (document.querySelectorAll('.service-row').length === 0) addServiceRow(null, 1);
+                else calculateTotal();
+            });
             calculateTotal();
         }
-    });
 
-    calculateTotal();
-}
-
-function calculateTotal() {
-    let total = 0;
-    document.querySelectorAll('.service-row').forEach(row => {
-        let sel = row.querySelector('.service-select'), qty = row.querySelector('.service-quantity');
-        if(sel.value && qty.value) { let price = parseFloat(sel.selectedOptions[0]?.dataset.price || 0); total += price * parseFloat(qty.value); }
-    });
-    document.getElementById('totalAmount').textContent = `Итого: ${total.toLocaleString()} ₽`;
-    return total;
-}
-
-document.getElementById('addClientBtn').addEventListener('click', () => { currentTable='clients'; document.getElementById('simpleModalTitle').textContent='Добавить клиента'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="email" id="email" placeholder="Email"><input type="text" id="address" placeholder="Адрес">'; document.getElementById('simpleModal').classList.add('show'); });
-document.getElementById('addEmployeeBtn').addEventListener('click', () => { currentTable='employees'; document.getElementById('simpleModalTitle').textContent='Добавить сотрудника'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="position" placeholder="Должность *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="number" id="salary" step="0.01" placeholder="Оклад">'; document.getElementById('simpleModal').classList.add('show'); });
-document.getElementById('addServiceBtn').addEventListener('click', () => { currentTable='services'; document.getElementById('simpleModalTitle').textContent='Добавить услугу'; document.getElementById('simpleEditId').value=''; document.getElementById('simpleModalFields').innerHTML='<input type="text" id="name" placeholder="Название *" required><input type="text" id="description" placeholder="Описание"><input type="number" id="price_per_m2" step="0.01" placeholder="Цена/м² *" required><input type="number" id="duration" placeholder="Длительность (мин)">'; document.getElementById('simpleModal').classList.add('show'); });
-
-document.getElementById('addOrderBtn').addEventListener('click', () => { 
-    if(!allEmployees.length||!allServices.length){ showToast('Данные загружаются, подождите секунду', true); return; } 
-    document.getElementById('orderModalTitle').textContent='➕ Создание заказа'; 
-    document.getElementById('orderEditId').value=''; 
-    document.getElementById('client_name').value=''; 
-    document.getElementById('order_date').value=''; 
-    document.getElementById('status').value='новый'; 
-    let sel=document.getElementById('employee_id'); 
-    sel.innerHTML='<option value="">Выберите сотрудника *</option>'; 
-    allEmployees.forEach(e=>sel.innerHTML+=`<option value="${e.id}">${escapeHtml(e.full_name)}</option>`); 
-    document.getElementById('servicesList').innerHTML=''; 
-    addServiceRow(null, 1); 
-    document.getElementById('orderModal').classList.add('show'); 
-});
-
-document.getElementById('addServiceRowBtn').addEventListener('click', () => addServiceRow(null, 1));
-
-document.getElementById('simpleModalForm').addEventListener('submit', async(e) => { 
-    e.preventDefault(); 
-    let form={}, inputs=document.querySelectorAll('#simpleModalFields input'); 
-    inputs.forEach(i=>{ if(i.type==='number') form[i.id]=parseFloat(i.value)||0; else form[i.id]=i.value; }); 
-    let id=document.getElementById('simpleEditId').value; 
-    try{ 
-        if(id) await supabaseClient.from(currentTable).update(form).eq('id',id); 
-        else { form.created_at=new Date().toISOString(); await supabaseClient.from(currentTable).insert([form]); } 
-        showToast(id?'Обновлено':'Добавлено'); 
-        document.getElementById('simpleModal').classList.remove('show'); 
-        loadTable(currentTable); 
-        loadAllData(); 
-    } catch(error){ showToast('Ошибка: '+error.message, true); } 
-});
-
-document.getElementById('orderForm').addEventListener('submit', async(e) => {
-    e.preventDefault();
-    let client_name = document.getElementById('client_name').value;
-    let employee_id = document.getElementById('employee_id').value;
-    let order_date = document.getElementById('order_date').value;
-    let status = document.getElementById('status').value;
-    let editId = document.getElementById('orderEditId').value;
-    let rows = document.querySelectorAll('.service-row');
-    if(rows.length === 0) { showToast('Добавьте услугу', true); return; }
-    let services = [];
-    rows.forEach(row => {
-        let sel = row.querySelector('.service-select'), qty = row.querySelector('.service-quantity');
-        if(sel.value && qty.value) {
-            let service = allServices.find(s => s.id == sel.value);
-            if(service) services.push(service.name + ' (' + qty.value + ' м²)');
+        function calculateTotal() {
+            let total = 0;
+            document.querySelectorAll('.service-row').forEach(row => {
+                let sel = row.querySelector('.service-select'), qty = row.querySelector('.service-quantity');
+                if (sel.value && qty.value) { let price = parseFloat(sel.selectedOptions[0]?.dataset.price || 0); total += price * parseFloat(qty.value); }
+            });
+            document.getElementById('totalAmount').textContent = `Итого: ${total.toLocaleString()} ₽`;
+            return total;
         }
-    });
-    if(services.length === 0) { showToast('Выберите услуги', true); return; }
-    let total_price = calculateTotal();
-    let formData = { client_name, employee_id: employee_id || null, services: services.join(', '), order_date, total_price, status };
-    try {
-        if(editId) await supabaseClient.from('orders').update(formData).eq('id', editId);
-        else { formData.created_at = new Date().toISOString(); await supabaseClient.from('orders').insert([formData]); }
-        showToast(editId ? 'Заказ обновлён' : 'Заказ создан');
-        document.getElementById('orderModal').classList.remove('show');
-        loadTable('orders');
-        loadAllData();
-    } catch(error) { showToast('Ошибка: ' + error.message, true); }
-});
-        document.getElementById('closeOrderModalBtn').addEventListener('click', () => document.getElementById('orderModal').classList.remove('show'));
-        document.getElementById('closeSimpleModalBtn').addEventListener('click', () => document.getElementById('simpleModal').classList.remove('show'));
-        window.deleteItem = async function(table, id) { if(confirm('Удалить?')) try{ await supabaseClient.from(table).delete().eq('id',id); showToast('Удалено'); loadTable(table); loadAllData(); } catch(e){ showToast('Ошибка', true); } };
-        
-        document.getElementById('employeeOrdersPdfBtn').addEventListener('click', () => { showToast('PDF подготовлен'); window.print(); });
-        document.getElementById('employeeOrdersPrintBtn').addEventListener('click', () => window.print());
-        document.getElementById('filterEmployeeOrdersBtn').addEventListener('click', filterEmployeeOrders);
+
+        window.editOrder = function(id) {
+            let order = allOrders.find(o => o.id == id);
+            if (!order) { showToast('Заказ не найден', true); return; }
+            document.getElementById('orderModalTitle').textContent = '✏️ Редактирование заказа';
+            document.getElementById('orderEditId').value = id;
+            document.getElementById('client_name').value = order.client_name || '';
+            document.getElementById('order_date').value = order.order_date || '';
+            document.getElementById('status').value = order.status || 'новый';
+            let empSelect = document.getElementById('employee_id');
+            empSelect.innerHTML = '<option value="">Выберите сотрудника *</option>';
+            allEmployees.forEach(e => empSelect.innerHTML += `<option value="${e.id}" ${e.id == order.employee_id ? 'selected' : ''}>${escapeHtml(e.full_name)}</option>`);
+            document.getElementById('servicesList').innerHTML = '';
+            if (order.services) {
+                let parts = order.services.split(',').map(s => s.trim());
+                parts.forEach(p => {
+                    let match = p.match(/(.+?)\s*\(([\d\.]+)\s*м²\)/);
+                    if (match) { let srv = allServices.find(s => s.name === match[1]); if (srv) addServiceRow(srv.id, parseFloat(match[2])); else addServiceRow(null, 1); } else addServiceRow(null, 1);
+                });
+            } else addServiceRow(null, 1);
+            calculateTotal();
+            document.getElementById('orderModal').classList.add('show');
+        };
+
+        document.getElementById('addOrderBtn').addEventListener('click', function() {
+            if (!allEmployees.length || !allServices.length) { showToast('Данные загружаются', true); return; }
+            document.getElementById('orderModalTitle').textContent = '➕ Создание заказа';
+            document.getElementById('orderEditId').value = '';
+            document.getElementById('client_name').value = '';
+            document.getElementById('order_date').value = '';
+            document.getElementById('status').value = 'новый';
+            let sel = document.getElementById('employee_id');
+            sel.innerHTML = '<option value="">Выберите сотрудника *</option>';
+            allEmployees.forEach(e => sel.innerHTML += `<option value="${e.id}">${escapeHtml(e.full_name)}</option>`);
+            document.getElementById('servicesList').innerHTML = '';
+            addServiceRow(null, 1);
+            document.getElementById('orderModal').classList.add('show');
+        });
+
+        document.getElementById('addServiceRowBtn').addEventListener('click', function() { addServiceRow(null, 1); });
+
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let client_name = document.getElementById('client_name').value;
+            let employee_id = document.getElementById('employee_id').value;
+            let order_date = document.getElementById('order_date').value;
+            let status = document.getElementById('status').value;
+            let editId = document.getElementById('orderEditId').value;
+            let rows = document.querySelectorAll('.service-row');
+            if (rows.length === 0) { showToast('Добавьте услугу', true); return; }
+            let services = [];
+            rows.forEach(row => {
+                let sel = row.querySelector('.service-select'), qty = row.querySelector('.service-quantity');
+                if (sel.value && qty.value) {
+                    let service = allServices.find(s => s.id == sel.value);
+                    if (service) services.push(service.name + ' (' + qty.value + ' м²)');
+                }
+            });
+            if (services.length === 0) { showToast('Выберите услуги', true); return; }
+            let total_price = calculateTotal();
+            let formData = { client_name, employee_id: employee_id || null, services: services.join(', '), order_date, total_price, status };
+            if (editId) {
+                let idx = allOrders.findIndex(o => o.id == editId);
+                if (idx !== -1) { for (let k in formData) { allOrders[idx][k] = formData[k]; } }
+                showToast('Заказ обновлён');
+            } else {
+                let newId = Math.max(...allOrders.map(o => o.id), 0) + 1;
+                formData.id = newId;
+                formData.created_at = new Date().toISOString().split('T')[0];
+                allOrders.push(formData);
+                showToast('Заказ создан');
+            }
+            saveData({ clients: allClients, employees: allEmployees, services: allServices, orders: allOrders });
+            document.getElementById('orderModal').classList.remove('show');
+            loadTable('orders');
+            updateStats();
+            filterEmployeeOrders();
+        });
+
+        document.getElementById('closeOrderModalBtn').addEventListener('click', function() { document.getElementById('orderModal').classList.remove('show'); });
+        document.getElementById('closeSimpleModalBtn').addEventListener('click', function() { document.getElementById('simpleModal').classList.remove('show'); });
+
+        // --- ОТЧЁТЫ ---
+        function setDefaultEmployeeDates() {
+            let d = new Date();
+            let startInput = document.getElementById('employeeStartDate');
+            let endInput = document.getElementById('employeeEndDate');
+            if (startInput) startInput.value = new Date(d.getFullYear(), 0, 1).toISOString().split('T')[0];
+            if (endInput) endInput.value = d.toISOString().split('T')[0];
+            if (startInput && endInput) filterEmployeeOrders();
+        }
+
+        function filterEmployeeOrders() {
+            let start = document.getElementById('employeeStartDate').value;
+            let end = document.getElementById('employeeEndDate').value;
+            let tbody = document.getElementById('employeeOrdersTable');
+            let detail = document.getElementById('employeeOrdersDetailTableBody');
+            if (!tbody || !detail) return;
+            if (!start || !end) {
+                tbody.innerHTML = '<tr><td colspan="5">Выберите даты<\/td></tr>';
+                detail.innerHTML = '<tr><td colspan="7">Выберите даты<\/td></tr>';
+                return;
+            }
+            let filtered = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
+            let sumHtml = '', detHtml = '';
+            allEmployees.forEach(emp => {
+                let empOrders = filtered.filter(o => o.employee_id === emp.id);
+                let total = empOrders.reduce((s, o) => s + (o.total_price || 0), 0);
+                let avg = empOrders.length ? (total / empOrders.length).toFixed(0) : 0;
+                sumHtml += '<tr><td><strong>' + escapeHtml(emp.full_name) + '</strong></td><td>' + escapeHtml(emp.position) + '</td><td>' + empOrders.length + '</td><td>' + total.toLocaleString() + ' ₽</td><td>' + (avg || '—') + ' ₽</td></tr>';
+                if (empOrders.length) {
+                    detHtml += '<tr><td colspan="7" style="background:#e2e8f0;font-weight:600;">👤 ' + escapeHtml(emp.full_name) + '</td></tr>';
+                    empOrders.forEach(o => {
+                        detHtml += '<tr><td>' + o.id + '</td><td>' + escapeHtml(emp.full_name) + '</td><td>' + escapeHtml(o.client_name) + '</td><td>' + escapeHtml(o.services) + '</td><td>' + o.order_date + '</td><td>' + (o.total_price || 0).toLocaleString() + ' ₽</td><td>' + escapeHtml(o.status) + '</td></tr>';
+                    });
+                }
+            });
+            tbody.innerHTML = sumHtml || '<tr><td colspan="5">Нет заказов за период<\/td></tr>';
+            detail.innerHTML = detHtml || '<tr><td colspan="7">Нет заказов за период<\/td></tr>';
+        }
+
         document.getElementById('generateReportsBtn').addEventListener('click', function() {
-            let start = document.getElementById('startDate').value, end = document.getElementById('endDate').value;
+            let start = document.getElementById('startDate').value,
+                end = document.getElementById('endDate').value;
             let filteredOrders = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
-            let filteredClients = allClients.filter(c => c.created_at && new Date(c.created_at).toISOString().split('T')[0] >= start && new Date(c.created_at).toISOString().split('T')[0] <= end);
-            let filteredEmployees = allEmployees.filter(e => e.created_at && new Date(e.created_at).toISOString().split('T')[0] >= start && new Date(e.created_at).toISOString().split('T')[0] <= end);
-            let filteredServices = allServices.filter(s => s.created_at && new Date(s.created_at).toISOString().split('T')[0] >= start && new Date(s.created_at).toISOString().split('T')[0] <= end);
+            let filteredClients = allClients.filter(c => c.created_at >= start && c.created_at <= end);
+            let filteredEmployees = allEmployees.filter(e => e.created_at >= start && e.created_at <= end);
+            let filteredServices = allServices.filter(s => s.created_at >= start && s.created_at <= end);
             document.getElementById('periodOrders').textContent = filteredOrders.length;
-            document.getElementById('periodRevenue').textContent = filteredOrders.reduce((s,o) => s + (o.total_price||0),0).toLocaleString() + ' ₽';
+            document.getElementById('periodRevenue').textContent = filteredOrders.reduce((s, o) => s + (o.total_price || 0), 0).toLocaleString() + ' ₽';
             document.getElementById('periodNewClients').textContent = filteredClients.length;
             document.getElementById('periodNewEmployees').textContent = filteredEmployees.length;
             document.getElementById('periodNewServices').textContent = filteredServices.length;
             document.getElementById('periodCompleted').textContent = filteredOrders.filter(o => o.status === 'выполнен').length;
         });
-        document.getElementById('pdfBtn').addEventListener('click', () => window.print());
-        document.getElementById('printBtn').addEventListener('click', () => window.print());
 
-        async function loadAllData() {
-            if (!supabaseClient) return;
-            try {
-                let [ordersRes, employeesRes, servicesRes, clientsRes] = await Promise.all([
-                    supabaseClient.from('orders').select('*'),
-                    supabaseClient.from('employees').select('*'),
-                    supabaseClient.from('services').select('*'),
-                    supabaseClient.from('clients').select('*')
-                ]);
-                allOrders = ordersRes.data || [];
-                allEmployees = employeesRes.data || [];
-                allServices = servicesRes.data || [];
-                allClients = clientsRes.data || [];
-                let today = new Date();
-                let start = new Date(today.getFullYear(), 0, 1).toISOString().split('T')[0];
-                let end = today.toISOString().split('T')[0];
-                document.getElementById('startDate').value = start;
-                document.getElementById('endDate').value = end;
+        document.getElementById('filterEmployeeOrdersBtn').addEventListener('click', filterEmployeeOrders);
+        document.getElementById('employeeOrdersPdfBtn').addEventListener('click', function() { showToast('PDF подготовлен'); window.print(); });
+        document.getElementById('employeeOrdersPrintBtn').addEventListener('click', function() { window.print(); });
+        document.getElementById('pdfBtn').addEventListener('click', function() { window.print(); });
+        document.getElementById('printBtn').addEventListener('click', function() { window.print(); });
+
+        // --- НАВИГАЦИЯ ---
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', function() {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            let section = this.dataset.section;
+            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+            document.getElementById('reportsSection').style.display = 'none';
+            document.getElementById('employeeOrdersSection').style.display = 'none';
+            if (section === 'reports') document.getElementById('reportsSection').style.display = 'block';
+            else if (section === 'employeeOrders') {
+                document.getElementById('employeeOrdersSection').style.display = 'block';
                 setDefaultEmployeeDates();
-                document.getElementById('generateReportsBtn').click();
                 filterEmployeeOrders();
-            } catch(e) { showToast('Ошибка загрузки: '+e.message, true); }
+            } else { document.getElementById(section + 'Section').style.display = 'block';
+                loadTable(section); }
+        }));
+
+        // --- АУТЕНТИФИКАЦИЯ ---
+        window.handleLogin = function() {
+            const user = document.getElementById('loginUsername').value,
+                pwd = document.getElementById('loginPassword').value;
+            if (user === 'admin' && pwd === 'admin123') {
+                localStorage.setItem('serviceClean_loggedIn', 'true');
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                if (!isAppInitialized) { initApp();
+                    isAppInitialized = true; }
+                document.querySelector('.nav-btn[data-section="clients"]').click();
+            } else document.getElementById('loginError').textContent = 'Неверный логин или пароль';
+        };
+
+        window.handleLogout = function() {
+            localStorage.removeItem('serviceClean_loggedIn');
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mainContent').style.display = 'none';
+        };
+
+        window.addEventListener('load', function() {
+            if (localStorage.getItem('serviceClean_loggedIn') === 'true') {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                initApp();
+                isAppInitialized = true;
+                document.querySelector('.nav-btn[data-section="clients"]').click();
+            }
+        });
+
+        function initApp() {
+            data = getData();
+            allClients = data.clients || [];
+            allEmployees = data.employees || [];
+            allServices = data.services || [];
+            allOrders = data.orders || [];
+            let today = new Date();
+            let start = new Date(today.getFullYear(), 0, 1).toISOString().split('T')[0];
+            let end = today.toISOString().split('T')[0];
+            document.getElementById('startDate').value = start;
+            document.getElementById('endDate').value = end;
+            setDefaultEmployeeDates();
+            document.getElementById('generateReportsBtn').click();
+            filterEmployeeOrders();
+            updateStats();
+            loadTable('clients');
         }
 
-        async function updateStats() {
-            if (!supabaseClient) return;
-            let tables = ['clients', 'employees', 'services', 'orders'];
-            for(let t of tables) try { let { count } = await supabaseClient.from(t).select('*', { count:'exact', head:true }); document.getElementById('stat'+t.charAt(0).toUpperCase()+t.slice(1)).textContent = count || 0; } catch(e) {}
-        }
-
-        function initApp() { loadAllData(); updateStats(); loadTable('clients'); }
+        // кнопки добавления
+        document.getElementById('addClientBtn').addEventListener('click', function() {
+            currentTable = 'clients';
+            document.getElementById('simpleModalTitle').textContent = 'Добавить клиента';
+            document.getElementById('simpleEditId').value = '';
+            document.getElementById('simpleModalFields').innerHTML = '<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="email" id="email" placeholder="Email"><input type="text" id="address" placeholder="Адрес">';
+            document.getElementById('simpleModal').classList.add('show');
+        });
+        document.getElementById('addEmployeeBtn').addEventListener('click', function() {
+            currentTable = 'employees';
+            document.getElementById('simpleModalTitle').textContent = 'Добавить сотрудника';
+            document.getElementById('simpleEditId').value = '';
+            document.getElementById('simpleModalFields').innerHTML = '<input type="text" id="full_name" placeholder="ФИО *" required><input type="text" id="position" placeholder="Должность *" required><input type="text" id="phone" placeholder="Телефон *" required><input type="number" id="salary" step="0.01" placeholder="Оклад">';
+            document.getElementById('simpleModal').classList.add('show');
+        });
+        document.getElementById('addServiceBtn').addEventListener('click', function() {
+            currentTable = 'services';
+            document.getElementById('simpleModalTitle').textContent = 'Добавить услугу';
+            document.getElementById('simpleEditId').value = '';
+            document.getElementById('simpleModalFields').innerHTML = '<input type="text" id="name" placeholder="Название *" required><input type="text" id="description" placeholder="Описание"><input type="number" id="price_per_m2" step="0.01" placeholder="Цена/м² *" required><input type="number" id="duration" placeholder="Длительность (мин)">';
+            document.getElementById('simpleModal').classList.add('show');
+        });
     </script>
 </body>
 </html>
