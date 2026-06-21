@@ -56,6 +56,7 @@
         .modal-content { background: white; padding: 2rem; border-radius: 1rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; }
         .modal-content h3 { color: #0a2e4d; margin-bottom: 1.5rem; }
         .modal-content input, .modal-content select { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
+        .modal-content label { display: block; font-weight: 600; color: #0a2e4d; margin-bottom: 0.3rem; }
         .password-wrapper { position: relative; width: 100%; margin-bottom: 1rem; }
         .password-wrapper input { margin-bottom: 0; padding-right: 2.5rem; }
         .toggle-password { position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); cursor: pointer; background: transparent; border: none; }
@@ -161,7 +162,7 @@
         <footer class="footer"><div class="company">ООО «СервисКлин» 2026</div></footer>
     </div>
 
-    <div class="modal" id="orderModal"><div class="modal-content"><h3 id="orderModalTitle">➕ Создание заказа</h3><form id="orderForm"><input type="hidden" id="orderEditId"><input type="text" id="client_name" placeholder="Имя клиента *" required><select id="employee_id" required><option value="">Выберите сотрудника *</option></select><div id="servicesList"></div><button type="button" class="add-service-btn" id="addServiceRowBtn">+ Добавить услугу</button><div class="total-amount" id="totalAmount">Итого: 0 ₽</div><input type="date" id="order_date" required><select id="status" required><option value="новый">Новый</option><option value="в работе">В работе</option><option value="выполнен">Выполнен</option></select><div class="modal-buttons"><button type="submit">Сохранить</button><button type="button" id="closeOrderModalBtn">Отмена</button></div></form></div></div>
+    <div class="modal" id="orderModal"><div class="modal-content"><h3 id="orderModalTitle">➕ Создание заказа</h3><form id="orderForm"><input type="hidden" id="orderEditId"><input type="text" id="client_name" placeholder="Имя клиента *" required><select id="employee_id" required><option value="">Выберите сотрудника *</option></select><div id="servicesList"></div><button type="button" class="add-service-btn" id="addServiceRowBtn">+ Добавить услугу</button><div class="total-amount" id="totalAmount">Итого: 0 ₽</div><label for="order_date">📅 Дата заказа:</label><input type="date" id="order_date" required><select id="status" required><option value="новый">Новый</option><option value="в работе">В работе</option><option value="выполнен">Выполнен</option></select><div class="modal-buttons"><button type="submit">Сохранить</button><button type="button" id="closeOrderModalBtn">Отмена</button></div></form></div></div>
     <div class="modal" id="simpleModal"><div class="modal-content"><h3 id="simpleModalTitle">Добавление</h3><form id="simpleModalForm"><input type="hidden" id="simpleEditId"><div id="simpleModalFields"></div><div class="modal-buttons"><button type="submit">Сохранить</button><button type="button" id="closeSimpleModalBtn">Отмена</button></div></form></div></div>
     <div class="toast" id="toast">Сохранено</div>
 
