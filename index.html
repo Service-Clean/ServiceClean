@@ -555,7 +555,8 @@
                 detail.innerHTML = '<tr><td colspan="7">Выберите даты<\/td></tr>';
                 return;
             }
-            let filtered = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
+            // ФИЛЬТРУЕМ ПО ДАТЕ СОЗДАНИЯ (created_at), А НЕ ПО ДАТЕ ЗАКАЗА
+            let filtered = allOrders.filter(o => o.created_at >= start && o.created_at <= end);
             let sumHtml = '', detHtml = '';
             allEmployees.forEach(emp => {
                 let empOrders = filtered.filter(o => o.employee_id === emp.id);
@@ -576,7 +577,8 @@
         document.getElementById('generateReportsBtn').addEventListener('click', function() {
             let start = document.getElementById('startDate').value,
                 end = document.getElementById('endDate').value;
-            let filteredOrders = allOrders.filter(o => o.order_date >= start && o.order_date <= end);
+            // ФИЛЬТРУЕМ ПО ДАТЕ СОЗДАНИЯ (created_at), А НЕ ПО ДАТЕ ЗАКАЗА
+            let filteredOrders = allOrders.filter(o => o.created_at >= start && o.created_at <= end);
             let filteredClients = allClients.filter(c => c.created_at >= start && c.created_at <= end);
             let filteredEmployees = allEmployees.filter(e => e.created_at >= start && e.created_at <= end);
             let filteredServices = allServices.filter(s => s.created_at >= start && s.created_at <= end);
